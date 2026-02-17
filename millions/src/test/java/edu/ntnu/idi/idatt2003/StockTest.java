@@ -106,7 +106,7 @@ class StockTest {
     //Arrange and Act
     String symbol = appleStock.getSymbol();
     //Assert
-    assertEquals("AAPL", appleStock.getSymbol());
+    assertEquals("AAPL", symbol);
   }
 
   @Test
@@ -117,13 +117,6 @@ class StockTest {
     assertEquals("Apple Inc.", appleStock.getCompany());
   }
 
-  @Test
-  void testGetSalesPrice() {
-    //Arrange and Act
-    BigDecimal salesPrice = appleStock.getSalesPrice();
-    //Assert
-    assertEquals(new BigDecimal("150.50"), appleStock.getSalesPrice());
-  }
 
   @Test
   void testGetSalesPriceWithReturnsInitialPrice() {
@@ -146,7 +139,7 @@ class StockTest {
   }
 
   @Test
-  void testaddNewSalesPriceWithValidPrice() {
+  void testAddNewSalesPriceWithValidPrice() {
     //Arrange
     BigDecimal newPrice = new BigDecimal("160.50");
     //Act
@@ -157,7 +150,7 @@ class StockTest {
 
   }
   @Test
-  void testaddNewSalesPriceWithNullPrice() {
+  void testAddNewSalesPriceWithNullPrice() {
     //Arrange and Act
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
         () -> appleStock.addNewSalesPrice(null));
