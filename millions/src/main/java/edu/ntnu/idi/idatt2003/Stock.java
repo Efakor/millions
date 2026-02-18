@@ -13,8 +13,7 @@ public class Stock {
    * Creates a new Stock with the given symbol,company name, and initial sales price.
    * @param symbol the unique stock symbol(e.g,"AAPL")
    * @param company the company name (e.g,"Apple INC")
-   * @param salesPrice the initial if symbol or company is null or empty,
-   *                   or if salesPrice is null or not positive
+   * @param salesPrice the initial sales price of the stock
    * @throws IllegalArgumentException if symbol or company is null or empty,
    *                                  or if salesPrice is null or not positive
    */
@@ -23,15 +22,10 @@ public class Stock {
     validateSymbol(symbol);
     validateCompany(company);
     validateSalesPrice(salesPrice);
-
-
-
-
     this.symbol = symbol;
     this.company = company;
     this.prices = new ArrayList<>();
     this.prices.add(salesPrice);
-
 
 
 }
@@ -85,7 +79,7 @@ public BigDecimal getSalesPrice() {
 }
 
   /**
-   * Validates that the sales price is not null and is positive.
+   * Validates that the symbol is not null or empty.
    * @param salesPrice the sales price to validate
    * @throws IllegalArgumentException if salePrice is null or not positive
    */
