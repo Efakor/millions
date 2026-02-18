@@ -68,7 +68,7 @@ public class Share {
    */
   private void validateStock(Stock stock){
     if(stock==null){
-      throw new IllegalArgumentException("stock is null");
+      throw new IllegalArgumentException("Stock is null");
     }
   }
 
@@ -79,10 +79,10 @@ public class Share {
    */
   private void validateQuantity(BigDecimal quantity){
     if(quantity==null){
-      throw new IllegalArgumentException("quantity is null");
+      throw new IllegalArgumentException("Quantity is null");
     }
     if(quantity.compareTo(BigDecimal.ZERO)<=0){
-      throw new IllegalArgumentException("quantity must be greater than zero");
+      throw new IllegalArgumentException("Quantity must be greater than zero");
     }
   }
 
@@ -93,10 +93,10 @@ public class Share {
    */
   private void validatePurchasePrice(BigDecimal purchasePrice){
     if(purchasePrice==null){
-      throw new IllegalArgumentException("purchasePrice is null");
+      throw new IllegalArgumentException("Purchase Price is null");
     }
     if(purchasePrice.compareTo(BigDecimal.ZERO)<=0){
-      throw new IllegalArgumentException("purchasePrice must be greater than zero");
+      throw new IllegalArgumentException("Purchase Price must be greater than zero");
     }
   }
   @Override
