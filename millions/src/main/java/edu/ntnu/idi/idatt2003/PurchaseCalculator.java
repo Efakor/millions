@@ -23,7 +23,7 @@ public class PurchaseCalculator implements TransactionCalculator{
   }
   @Override
   public BigDecimal calculateCommission() {
-    BigDecimal rate =new BigDecimal("0.000´5"); //0.5%
+    BigDecimal rate =new BigDecimal("0.005"); //0.5%
     return calculateGross().multiply(rate).setScale(2, RoundingMode.HALF_UP);
 
   }
