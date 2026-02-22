@@ -3,13 +3,13 @@ package edu.ntnu.idi.idatt2003;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class SalesCalculator implements TransactionCalculator{
+public class SaleCalculator implements TransactionCalculator{
   private final BigDecimal purchasePrice;
   private final BigDecimal salePrice;
   private final BigDecimal quantity;
-  public SalesCalculator(Share share) {
+  public SaleCalculator(Share share) {
     if (share==null){
-      throw new NullPointerException("Share cannot be null");
+      throw new IllegalArgumentException("Share cannot be null");
     }
     this.purchasePrice = share.getPurchasePrice();
     this.salePrice = share.getStock().getSalesPrice();
