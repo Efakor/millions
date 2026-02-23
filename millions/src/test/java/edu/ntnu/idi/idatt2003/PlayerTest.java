@@ -136,7 +136,7 @@ class PlayerTest {
         player.withdrawMoney(amountToWithdraw);
 
         BigDecimal expected = startingMoney.subtract(amountToWithdraw);
-        assertEquals(expected, player.getMoney());
+        assertEquals(expected, player.getCurrentMoney());
     }
 
     @Test
@@ -174,7 +174,7 @@ class PlayerTest {
     @Test
     void withdrawMoneyWithExactBalanceSucceeds() {
         player.withdrawMoney(startingMoney);
-        assertEquals(BigDecimal.ZERO, player.getCurrentMoney());
+        assertEquals(0, player.getCurrentMoney().compareTo(BigDecimal.ZERO));
     }
 
     @Test
@@ -188,6 +188,6 @@ class PlayerTest {
                 .subtract(new BigDecimal("200"))
                 .add(new BigDecimal("300"));
 
-        assertEquals(expected, player.getMoney());
+        assertEquals(expected, player.getCurrentMoney());
     }
 }

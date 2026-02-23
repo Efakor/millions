@@ -54,7 +54,7 @@ public class Player {
         if (startingMoney == null) {
             throw new IllegalArgumentException("Player starting money cannot be null");
         }
-        if (startingMoney.compareTo(BigDecimal.ZERO) < 0) {
+        if (startingMoney.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Player starting money cannot be negative");
         }
     }
@@ -67,7 +67,7 @@ public class Player {
     public void withdrawMoney(BigDecimal amount) {
         validateAmount(amount, "Amount to withdraw");
 
-        if (this.currentMoney.subtract(amount).compareTo(BigDecimal.ZERO) <= 0) {
+        if (this.currentMoney.subtract(amount).compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalStateException(String.format
                     ("Insufficient funds!! Current amount is: %s, Amount needed: %s", this.currentMoney, amount)
             );

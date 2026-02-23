@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * Unit tests for the Transaction class.
  * Since Transaction is abstract, we test through a concrete mock implementation.
@@ -23,7 +25,7 @@ class TransactionTest {
             if (isCommitted()) {
                 throw new IllegalStateException("Transaction already committed");
             }
-            setCommitted();
+            setCommitted(true);
         }
     }
 

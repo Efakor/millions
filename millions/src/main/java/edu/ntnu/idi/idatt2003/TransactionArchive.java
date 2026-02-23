@@ -43,7 +43,7 @@ public class TransactionArchive {
     public int countDistinctWeeks() {
         return (int) transactions.stream()
                 .map(Transaction::getWeek)
-                .dinstinct
+                .distinct()
                 .count();
     }
 }

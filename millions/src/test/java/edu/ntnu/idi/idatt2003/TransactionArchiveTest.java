@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt2003.millions;
+package edu.ntnu.idi.idatt2003;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ class TransactionArchiveTest {
 
         @Override
         public void commit(Player player) {
-            setCommitted();
+            setCommitted(true);
         }
     }
 
