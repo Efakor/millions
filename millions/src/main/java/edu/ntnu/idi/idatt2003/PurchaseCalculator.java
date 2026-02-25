@@ -1,8 +1,13 @@
 package edu.ntnu.idi.idatt2003;
-
+/**
+ * Calculator for purchase transactions.
+ * Calculates costs and fees when buying shares.
+ */
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
+
 
 
 public class PurchaseCalculator implements TransactionCalculator{

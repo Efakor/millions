@@ -3,6 +3,13 @@ package edu.ntnu.idi.idatt2003;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ *Calculator for sale transactions.
+ * Calculates proceeds and costs when selling shares,
+ * including commission and profit-based tax.
+ *
+ */
+
 public class SaleCalculator implements TransactionCalculator{
   private final BigDecimal purchasePrice;
   private final BigDecimal salePrice;
