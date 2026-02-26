@@ -115,12 +115,11 @@ public class Exchange {
 
         BigDecimal currentPrice = stock.getSalesPrice();
         Share share = new Share(stock, quantity, currentPrice);
-        PurchaseCalculator calculator = new PurchaseCalculator(share, currentPrice);
 
-        Purchase purchase = new Purchase(share, week, calculator);
+        Purchase purchase = new Purchase(share, week);
         purchase.commit(player);
 
-        return new Purchase(share, week, calculator);
+        return purchase;
     }
 
     public void advance() {
