@@ -5,22 +5,40 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import  java.math.BigDecimal;
 
-
+/**
+ * Unit tests for PurchaseCalculator  class.
+ * Tests all calculation methods for purchase transactions.
+ */
 
 class PurchaseCalculatorTest {
   private Stock appleStock;
   private Share appleShare;
   private PurchaseCalculator calculator;
+
+  /**
+   * Sets up test fixtures before each test.
+   * Creates a stock, a share, a purchase calculator for testing.
+   */
   @BeforeEach
 void setUp() {
     appleStock=new Stock("AAPL", "Apple INC", new BigDecimal("150.00"));
     appleShare=new Share(appleStock, new BigDecimal("10"), new BigDecimal("100.00"));
     calculator = new PurchaseCalculator(appleShare);
   }
+
+  /**
+   * Tests PurchaseCalculator can be created with a valid share.
+   */
   @Test
-  void calculatePurchase() {
+  void testConstructorWithValidInput() {
     assertNotNull(calculator);
   }
+
+  /**
+   * Tests PurchaseCalculator constructor when share is null,
+   * throws IllegalArgumentException.
+   *
+   */
   @Test
   void testConstructorWithNullShare() {
     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -28,23 +46,39 @@ void setUp() {
     assertTrue(exception.getMessage().contains("Share"));
 
   }
+
+  /**
+   * Tests calculate gross returns the correct gross value.
+   */
   @Test
   void testCalculateGross() {
     BigDecimal gross =calculator.calculateGross();
     assertEquals(new BigDecimal("1000.00"),gross);
   }
+
+  /**
+   * Tests calculate the commission and returns the correct commission (0.5% gross).
+   */
   @Test
   void testCalculateCommission() {
-    BigDecimal commision=calculator.calculateCommission();
-    assertEquals(new BigDecimal("5.00"),commision);
+    BigDecimal commission=calculator.calculateCommission();
+    assertEquals(new BigDecimal("5.00"),commission);
 
   }
+
+  /**
+   * Tests calculate tax. There is no tax in purchasing shares.
+   */
   @Test
   void testCalculateTax() {
     //No tax on purchases
     BigDecimal tax=calculator.calculateTax();
     assertEquals(new BigDecimal("0.00"),tax);
   }
+
+  /**
+   * Tests calculate total cost,returns the correct total cost.
+   */
   @Test
   void testCalculateTotal() {
     BigDecimal total=calculator.calculateTotal();
