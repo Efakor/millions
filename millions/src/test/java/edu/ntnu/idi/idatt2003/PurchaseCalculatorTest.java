@@ -61,8 +61,8 @@ void setUp() {
    */
   @Test
   void testCalculateCommission() {
-    BigDecimal commision=calculator.calculateCommission();
-    assertEquals(new BigDecimal("5.00"),commision);
+    BigDecimal commission=calculator.calculateCommission();
+    assertEquals(new BigDecimal("5.00"),commission);
 
   }
 
