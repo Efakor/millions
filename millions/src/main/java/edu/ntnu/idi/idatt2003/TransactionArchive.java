@@ -40,6 +40,30 @@ public class TransactionArchive {
         return List.copyOf(transactions);
     }
 
+    public List<Purchase> getPurchases(int week) {
+        if (week < 1) {
+            throw new IllegalArgumentException("Week must be positive");
+        }
+
+        return transactions.stream()
+                .filter(t -> t.getWeek() == week)
+                .filter(t -> t instanceof Purchase)
+                .map(t -> (Purchase) t)
+                .collect(Collectors.toList());
+    }
+
+    public List<Sale> getSales(int week) {
+        if (week < 1) {
+            throw new IllegalArgumentException("Week must be positive");
+        }
+
+        return transactions.stream()
+                .filter(t -> t.getWeek() == week)
+                .filter(t -> t instanceof Sale)
+                .map(t -> (Sale) t)
+                .collect(Collectors.toList());
+    }
+
     public int countDistinctWeeks() {
         return (int) transactions.stream()
                 .map(Transaction::getWeek)
