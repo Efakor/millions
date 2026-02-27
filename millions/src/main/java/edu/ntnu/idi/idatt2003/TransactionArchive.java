@@ -72,6 +72,7 @@ public class TransactionArchive {
         return List.copyOf(transactions);
     }
 
+<<<<<<< HEAD
     /**
      * Counts the number of distinct weeks with actual trading.
      * A week is counted if it has at least one transaction.
@@ -79,6 +80,32 @@ public class TransactionArchive {
      *
      * @return the number of weeks with transactions
      */
+=======
+    public List<Purchase> getPurchases(int week) {
+        if (week < 1) {
+            throw new IllegalArgumentException("Week must be positive");
+        }
+
+        return transactions.stream()
+                .filter(t -> t.getWeek() == week)
+                .filter(t -> t instanceof Purchase)
+                .map(t -> (Purchase) t)
+                .collect(Collectors.toList());
+    }
+
+    public List<Sale> getSales(int week) {
+        if (week < 1) {
+            throw new IllegalArgumentException("Week must be positive");
+        }
+
+        return transactions.stream()
+                .filter(t -> t.getWeek() == week)
+                .filter(t -> t instanceof Sale)
+                .map(t -> (Sale) t)
+                .collect(Collectors.toList());
+    }
+
+>>>>>>> 9e1ab9f6a82af1cc89f3873786075e685ff80e8b
     public int countDistinctWeeks() {
         return (int) transactions.stream()
                 .map(Transaction::getWeek)
