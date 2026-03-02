@@ -39,6 +39,7 @@ class PortfolioTest {
     }
 
     @Test
+
     void addShareWithValidShare() {
         assertTrue(portfolio.addShare(appleShare1));
         assertEquals(1, portfolio.size());
@@ -91,7 +92,7 @@ class PortfolioTest {
         portfolio.addShare(appleShare1);
         portfolio.addShare(googleShare);
 
-        List<Share> shares = portfolio.getShares();
+        List<Share> shares = portfolio.getAllShares();
 
         assertEquals(2, shares.size());
         assertTrue(shares.contains(appleShare1));
@@ -101,7 +102,7 @@ class PortfolioTest {
     @Test
     void getSharesReturnsUnmodifiableList() {
         portfolio.addShare(appleShare1);
-        List<Share> shares = portfolio.getShares();
+        List<Share> shares = portfolio.getAllShares();
 
         assertThrows(UnsupportedOperationException.class, () -> {
             shares.add(googleShare);

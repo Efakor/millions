@@ -72,15 +72,14 @@ public class TransactionArchive {
         return List.copyOf(transactions);
     }
 
-<<<<<<< HEAD
     /**
-     * Counts the number of distinct weeks with actual trading.
-     * A week is counted if it has at least one transaction.
-     * Useful for calculating average performance per active week.
+     * Gets all purchase transactions from a specific week.
+     * Useful for analyzing buying activity.
      *
-     * @return the number of weeks with transactions
+     * @param week the week number
+     * @return list of purchases from that week (empty if none)
+     * @throws IllegalArgumentException if week is less than 1
      */
-=======
     public List<Purchase> getPurchases(int week) {
         if (week < 1) {
             throw new IllegalArgumentException("Week must be positive");
@@ -93,6 +92,14 @@ public class TransactionArchive {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Gets all sale transactions from a specific week.
+     * Useful for analyzing selling activity.
+     *
+     * @param week the week number
+     * @return list of sales from that week (empty if none)
+     * @throws IllegalArgumentException if week is less than 1
+     */
     public List<Sale> getSales(int week) {
         if (week < 1) {
             throw new IllegalArgumentException("Week must be positive");
@@ -105,7 +112,13 @@ public class TransactionArchive {
                 .collect(Collectors.toList());
     }
 
->>>>>>> 9e1ab9f6a82af1cc89f3873786075e685ff80e8b
+    /**
+     * Counts the number of distinct weeks with actual trading.
+     * A week is counted if it has at least one transaction.
+     * Useful for calculating average performance per active week.
+     *
+     * @return the number of weeks with transactions
+     */
     public int countDistinctWeeks() {
         return (int) transactions.stream()
                 .map(Transaction::getWeek)
