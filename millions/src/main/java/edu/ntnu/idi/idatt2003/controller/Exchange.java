@@ -1,4 +1,7 @@
-package edu.ntnu.idi.idatt2003;
+package edu.ntnu.idi.idatt2003.controller;
+
+import edu.ntnu.idi.idatt2003.model.*;
+import edu.ntnu.idi.idatt2003.model.calculator.SaleCalculator;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

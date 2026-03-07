@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt2003;
+package edu.ntnu.idi.idatt2003.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;

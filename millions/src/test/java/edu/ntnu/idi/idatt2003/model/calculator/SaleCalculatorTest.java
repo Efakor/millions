@@ -1,5 +1,7 @@
-package edu.ntnu.idi.idatt2003;
+package edu.ntnu.idi.idatt2003.model.calculator;
 
+import edu.ntnu.idi.idatt2003.model.Share;
+import edu.ntnu.idi.idatt2003.model.Stock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

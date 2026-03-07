@@ -1,5 +1,7 @@
-package edu.ntnu.idi.idatt2003;
+package edu.ntnu.idi.idatt2003.model.calculator;
 
+
+import edu.ntnu.idi.idatt2003.model.Share;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

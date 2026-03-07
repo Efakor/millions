@@ -1,5 +1,6 @@
-package edu.ntnu.idi.idatt2003;
+package edu.ntnu.idi.idatt2003.model;
 
+import edu.ntnu.idi.idatt2003.model.calculator.TransactionCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;

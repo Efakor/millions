@@ -1,4 +1,6 @@
-package edu.ntnu.idi.idatt2003;
+package edu.ntnu.idi.idatt2003.model;
+
+import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,6 @@
-package edu.ntnu.idi.idatt2003;
+package edu.ntnu.idi.idatt2003.model.calculator;
+
+import edu.ntnu.idi.idatt2003.model.Share;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -8,7 +10,7 @@ import java.math.RoundingMode;
  * Calculates proceeds and costs selling shares,as well as commission and profit-base tax.
  */
 
-public class SaleCalculator implements TransactionCalculator{
+public class SaleCalculator implements TransactionCalculator {
   private final BigDecimal purchasePrice;
   private final BigDecimal salePrice;
   private final BigDecimal quantity;

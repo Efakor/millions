@@ -1,5 +1,6 @@
-package edu.ntnu.idi.idatt2003;
+package edu.ntnu.idi.idatt2003.model;
 
+import edu.ntnu.idi.idatt2003.model.calculator.SaleCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
@@ -101,7 +102,7 @@ class SaleTest {
         // Remove share from portfolio
         player.getPortfolio().removeShare(share);
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> sale.commit(player));
-        assertFalse(exception.getMessage().contains("does not own share"));
+        assertTrue(exception.getMessage().contains("does not own share"));
     }
 
     @Test
