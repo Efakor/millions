@@ -99,6 +99,7 @@ public class Share {
       throw new IllegalArgumentException("Purchase Price must be greater than zero");
     }
   }
+
   @Override
   public boolean equals(Object o) {
     if (this == o)
