@@ -36,9 +36,9 @@ public class Purchase extends Transaction {
 
   @Override
   public  void commit(Player player) {
-    if (isCommitted()) {
-      throw new IllegalStateException("Transaction is already committed");
-    }
+    validatePlayer(player);
+    validateNotCommited();
+
 
     BigDecimal totalCost = getCalculator().calculateTotal();
     player.withdrawMoney(totalCost);
@@ -46,5 +46,26 @@ public class Purchase extends Transaction {
     player.getTransactionArchive().add(this);
     setCommitted(true);
 
+  }
+
+  /**
+   * Validates the player is not null.
+   * @param player is the player to validate
+   * @throws  IllegalArgumentException if player null
+   */
+  private  void  validatePlayer(Player player) {
+    if (player == null) {
+      throw new IllegalArgumentException("Player cannot be null");
+    }
+  }
+
+  /**
+   * Validates this transaction has not been committed.
+   * @throws IllegalArgumentException if transaction is already committed.
+   */
+  private  void  validateNotCommited() {
+    if (isCommitted()) {
+      throw new IllegalStateException("Transaction is already committed");
+    }
   }
 }
