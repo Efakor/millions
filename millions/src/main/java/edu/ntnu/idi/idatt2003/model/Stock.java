@@ -1,8 +1,6 @@
 package edu.ntnu.idi.idatt2003.model;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Stock {
   private final String symbol;
@@ -53,7 +51,7 @@ public class Stock {
    */
 
 public BigDecimal getSalesPrice() {
-    return prices.get(prices.size()-1);
+    return prices.getLast();
 }
 
   /**
@@ -77,6 +75,55 @@ public BigDecimal getSalesPrice() {
     return new  ArrayList<>(prices);
 
 }
+
+    /**
+     * Returns the full price history of this stock.
+     * The list is unmodifiable to protect its internal state.
+     *
+     * @return an unmodifiable list of all registered prices
+     */
+    public List<BigDecimal> getHistoricalPrices() {
+      return Collections.unmodifiableList(prices);
+    }
+
+    /**
+     * Returns the highest price this stock has ever been registered at.
+     *
+     * @return the highest recorded price
+     * @throws IllegalStateException if no prices have been registered
+     */
+    public BigDecimal getHighestPrice() {
+      return  prices.stream()
+              .max(Comparator.naturalOrder())
+              .orElseThrow(() -> new IllegalStateException("No prices registered"));
+    }
+
+    /**
+     * Returns the lowest price this stock has ever been registered at.
+     *
+     * @return the lowest recorded price
+     * @throws IllegalStateException if no prices have been registered
+     */
+    public BigDecimal getLowestPrice() {
+        return  prices.stream()
+                .min(Comparator.naturalOrder())
+                .orElseThrow(() -> new IllegalStateException("No prices registered"));
+    }
+
+    /**
+     * Returns the difference between the current price and the previous price.
+     * A positive value means the price went up, negative means it went down.
+     *
+     * @return the latest price change, or BigDecimal.ZERO if only one price exists
+     */
+    public BigDecimal getLatestPriceChange() {
+      if (prices.size() < 2) {
+          return BigDecimal.ZERO;
+      }
+      BigDecimal latest = prices.get(prices.size() - 1);
+      BigDecimal previous = prices.get(prices.size() - 2);
+      return latest.subtract(previous);
+    }
 
   /**
    * Validates that the symbol is not null or empty.
