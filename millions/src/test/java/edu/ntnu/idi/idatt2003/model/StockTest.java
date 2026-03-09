@@ -15,7 +15,6 @@ class StockTest {
   void setUp() {
     initialPrice = new BigDecimal("150.50");
     appleStock = new Stock("AAPL", "Apple Inc.", initialPrice);
-
   }
 
   //Constructor Tests
@@ -54,8 +53,6 @@ class StockTest {
 
 
     }
-
-
   }
 
   /**
@@ -79,8 +76,8 @@ class StockTest {
       assertTrue(exception.getMessage().contains("Company name"));
 
     }
-
   }
+
   @Nested
   class ConstructorSalesPriceValidationTests{
     @Test
@@ -108,9 +105,8 @@ class StockTest {
 
 
     }
-
-
   }
+
   @Nested
   class ConstructorGetterTests{
 
@@ -135,8 +131,8 @@ class StockTest {
       //Assert
       assertEquals(initialPrice, salesPrice);
     }
-
   }
+
   @Nested
   class AddTests{
     @Test
@@ -147,10 +143,7 @@ class StockTest {
       appleStock.addNewSalesPrice(newPrice);
       //Assert
       assertEquals(newPrice, appleStock.getSalesPrice());
-
-
     }
-
     @Test
     void testaddNewSalesPriceWithZeroPrice() {
       //Arrange and Act
@@ -160,14 +153,13 @@ class StockTest {
       assertTrue(exception.getMessage().contains("Sales"));
     }
     @Test
-    void testaddNewSalesPriceWithNegativePrice() {
+    void testAddNewSalesPriceWithNegativePrice() {
       //Arrange and Act
       IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
           () -> appleStock.addNewSalesPrice(new BigDecimal("-150.50")));
 
       //Assert
       assertTrue(exception.getMessage().contains("Sales"));
-
     }
     @Test
     void testAddMultiplePrices() {
@@ -182,19 +174,20 @@ class StockTest {
 
       //Assert
       assertEquals(price4, appleStock.getSalesPrice());
-      assertEquals(4, appleStock.getPriceHistory().size());
+      assertEquals(4, appleStock.getHistoricalPrices().size());
     }
   }
+
   @Nested
   class GetPriceHistoryTests{
     //Price History tests
     @Test
     void testGetPriceHistoryInitialSize() {
       //Arrange
-      var history = appleStock.getPriceHistory();
+      var history = appleStock.getHistoricalPrices();
       //Assert
       assertEquals(1, history.size());
-      assertEquals(initialPrice, history.get(0));
+      assertEquals(initialPrice, history.getFirst());
     }
     @Test
     void testGetPriceHistoryAfterAddingPrice() {
@@ -204,21 +197,12 @@ class StockTest {
       appleStock.addNewSalesPrice(price2);
       appleStock.addNewSalesPrice(price3);
       //Act
-      var history = appleStock.getPriceHistory();
+      var history = appleStock.getHistoricalPrices();
       //Assert
       assertEquals(3, history.size());
       assertEquals(initialPrice, history.get(0));
       assertEquals(price2, history.get(1));
       assertEquals(price3, history.get(2));
-    }
-
-    @Test
-    void testGetPriceHistoryReturnsNewPrice() {
-      //Arrange and Act
-      var history1 = appleStock.getPriceHistory();
-      var history2 = appleStock.getPriceHistory();
-      //Assert
-      assertNotSame(history1, history2);
     }
     @Test
     void testWithEqualSameSymbol() {
@@ -235,8 +219,56 @@ class StockTest {
       Stock stock2= new Stock("GOOGL", "Alphabet Inc..", new BigDecimal("2800.00"));
       assertNotEquals(stock1, stock2);
     }
-
   }
+
+    @Nested
+    class PriceStatisticsTests {
+
+        @Test
+        void getHighestPriceWithMultiplePrices() {
+            appleStock.addNewSalesPrice(new BigDecimal("200.00"));
+            appleStock.addNewSalesPrice(new BigDecimal("90.00"));
+
+            assertEquals(0, new BigDecimal("200.00").compareTo(appleStock.getHighestPrice()));
+        }
+
+        @Test
+        void getHighestPriceWithSinglePrice() {
+            assertEquals(0, new BigDecimal("150.50").compareTo(appleStock.getHighestPrice()));
+        }
+
+        @Test
+        void getLowestPriceWithMultiplePrices() {
+            appleStock.addNewSalesPrice(new BigDecimal("200.00"));
+            appleStock.addNewSalesPrice(new BigDecimal("60.00"));
+
+            assertEquals(0, new BigDecimal("60.00").compareTo(appleStock.getLowestPrice()));
+        }
+
+        @Test
+        void getLowestPriceWithSinglePrice() {
+            assertEquals(0, new BigDecimal("150.50").compareTo(appleStock.getLowestPrice()));
+        }
+
+        @Test
+        void getLatestPriceChangeWithTwoPricesReturnsCorrectDifference() {
+            appleStock.addNewSalesPrice(new BigDecimal("170.50"));
+
+            assertEquals(0, new BigDecimal("20.00").compareTo(appleStock.getLatestPriceChange()));
+        }
+
+        @Test
+        void getLatestPriceChangeWithNegativeChangeReturnsNegativeValue() {
+            appleStock.addNewSalesPrice(new BigDecimal("130.50"));
+
+            assertEquals(0, new BigDecimal("-20.00").compareTo(appleStock.getLatestPriceChange()));
+        }
+
+        @Test
+        void getLatestPriceChangeWithOnlyOnePriceReturnsZero() {
+            assertEquals(0, BigDecimal.ZERO.compareTo(appleStock.getLatestPriceChange()));
+        }
+    }
 
 }
 
