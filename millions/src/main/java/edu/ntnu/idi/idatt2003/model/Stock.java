@@ -66,16 +66,6 @@ public BigDecimal getSalesPrice() {
     prices.add(newPrice);
 }
 
-  /**
-   * Returns an unmodifiable view of the price history.
-   * This can be useful for analyzing price trends.
-   * @return a list containing all historical prices
-   */
-  public List<BigDecimal> getPriceHistory() {
-    return new  ArrayList<>(prices);
-
-}
-
     /**
      * Returns the full price history of this stock.
      * The list is unmodifiable to protect its internal state.
@@ -120,7 +110,7 @@ public BigDecimal getSalesPrice() {
       if (prices.size() < 2) {
           return BigDecimal.ZERO;
       }
-      BigDecimal latest = prices.get(prices.size() - 1);
+      BigDecimal latest = prices.getLast();
       BigDecimal previous = prices.get(prices.size() - 2);
       return latest.subtract(previous);
     }
