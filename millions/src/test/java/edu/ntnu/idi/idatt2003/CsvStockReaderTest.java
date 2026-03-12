@@ -1,4 +1,5 @@
 package edu.ntnu.idi.idatt2003;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.io.TempDir;
@@ -11,6 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class CsvStockReaderTest {
+  private CsvStockReader reader;
+  @BeforeEach
+  void setUp() {
+    reader=new  CsvStockReader();
+  }
   /**
    * Tests for valid CSV files.
    */
@@ -28,7 +34,6 @@ class CsvStockReaderTest {
           GOOGL,Alphabet Inc.,2800.00
           """;
       Files.writeString(csvFile, content);
-      StockFileReader reader = new CsvStockReader();
       //Act
       List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
       //Assert
@@ -50,7 +55,6 @@ class CsvStockReaderTest {
           TSLA,Tesla Inc.,426.52
       """;
       Files.writeString(csvFile, content);
-      StockFileReader reader = new CsvStockReader();
 
       //Act
       List<Stock>stocks=reader.readStocksFromFile(csvFile.toString());
@@ -80,7 +84,6 @@ class CsvStockReaderTest {
           GOOGL,Alphabet Inc.,311.11
       """;
       Files.writeString(csvFile, content);
-      CsvStockReader reader = new CsvStockReader();
       //Act
       List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
       //Assert
@@ -95,13 +98,12 @@ class CsvStockReaderTest {
     void testSkipBlankLines(@TempDir Path tempDir) throws IOException {
       Path csvFile = tempDir.resolve("stock.csv");
       String content= """
-          
+     
           AAPL,Apple Inc. ,150.00
           
           GOOGL,Alphabet Inc.,311.11
       """;
       Files.writeString(csvFile, content);
-      CsvStockReader reader = new CsvStockReader();
       //Act
       List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
       assertEquals(2,stocks.size());
@@ -122,7 +124,6 @@ class CsvStockReaderTest {
         
         """;
     Files.writeString(csvFile, content);
-    CsvStockReader reader = new CsvStockReader();
     //Act
     List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
     //Assert
@@ -138,7 +139,6 @@ class CsvStockReaderTest {
   class ValidationTests{
     @Test
     void testReadNullFileName(){
-      CsvStockReader reader = new CsvStockReader();
       assertThrows(IllegalArgumentException.class, () -> reader.readStocksFromFile(null));
     }
 
@@ -148,8 +148,6 @@ class CsvStockReaderTest {
 
     @Test
     void testReadEmptyFileName(){
-      //Arrange
-      CsvStockReader reader = new CsvStockReader();
       //Act & Assert
       assertThrows(IllegalArgumentException.class, () -> reader.readStocksFromFile(""));
     }
@@ -181,7 +179,6 @@ class CsvStockReaderTest {
           MSFT,Microsoft,404.68
       """;
       Files.writeString(csvFile, content);
-      CsvStockReader reader = new CsvStockReader();
       //Act
       List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
       //Assert
@@ -201,7 +198,6 @@ class CsvStockReaderTest {
           GOOGL,Alphabet Inc.,2800.00
           """;
       Files.writeString(csvFile, content);
-      CsvStockReader reader = new CsvStockReader();
       List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
       assertEquals(2,stocks.size());
       assertEquals("AAPL",stocks.get(0).getSymbol());
@@ -216,7 +212,6 @@ class CsvStockReaderTest {
           INVALID PRICE
           """;
       Files.writeString(csvFile, content);
-      CsvStockReader reader = new CsvStockReader();
       List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
       assertTrue(stocks.isEmpty());
     }
@@ -230,7 +225,6 @@ class CsvStockReaderTest {
           //Arrange
           Path csvFile = tempDir.resolve("stock.csv");
           Files.writeString(csvFile,"");
-          CsvStockReader reader = new CsvStockReader();
           //Act
           List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
           //Assert
@@ -246,7 +240,6 @@ class CsvStockReaderTest {
             #Comment
             """;
           Files.writeString(csvFile, content);
-          CsvStockReader reader = new CsvStockReader();
           //Act
           List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
           //Assert
@@ -260,7 +253,6 @@ class CsvStockReaderTest {
             
         """;
           Files.writeString(csvFile, content);
-          CsvStockReader reader = new CsvStockReader();
           List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
           assertTrue(stocks.isEmpty());
         }
@@ -272,7 +264,6 @@ class CsvStockReaderTest {
             
             """;
           Files.writeString(csvFile, content);
-          CsvStockReader reader = new CsvStockReader();
           List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
           assertEquals(0,new BigDecimal("150.75").compareTo(stocks.get(0).getSalesPrice()));
         }
@@ -283,7 +274,6 @@ class CsvStockReaderTest {
           String longName= "Long company Name International Company";
           String content="LONG," +longName+ ",160.00\n" ;
           Files.writeString(csvFile,content);
-          CsvStockReader reader = new CsvStockReader();
           //Act
           List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
           //Assert
@@ -300,7 +290,6 @@ class CsvStockReaderTest {
           Path csvFile = tempDir.resolve("stock.csv");
           String content="AAPL  ,Apple Inc.   ,150.00\n" ;
           Files.writeString(csvFile, content);
-          CsvStockReader reader = new CsvStockReader();
           List<Stock>stocks= reader.readStocksFromFile(csvFile.toString());
           assertEquals(1, stocks.size());
           assertEquals("AAPL",stocks.get(0).getSymbol());
@@ -317,10 +306,9 @@ class CsvStockReaderTest {
   class ResourceFiles{
     @Test
     void testFromTestResources() throws IOException {
-      //Arrange
-      CsvStockReader reader = new CsvStockReader();
       //Act
       List<Stock>stocks= reader.readStocksFromFile("src/test/resources/test-stocks.csv");
+      //Assert
       assertFalse(stocks.isEmpty());
       assertTrue(stocks.size()>=1);
     }
