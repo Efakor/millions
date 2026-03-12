@@ -153,14 +153,11 @@ class CsvStockReaderTest {
     }
     @Test
     void testReadBlankFileName(){
-      //Arrange
-      CsvStockReader reader = new CsvStockReader();
       //Act & Assert
       assertThrows(IllegalArgumentException.class, () -> reader.readStocksFromFile(" "));
     }
     @Test
     void testNonExistentFileName(){
-      CsvStockReader reader = new CsvStockReader();
       assertThrows(IOException.class, () -> reader.readStocksFromFile("non-existent-file.csv"));
     }
 
