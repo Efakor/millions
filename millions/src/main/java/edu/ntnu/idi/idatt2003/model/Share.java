@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt2003;
+package edu.ntnu.idi.idatt2003.model;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -99,6 +99,7 @@ public class Share {
       throw new IllegalArgumentException("Purchase Price must be greater than zero");
     }
   }
+
   @Override
   public boolean equals(Object o) {
     if (this == o)
