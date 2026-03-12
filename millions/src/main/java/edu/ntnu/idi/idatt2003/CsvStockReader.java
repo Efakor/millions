@@ -1,4 +1,6 @@
 package edu.ntnu.idi.idatt2003;
+import edu.ntnu.idi.idatt2003.model.Stock;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

@@ -1,4 +1,5 @@
 package edu.ntnu.idi.idatt2003;
+import edu.ntnu.idi.idatt2003.model.Stock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;

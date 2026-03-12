@@ -1,5 +1,5 @@
 package edu.ntnu.idi.idatt2003;
-
+import edu.ntnu.idi.idatt2003.model.Stock;
 import java.io.IOException;
 import java.util.List;
 
