@@ -1,0 +1,8 @@
+# Test stocks for unit testing
+# Ticker,Name,Price
+
+AAPL,Apple Inc.,150.00
+GOOGL,Alphabet Inc.,2800.00
+MSFT,Microsoft,300.00
+TSLA,Tesla Inc.,250.00
+NVDA,Nvidia,191.27
