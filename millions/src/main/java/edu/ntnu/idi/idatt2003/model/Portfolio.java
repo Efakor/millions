@@ -1,5 +1,8 @@
 package edu.ntnu.idi.idatt2003.model;
 
+import edu.ntnu.idi.idatt2003.model.calculator.SaleCalculator;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -115,5 +118,17 @@ public class Portfolio {
      */
     public boolean isEmpty() {
         return shares.isEmpty();
+    }
+
+    /**
+     * Returns the total net worth of this portfolio based on current sale values.
+     * Uses SaleCalculator to calculate the sale value of each share.
+     *
+     * @return the total sale value of all shares, or BigDecimal.ZERO if the portfolio is empty
+     */
+    public BigDecimal getNetWorth() {
+        return shares.stream()
+                .map(share -> new SaleCalculator(share).calculateTotal())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

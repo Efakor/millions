@@ -83,6 +83,16 @@ public class Player {
     }
 
     /**
+     * Returns the total net worth of this player.
+     * Calculated as current money plus the net worth of the portfolio.
+     *
+     * @return total net worth
+     */
+    public BigDecimal getNetWorth() {
+        return currentMoney.add(portfolio.getNetWorth());
+    }
+
+    /**
      * Validates the player's name.
      *
      * @param name the name to validate
