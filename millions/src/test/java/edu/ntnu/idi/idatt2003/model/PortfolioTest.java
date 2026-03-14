@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt2003.model;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
@@ -39,7 +40,6 @@ class PortfolioTest {
     }
 
     @Test
-
     void addShareWithValidShare() {
         assertTrue(portfolio.addShare(appleShare1));
         assertEquals(1, portfolio.size());
@@ -190,5 +190,30 @@ class PortfolioTest {
 
         portfolio.removeShare(appleShare1);
         assertTrue(portfolio.isEmpty());
+    }
+
+    @Nested
+    class NetWorthTests {
+
+        @Test
+        void getNetWorthWithEmptyPortfolio() {
+            assertEquals(0, BigDecimal.ZERO.compareTo(portfolio.getNetWorth()));
+        }
+
+        @Test
+        void geNetWorthWithSingleShare() {
+            portfolio.addShare(appleShare1);
+            assertTrue(portfolio.getNetWorth().compareTo(BigDecimal.ZERO) > 0);
+        }
+
+        @Test
+        void geNetWorthWithMultipleShares() {
+            portfolio.addShare(appleShare1);
+            BigDecimal singleShareWorth = portfolio.getNetWorth();
+            portfolio.addShare(googleShare);
+            BigDecimal multipleShareWorth = portfolio.getNetWorth();
+
+            assertTrue(singleShareWorth.compareTo(multipleShareWorth) < 0);
+        }
     }
 }

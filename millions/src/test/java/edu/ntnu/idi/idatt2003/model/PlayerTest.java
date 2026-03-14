@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt2003.model;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 
@@ -189,5 +190,25 @@ class PlayerTest {
                 .add(new BigDecimal("300"));
 
         assertEquals(expected, player.getCurrentMoney());
+    }
+
+    @Nested
+    class NetWorthTests {
+
+        @Test
+        void getNetWorthWithNoSharesReturnsMoneyOnly() {
+            Player player = new Player("Efa", new BigDecimal("1000.00"));
+            assertEquals(0, new  BigDecimal("1000.00").compareTo(player.getNetWorth()));
+        }
+
+        @Test
+        void getNetWorthWithSharesInPortfolio() {
+            Player player = new Player("Efa", new BigDecimal("1000.00"));
+            Stock stock = new Stock("AAPL", "Apple Inc.", new BigDecimal("100.00"));
+            Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("90.00"));
+            player.getPortfolio().addShare(share);
+
+            assertTrue(player.getNetWorth().compareTo(new BigDecimal("1000.00")) > 0);
+        }
     }
 }
