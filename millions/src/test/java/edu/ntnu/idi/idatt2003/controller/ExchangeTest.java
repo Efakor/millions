@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt2003.controller;
 
 import edu.ntnu.idi.idatt2003.model.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -366,5 +367,57 @@ class ExchangeTest {
 
         // Transaction archive should have 2 transactions
         assertEquals(2, player.getTransactionArchive().getAllTransactions().size());
+    }
+
+    @Nested
+    class GainersAndLosersTests {
+
+        @BeforeEach
+        void addPrices() {
+            // advance prices so getLatestPriceChange() has two prices to work with
+            appleStock.addNewSalesPrice(new BigDecimal("200.00")); // went up
+            googleStock.addNewSalesPrice(new BigDecimal("2500.00")); // went down
+            wellsFargoStock.addNewSalesPrice(new BigDecimal("20.00")); // went down
+        }
+
+        @Test
+        void getGainersReturnsStocksWithPositiveChange() {
+            List<Stock> gainers = exchange.getGainers(5);
+            assertTrue(gainers.contains(appleStock));
+            assertFalse(gainers.contains(googleStock));
+            assertFalse(gainers.contains(wellsFargoStock));
+        }
+
+        @Test
+        void getGainerRespectsLimit() {
+            List<Stock> gainers = exchange.getGainers(1);
+            assertEquals(1, gainers.size());
+        }
+
+        @Test
+        void getGainersWithLimitLargerThanGainerCount_ReturnsAllGainers() {
+            List<Stock> gainers = exchange.getGainers(10);
+            assertEquals(1,  gainers.size());
+        }
+
+        @Test
+        void getLosersReturnsStocksWithNegativeChange() {
+            List<Stock> losers = exchange.getLosers(5);
+            assertTrue(losers.contains(googleStock));
+            assertTrue(losers.contains(wellsFargoStock));
+            assertFalse(losers.contains(appleStock));
+        }
+
+        @Test
+        void getLosersRespectsLimit() {
+            List<Stock> losers = exchange.getLosers(1);
+            assertEquals(1, losers.size());
+        }
+
+        @Test
+        void getLosersWithLimitLargerThanLoserCount_ReturnsAllLosers() {
+            List<Stock> losers = exchange.getLosers(10);
+            assertEquals(2,  losers.size());
+        }
     }
 }
