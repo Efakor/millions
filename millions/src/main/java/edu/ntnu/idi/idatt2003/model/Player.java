@@ -1,6 +1,7 @@
 package edu.ntnu.idi.idatt2003.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Represents a player in the stock trading game.
@@ -116,6 +117,25 @@ public class Player {
         }
         if (startingMoney.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Player starting money cannot be negative");
+        }
+    }
+
+    /**
+     * Returns the current status of the player based on the number of weeks traded and net worth
+     * growth compared to the starting capital.
+     *
+     * @return "Speculator", "Investor" or "Novice"
+     */
+    public String getStatus() {
+        int weeksTraded = transactionArchive.countDistinctWeeks();
+        BigDecimal growth = getNetWorth().divide(startingMoney, 10, RoundingMode.HALF_UP);
+
+        if (weeksTraded >= 20 && growth.compareTo(new BigDecimal("2.00")) >= 0) {
+            return "Speculator";
+        } else if (weeksTraded >= 10 && growth.compareTo(new BigDecimal("1.20")) >= 0) {
+            return "Investor";
+        } else {
+            return "Novice";
         }
     }
 

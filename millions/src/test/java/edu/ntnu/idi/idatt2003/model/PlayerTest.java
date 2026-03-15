@@ -211,4 +211,62 @@ class PlayerTest {
             assertTrue(player.getNetWorth().compareTo(new BigDecimal("1000.00")) > 0);
         }
     }
+
+    @Nested
+    class StatusTests {
+
+        private void simulateWeeks(Player player, int weeks) {
+            Stock stock = new Stock("TEST", "Test Inc.", new BigDecimal("10.00"));
+            Share share = new Share(stock, new BigDecimal("1"), new BigDecimal("10.00"));
+            for (int i = 1; i <= weeks; i++) {
+                Purchase purchase = new Purchase(share, i);
+                purchase.commit(player);
+            }
+        }
+
+        @Test
+        void getStatusWithNoTradesReturnsNovice() {
+            Player player = new Player("Efa", new BigDecimal("1000.00"));
+            assertEquals("Novice", player.getStatus());
+        }
+
+        @Test
+        void getStatusWithInsufficientWeeksReturnsNovice() {
+            Player player = new Player("Efa", new BigDecimal("1000.00"));
+            player.addMoney(new BigDecimal("500.00"));
+            assertEquals("Novice", player.getStatus());
+        }
+
+        @Test
+        void getStatusWithExactSpeculatorThresholdReturnsSpeculator() {
+            // 20 weeks traded, exactly doubled
+            Player player = new Player("Efa", new BigDecimal("1000.00"));
+            simulateWeeks(player, 20);
+            player.addMoney(new BigDecimal("1100.00")); // overshoot to account for commission costs
+            assertEquals("Speculator", player.getStatus());
+        }
+
+        @Test
+        void getStatusWithExactInvestorThresholdReturnsInvestor() {
+            // 10 weeks traded, exactly 20% growth
+            Player player = new Player("Efa", new BigDecimal("1000.00"));
+            simulateWeeks(player, 10);
+            player.addMoney(new BigDecimal("250.00")); // overshoot to account for commission costs
+            assertEquals("Investor", player.getStatus());
+        }
+
+        @Test
+        void getStatusWithEnoughGrowthButInsufficientWeeksReturnsNovice() {
+            Player player = new Player("Efa", new BigDecimal("1000.00"));
+            player.addMoney(new BigDecimal("500.00")); // 50% growth but no weeks
+            assertEquals("Novice", player.getStatus());
+        }
+
+        @Test
+        void getStatusWithEnoughWeeksButInsufficientGrowthReturnsNovice() {
+            Player player = new Player("Efa", new BigDecimal("1000.00"));
+            simulateWeeks(player, 10);
+            assertEquals("Novice", player.getStatus());
+        }
+    }
 }
