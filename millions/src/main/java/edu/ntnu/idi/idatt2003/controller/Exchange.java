@@ -262,5 +262,31 @@ public class Exchange {
         }
     }
 
+    /**
+     * Returns the stocks with the biggest positive price change since last week.
+     *
+     * @param limit the maximum number of stocks to return
+     * @return a list of top gaining stocks, sorted by price change descending
+     */
+    public List<Stock> getGainers(int limit) {
+        return stocks.values().stream()
+                .filter(stock -> stock.getLatestPriceChange().compareTo(BigDecimal.ZERO) > 0)
+                .sorted((a, b) -> b.getLatestPriceChange().compareTo(a.getLatestPriceChange()))
+                .limit(limit)
+                .collect(Collectors.toList());
+    }
 
+    /**
+     * Returns the stocks that have performed worst since last week.
+     *
+     * @param limit the maximum number of stocks to return
+     * @return a list of worst performing stocks, sorted by price change ascending
+     */
+    public List<Stock> getLosers(int limit) {
+        return stocks.values().stream()
+                .filter(stock -> stock.getLatestPriceChange().compareTo(BigDecimal.ZERO) < 0)
+                .sorted((a, b) -> a.getLatestPriceChange().compareTo(b.getLatestPriceChange()))
+                .limit(limit)
+                .collect(Collectors.toList());
+    }
 }
