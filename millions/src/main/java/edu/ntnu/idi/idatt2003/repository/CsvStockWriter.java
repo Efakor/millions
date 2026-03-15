@@ -20,9 +20,9 @@ public class CsvStockWriter implements StockFileWriter {
 
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
       //write headers
-      writer.write("#Stock data");
+
       writer.newLine();
-      writer.write("Symbol,Name,Price");
+
       writer.newLine();
       for(Stock stock : stocks){
         String line = String.format("%s,%s,%s",
