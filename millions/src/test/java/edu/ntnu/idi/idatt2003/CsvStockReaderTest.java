@@ -1,5 +1,6 @@
 package edu.ntnu.idi.idatt2003;
 import edu.ntnu.idi.idatt2003.model.Stock;
+import edu.ntnu.idi.idatt2003.repository.CsvStockReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
