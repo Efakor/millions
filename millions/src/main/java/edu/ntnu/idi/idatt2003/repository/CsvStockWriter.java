@@ -19,11 +19,7 @@ public class CsvStockWriter implements StockFileWriter {
 
 
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-      //write headers
 
-      writer.newLine();
-
-      writer.newLine();
       for(Stock stock : stocks){
         String line = String.format("%s,%s,%s",
             stock.getSymbol(),
