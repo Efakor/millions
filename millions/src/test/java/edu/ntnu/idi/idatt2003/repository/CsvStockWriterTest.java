@@ -90,7 +90,7 @@ class CsvStockWriterTest {
       //Arrange
       Path csvFile=tempDir.resolve("correct_prices.csv");
       List<Stock> stocks=List.of(new Stock("AAPL","Apple Inc.",new BigDecimal("150.55")));
-      String expected="AAPL,Apple Inc.,150.55";
+      String expected="AAPL,Apple Inc.,150.55\n";
       //Act
       stockWriter.writeStocksToFile(csvFile.toString(),stocks);
       String content=Files.readString(csvFile);
