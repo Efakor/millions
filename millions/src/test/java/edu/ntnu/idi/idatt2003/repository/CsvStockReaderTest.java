@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt2003;
+package edu.ntnu.idi.idatt2003.repository;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,9 +23,7 @@ class CsvStockReaderTest {
    */
   @Nested
     class ValidFileTests{
-    /**
-     * Test
-     */
+
     @Test
         void testValidFile(@TempDir Path tempDir) throws IOException {
       //Arrange
@@ -310,5 +308,6 @@ class CsvStockReaderTest {
       assertFalse(stocks.isEmpty());
       assertTrue(stocks.size()>=1);
     }
+
   }
 }
