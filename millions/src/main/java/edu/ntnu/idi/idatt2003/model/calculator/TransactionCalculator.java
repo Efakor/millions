@@ -36,6 +36,4 @@ public interface TransactionCalculator {
    * @return .
    */
   BigDecimal calculateTotal();
-
-
 }
