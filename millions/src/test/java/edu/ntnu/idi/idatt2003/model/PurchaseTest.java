@@ -1,9 +1,15 @@
 package edu.ntnu.idi.idatt2003.model;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import java.math.BigDecimal;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the purchase class.
@@ -11,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 class PurchaseTest {
-  private Stock appleStock;
   private Share appleShare;
   private Player player;
   private Purchase purchase;
@@ -23,7 +28,7 @@ class PurchaseTest {
 
   @BeforeEach
   void setUp() {
-    appleStock = new Stock("AAPL", "Apple Inc.", new BigDecimal("150.00"));
+    Stock appleStock = new Stock("AAPL", "Apple Inc.", new BigDecimal("150.00"));
     appleShare = new Share(appleStock, new BigDecimal("10"), new BigDecimal("100.00"));
     player = new Player("Test Player", new BigDecimal("10000.00"));
     purchase = new Purchase(appleShare, 1);
@@ -50,14 +55,14 @@ class PurchaseTest {
   @Nested
   class SuccessfulCommitTests {
     /**
-     * Test that commit deducts the correct amount from player's money
+     * Test that commit deducts the correct amount from player's money.
      */
     @Test
     void testCommitsDeductsMoney() {
       BigDecimal initialMoney = player.getCurrentMoney();
-      BigDecimal totalcost = purchase.getTotalValue();
+      BigDecimal totalCost = purchase.getTotalValue();
       purchase.commit(player);
-      BigDecimal expectedMoney = initialMoney.subtract(totalcost);
+      BigDecimal expectedMoney = initialMoney.subtract(totalCost);
       assertEquals(0, expectedMoney.compareTo(player.getCurrentMoney()));
 
     }
@@ -105,19 +110,16 @@ class PurchaseTest {
       purchase2.commit(player);
       assertEquals(2, player.getPortfolio().size());
       assertEquals(2, player.getTransactionArchive().getAllTransactions().size());
-
-
     }
-
-
   }
+
   @Nested
-  class ValidationMethods{
+  class ValidationMethods {
     /**
      * Tests that commit throws IllegalArgumentException when player is null.
      */
     @Test
-    void testCommitWithNullPlayer(){
+    void testCommitWithNullPlayer() {
       assertThrows(IllegalArgumentException.class, () -> purchase.commit(null));
 
     }
@@ -126,7 +128,7 @@ class PurchaseTest {
      * Tests that commit  throws an exception when player has insufficient funds.
      */
     @Test
-    void testCommitWithInnsufficientfunds(){
+    void testCommitWithInsufficientFunds() {
       Player poorPlayer = new Player("Poor Player", new BigDecimal("10.00"));
       assertThrows(IllegalStateException.class, () -> purchase.commit(poorPlayer));
     }
@@ -136,7 +138,7 @@ class PurchaseTest {
      * transaction.
      */
     @Test
-    void testCommitWhenAlreadyCommitted(){
+    void testCommitWhenAlreadyCommitted() {
       purchase.commit(player);
       assertThrows(IllegalStateException.class, () -> purchase.commit(player));
 
@@ -146,43 +148,30 @@ class PurchaseTest {
      * Test that null player validation before commited check.
      */
     @Test
-    void testValidationNullPlayerFirst(){
+    void testValidationNullPlayerFirst() {
       assertThrows(IllegalArgumentException.class, () -> purchase.commit(null));
     }
+
     /**
      * Tests that remains uncommited after failed commit due to null player.
      */
     @Test
-    void testPlayerUncommittedAfterNullPlayerError(){
-      try{
-        purchase.commit(null);
-        fail("Should have thrown IllegalArgumentException");
-      } catch(IllegalArgumentException e){
-
-
-      }
+    void testPlayerUncommittedAfterNullPlayerError() {
+      assertThrows(IllegalArgumentException.class, () -> purchase.commit(null));
       assertFalse(purchase.isCommitted());
     }
 
     /**
-     * Test that transaction remains uncommited after insufficient funds
+     * Test that transaction remains uncommited after insufficient funds.
      */
     @Test
-    void testPlayerUncommitedAfterInsufficientFunds(){
+    void testPlayerUncommitedAfterInsufficientFunds() {
       Player poorPlayer = new Player("Poor Player", new BigDecimal("10.00"));
-      try{
-        purchase.commit(null);
-        fail("Should have thrown IllegalArgumentException");
-    }catch(IllegalArgumentException e){
-
-      }
+      assertThrows(IllegalArgumentException.class, () -> purchase.commit(poorPlayer));
       assertFalse(purchase.isCommitted());
-      assertEquals(0,poorPlayer.getPortfolio().size());
+      assertEquals(0, poorPlayer.getPortfolio().size());
 
     }
   }
-
-
-
-  }
+}
 

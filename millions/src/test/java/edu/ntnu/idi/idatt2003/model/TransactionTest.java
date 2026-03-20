@@ -1,11 +1,15 @@
 package edu.ntnu.idi.idatt2003.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import edu.ntnu.idi.idatt2003.model.calculator.TransactionCalculator;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the Transaction class.
@@ -13,156 +17,140 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class TransactionTest {
 
-    /**
-     * Mock implementation of Transaction for testing.
-     */
-    private static class MockTransaction extends Transaction {
-        public MockTransaction(Share share, int week, TransactionCalculator calculator) {
-            super(share, week, calculator);
-        }
-
-        @Override
-        public void commit(Player player) {
-            if (isCommitted()) {
-                throw new IllegalStateException("Transaction already committed");
-            }
-            setCommitted(true);
-        }
+  /**
+   * Mock implementation of Transaction for testing.
+   */
+  private static class MockTransaction extends Transaction {
+    public MockTransaction(Share share, int week, TransactionCalculator calculator) {
+      super(share, week, calculator);
     }
 
-    /**
-     * Mock implementation of TransactionCalculator for testing.
-     */
-    private static class MockCalculator implements TransactionCalculator {
-        private final BigDecimal gross;
+    @Override
+    public void commit(Player player) {
+      if (isCommitted()) {
+        throw new IllegalStateException("Transaction already committed");
+      }
+      setCommitted(true);
+    }
+  }
 
-        public MockCalculator(BigDecimal gross) {
-            this.gross = gross;
-        }
+  /**
+   * Mock implementation of TransactionCalculator for testing.
+   */
+  private record MockCalculator(BigDecimal gross) implements TransactionCalculator {
 
-        @Override
-        public BigDecimal calculateGross() {
-            return gross;
-        }
-
-        @Override
-        public BigDecimal calculateCommission() {
-            return gross.multiply(new BigDecimal("0.005")); // 0.5%
-        }
-
-        @Override
-        public BigDecimal calculateTax() {
-            return BigDecimal.ZERO;
-        }
-
-        @Override
-        public BigDecimal calculateTotal() {
-            return calculateGross().add(calculateCommission());
-        }
+    @Override
+    public BigDecimal calculateGross() {
+      return gross;
     }
 
-    private Stock stock;
-    private Share share;
-    private TransactionCalculator calculator;
-    private Player player;
-
-    @BeforeEach
-    void setUp() {
-        stock = new Stock("AAPL", "Apple Inc.", new BigDecimal("150.00"));
-        share = new Share(stock, new BigDecimal("10"), new BigDecimal("150.00"));
-        calculator = new MockCalculator(new BigDecimal("1500.00"));
-        player = new Player("Test Player", new BigDecimal("10000.00"));
+    @Override
+    public BigDecimal calculateCommission() {
+      return gross.multiply(new BigDecimal("0.005")); // 0.5%
     }
 
-    @Test
-    void constructorWithValidParameters() {
-        Transaction transaction = new MockTransaction(share, 1, calculator);
-
-        assertNotNull(transaction);
-        assertEquals(share, transaction.getShare());
-        assertEquals(1, transaction.getWeek());
-        assertFalse(transaction.isCommitted());
+    @Override
+    public BigDecimal calculateTax() {
+      return BigDecimal.ZERO;
     }
 
-    @Test
-    void constructorWithNullShare() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new MockTransaction(null, 1, calculator);
-        });
+    @Override
+    public BigDecimal calculateTotal() {
+      return calculateGross().add(calculateCommission());
     }
+  }
 
-    @Test
-    void constructorWithNullCalculator() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new MockTransaction(share, 1, null);
-        });
-    }
+  private Share share;
+  private TransactionCalculator calculator;
+  private Player player;
 
-    @Test
-    void constructorWithZeroWeek() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new MockTransaction(share, 0, calculator);
-        });
-    }
+  @BeforeEach
+  void setUp() {
+    Stock stock = new Stock("AAPL", "Apple Inc.", new BigDecimal("150.00"));
+    share = new Share(stock, new BigDecimal("10"), new BigDecimal("150.00"));
+    calculator = new MockCalculator(new BigDecimal("1500.00"));
+    player = new Player("Test Player", new BigDecimal("10000.00"));
+  }
 
-    @Test
-    void constructorWithNegativeWeek() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new MockTransaction(share, -1, calculator);
-        });
-    }
+  @Test
+  void constructorWithValidParameters() {
+    Transaction transaction = new MockTransaction(share, 1, calculator);
 
-    @Test
-    void getGrossValueReturnsCalculatorValue() {
-        Transaction transaction = new MockTransaction(share, 1, calculator);
+    assertNotNull(transaction);
+    assertEquals(share, transaction.getShare());
+    assertEquals(1, transaction.getWeek());
+    assertFalse(transaction.isCommitted());
+  }
 
-        assertEquals(new BigDecimal("1500.00"), transaction.getGrossValue());
-    }
+  @Test
+  void constructorWithNullShare() {
+    assertThrows(IllegalArgumentException.class, () -> new MockTransaction(null, 1, calculator));
+  }
 
-    @Test
-    void getCommissionReturnsCalculatorValue() {
-        Transaction transaction = new MockTransaction(share, 1, calculator);
+  @Test
+  void constructorWithNullCalculator() {
+    assertThrows(IllegalArgumentException.class, () -> new MockTransaction(share, 1, null));
+  }
 
-        assertEquals(new BigDecimal("7.50000"), transaction.getCommission());
-    }
+  @Test
+  void constructorWithZeroWeek() {
+    assertThrows(IllegalArgumentException.class, () -> new MockTransaction(share, 0, calculator));
+  }
 
-    @Test
-    void getTaxReturnsCalculatorValue() {
-        Transaction transaction = new MockTransaction(share, 1, calculator);
+  @Test
+  void constructorWithNegativeWeek() {
+    assertThrows(IllegalArgumentException.class, () -> new MockTransaction(share, -1, calculator));
+  }
 
-        assertEquals(BigDecimal.ZERO, transaction.getTax());
-    }
+  @Test
+  void getGrossValueReturnsCalculatorValue() {
+    Transaction transaction = new MockTransaction(share, 1, calculator);
 
-    @Test
-    void getTotalValueReturnsCalculatorValue() {
-        Transaction transaction = new MockTransaction(share, 1, calculator);
+    assertEquals(new BigDecimal("1500.00"), transaction.getGrossValue());
+  }
 
-        assertEquals(new BigDecimal("1507.50000"), transaction.getTotalValue());
-    }
+  @Test
+  void getCommissionReturnsCalculatorValue() {
+    Transaction transaction = new MockTransaction(share, 1, calculator);
 
-    @Test
-    void isCommitted_initiallyFalse() {
-        Transaction transaction = new MockTransaction(share, 1, calculator);
+    assertEquals(new BigDecimal("7.50000"), transaction.getCommission());
+  }
 
-        assertFalse(transaction.isCommitted());
-    }
+  @Test
+  void getTaxReturnsCalculatorValue() {
+    Transaction transaction = new MockTransaction(share, 1, calculator);
 
-    @Test
-    void commitSetsCommittedToTrue() {
-        Transaction transaction = new MockTransaction(share, 1, calculator);
+    assertEquals(BigDecimal.ZERO, transaction.getTax());
+  }
 
-        transaction.commit(player);
+  @Test
+  void getTotalValueReturnsCalculatorValue() {
+    Transaction transaction = new MockTransaction(share, 1, calculator);
 
-        assertTrue(transaction.isCommitted());
-    }
+    assertEquals(new BigDecimal("1507.50000"), transaction.getTotalValue());
+  }
 
-    @Test
-    void commitWhenAlreadyCommitted() {
-        Transaction transaction = new MockTransaction(share, 1, calculator);
-        transaction.commit(player);
+  @Test
+  void isCommitted_initiallyFalse() {
+    Transaction transaction = new MockTransaction(share, 1, calculator);
 
-        assertThrows(IllegalStateException.class, () -> {
-            transaction.commit(player);
-        });
-    }
+    assertFalse(transaction.isCommitted());
+  }
+
+  @Test
+  void commitSetsCommittedToTrue() {
+    Transaction transaction = new MockTransaction(share, 1, calculator);
+
+    transaction.commit(player);
+
+    assertTrue(transaction.isCommitted());
+  }
+
+  @Test
+  void commitWhenAlreadyCommitted() {
+    Transaction transaction = new MockTransaction(share, 1, calculator);
+    transaction.commit(player);
+
+    assertThrows(IllegalStateException.class, () -> transaction.commit(player));
+  }
 }

@@ -1,8 +1,6 @@
 package edu.ntnu.idi.idatt2003.model.calculator;
 
-
 import edu.ntnu.idi.idatt2003.model.Share;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -26,8 +24,8 @@ public class PurchaseCalculator implements TransactionCalculator {
       throw new IllegalArgumentException("Share cannot be null");
 
     }
-    this.purchasePrice = share.getPurchasePrice();
-    this.quantity = share.getQuantity();
+    this.purchasePrice = share.purchasePrice();
+    this.quantity = share.quantity();
 
   }
 
@@ -78,6 +76,4 @@ public class PurchaseCalculator implements TransactionCalculator {
         .add(calculateTax())
         .setScale(2, RoundingMode.HALF_UP);
   }
-
-
 }
