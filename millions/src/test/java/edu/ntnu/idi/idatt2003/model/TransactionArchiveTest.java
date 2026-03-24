@@ -1,175 +1,178 @@
 package edu.ntnu.idi.idatt2003.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import edu.ntnu.idi.idatt2003.model.calculator.TransactionCalculator;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the TransactionArchive class.
  */
 class TransactionArchiveTest {
 
-    /**
-     * Mock Transaction for testing.
-     */
-    private static class MockTransaction extends Transaction {
-        public MockTransaction(Share share, int week, TransactionCalculator calculator) {
-            super(share, week, calculator);
-        }
-
-        @Override
-        public void commit(Player player) {
-            setCommitted(true);
-        }
+  /**
+   * Mock Transaction for testing.
+   */
+  private static class MockTransaction extends Transaction {
+    public MockTransaction(Share share, int week, TransactionCalculator calculator) {
+      super(share, week, calculator);
     }
 
-    /**
-     * Mock Calculator for testing.
-     */
-    private static class MockCalculator implements TransactionCalculator {
-        @Override
-        public BigDecimal calculateGross() { return new BigDecimal("1000"); }
+    @Override
+    public void commit(Player player) {
+      setCommitted(true);
+    }
+  }
 
-        @Override
-        public BigDecimal calculateCommission() { return new BigDecimal("5"); }
-
-        @Override
-        public BigDecimal calculateTax() { return BigDecimal.ZERO; }
-
-        @Override
-        public BigDecimal calculateTotal() { return new BigDecimal("1005"); }
+  /**
+   * Mock Calculator for testing.
+   */
+  private static class MockCalculator implements TransactionCalculator {
+    @Override
+    public BigDecimal calculateGross() {
+      return new BigDecimal("1000");
     }
 
-    private TransactionArchive archive;
-    private Stock stock;
-    private Share share1;
-    private Share share2;
-    private TransactionCalculator calculator;
-
-    @BeforeEach
-    void setUp() {
-        archive = new TransactionArchive();
-        stock = new Stock("AAPL", "Apple Inc.", new BigDecimal("150.00"));
-        share1 = new Share(stock, new BigDecimal("10"), new BigDecimal("150.00"));
-        share2 = new Share(stock, new BigDecimal("5"), new BigDecimal("160.00"));
-        calculator = new MockCalculator();
+    @Override
+    public BigDecimal calculateCommission() {
+      return new BigDecimal("5");
     }
 
-    @Test
-    void constructorCreatesEmptyArchive() {
-        assertTrue(archive.isEmpty());
+    @Override
+    public BigDecimal calculateTax() {
+      return BigDecimal.ZERO;
     }
 
-    @Test
-    void addWithValidTransaction() {
-        Transaction transaction = new MockTransaction(share1, 1, calculator);
-
-        assertTrue(archive.add(transaction));
-        assertFalse(archive.isEmpty());
+    @Override
+    public BigDecimal calculateTotal() {
+      return new BigDecimal("1005");
     }
+  }
 
-    @Test
-    void addWithNullTransaction() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            archive.add(null);
-        });
-    }
+  private TransactionArchive archive;
+  private Share share1;
+  private Share share2;
+  private TransactionCalculator calculator;
 
-    @Test
-    void isEmptyReflectsArchiveState() {
-        assertTrue(archive.isEmpty());
+  @BeforeEach
+  void setUp() {
+    archive = new TransactionArchive();
+    Stock stock = new Stock("AAPL", "Apple Inc.", new BigDecimal("150.00"));
+    share1 = new Share(stock, new BigDecimal("10"), new BigDecimal("150.00"));
+    share2 = new Share(stock, new BigDecimal("5"), new BigDecimal("160.00"));
+    calculator = new MockCalculator();
+  }
 
-        archive.add(new MockTransaction(share1, 1, calculator));
-        assertFalse(archive.isEmpty());
-    }
+  @Test
+  void constructorCreatesEmptyArchive() {
+    assertTrue(archive.isEmpty());
+  }
 
-    @Test
-    void getTransactionsWithSpecificWeek() {
-        Transaction transaction1 = new MockTransaction(share1, 1, calculator);
-        Transaction transaction2 = new MockTransaction(share2, 2, calculator);
-        Transaction transaction3 = new MockTransaction(share1, 1, calculator);
+  @Test
+  void addWithValidTransaction() {
+    Transaction transaction = new MockTransaction(share1, 1, calculator);
 
-        archive.add(transaction1);
-        archive.add(transaction2);
-        archive.add(transaction3);
+    assertTrue(archive.add(transaction));
+    assertFalse(archive.isEmpty());
+  }
 
-        List<Transaction> week1Transactions = archive.getTransactions(1);
+  @Test
+  void addWithNullTransaction() {
+    assertThrows(IllegalArgumentException.class, () -> archive.add(null));
+  }
 
-        assertEquals(2, week1Transactions.size());
-        assertTrue(week1Transactions.contains(transaction1));
-        assertTrue(week1Transactions.contains(transaction3));
-    }
+  @Test
+  void isEmptyReflectsArchiveState() {
+    assertTrue(archive.isEmpty());
 
-    @Test
-    void getTransactionsWithNoMatchingWeek() {
-        archive.add(new MockTransaction(share1, 1, calculator));
+    archive.add(new MockTransaction(share1, 1, calculator));
+    assertFalse(archive.isEmpty());
+  }
 
-        List<Transaction> transactions = archive.getTransactions(5);
+  @Test
+  void getTransactionsWithSpecificWeek() {
+    Transaction transaction1 = new MockTransaction(share1, 1, calculator);
+    Transaction transaction2 = new MockTransaction(share2, 2, calculator);
+    Transaction transaction3 = new MockTransaction(share1, 1, calculator);
 
-        assertTrue(transactions.isEmpty());
-    }
+    archive.add(transaction1);
+    archive.add(transaction2);
+    archive.add(transaction3);
 
-    @Test
-    void getTransactionsWithInvalidWeek() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            archive.getTransactions(0);
-        });
+    List<Transaction> week1Transactions = archive.getTransactions(1);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            archive.getTransactions(-1);
-        });
-    }
+    assertEquals(2, week1Transactions.size());
+    assertTrue(week1Transactions.contains(transaction1));
+    assertTrue(week1Transactions.contains(transaction3));
+  }
 
-    @Test
-    void getAllTransactionsReturnsAllTransactions() {
-        Transaction transaction1 = new MockTransaction(share1, 1, calculator);
-        Transaction transaction2 = new MockTransaction(share2, 2, calculator);
+  @Test
+  void getTransactionsWithNoMatchingWeek() {
+    archive.add(new MockTransaction(share1, 1, calculator));
 
-        archive.add(transaction1);
-        archive.add(transaction2);
+    List<Transaction> transactions = archive.getTransactions(5);
 
-        List<Transaction> allTransactions = archive.getAllTransactions();
+    assertTrue(transactions.isEmpty());
+  }
 
-        assertEquals(2, allTransactions.size());
-        assertTrue(allTransactions.contains(transaction1));
-        assertTrue(allTransactions.contains(transaction2));
-    }
+  @Test
+  void getTransactionsWithInvalidWeek() {
+    assertThrows(IllegalArgumentException.class, () -> archive.getTransactions(0));
 
-    @Test
-    void getAllTransactionsReturnsUnmodifiableList() {
-        archive.add(new MockTransaction(share1, 1, calculator));
+    assertThrows(IllegalArgumentException.class, () -> archive.getTransactions(-1));
+  }
 
-        List<Transaction> transactions = archive.getAllTransactions();
+  @Test
+  void getAllTransactionsReturnsAllTransactions() {
+    Transaction transaction1 = new MockTransaction(share1, 1, calculator);
+    Transaction transaction2 = new MockTransaction(share2, 2, calculator);
 
-        assertThrows(UnsupportedOperationException.class, () -> {
-            transactions.add(new MockTransaction(share2, 2, calculator));
-        });
-    }
+    archive.add(transaction1);
+    archive.add(transaction2);
 
-    @Test
-    void countDistinctWeeksWithMultipleWeeks() {
-        archive.add(new MockTransaction(share1, 1, calculator));
-        archive.add(new MockTransaction(share2, 1, calculator));
-        archive.add(new MockTransaction(share1, 2, calculator));
-        archive.add(new MockTransaction(share2, 3, calculator));
+    List<Transaction> allTransactions = archive.getAllTransactions();
 
-        assertEquals(3, archive.countDistinctWeeks());
-    }
+    assertEquals(2, allTransactions.size());
+    assertTrue(allTransactions.contains(transaction1));
+    assertTrue(allTransactions.contains(transaction2));
+  }
 
-    @Test
-    void countDistinctWeeksWithEmptyArchive() {
-        assertEquals(0, archive.countDistinctWeeks());
-    }
+  @Test
+  void getAllTransactionsReturnsUnmodifiableList() {
+    archive.add(new MockTransaction(share1, 1, calculator));
 
-    @Test
-    void countDistinctWeeksWithSingleWeek() {
-        archive.add(new MockTransaction(share1, 1, calculator));
-        archive.add(new MockTransaction(share2, 1, calculator));
+    List<Transaction> transactions = archive.getAllTransactions();
 
-        assertEquals(1, archive.countDistinctWeeks());
-    }
+    assertThrows(UnsupportedOperationException.class, () ->
+        transactions.add(new MockTransaction(share2, 2, calculator)));
+  }
+
+  @Test
+  void countDistinctWeeksWithMultipleWeeks() {
+    archive.add(new MockTransaction(share1, 1, calculator));
+    archive.add(new MockTransaction(share2, 1, calculator));
+    archive.add(new MockTransaction(share1, 2, calculator));
+    archive.add(new MockTransaction(share2, 3, calculator));
+
+    assertEquals(3, archive.countDistinctWeeks());
+  }
+
+  @Test
+  void countDistinctWeeksWithEmptyArchive() {
+    assertEquals(0, archive.countDistinctWeeks());
+  }
+
+  @Test
+  void countDistinctWeeksWithSingleWeek() {
+    archive.add(new MockTransaction(share1, 1, calculator));
+    archive.add(new MockTransaction(share2, 1, calculator));
+
+    assertEquals(1, archive.countDistinctWeeks());
+  }
 }

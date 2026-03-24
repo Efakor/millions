@@ -1,7 +1,6 @@
 package edu.ntnu.idi.idatt2003.model;
 
 import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
-
 import java.math.BigDecimal;
 
 /**
@@ -50,6 +49,7 @@ public class Purchase extends Transaction {
 
   /**
    * Validates the player is not null.
+   *
    * @param player is the player to validate
    * @throws  IllegalArgumentException if player null
    */
@@ -61,6 +61,7 @@ public class Purchase extends Transaction {
 
   /**
    * Validates this transaction has not been committed.
+   *
    * @throws IllegalArgumentException if transaction is already committed.
    */
   private  void  validateNotCommited() {

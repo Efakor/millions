@@ -10,115 +10,114 @@ import java.util.Objects;
  * and at what price.
  */
 
-
-public class Share {
-  private final Stock stock;
-  private final BigDecimal quantity;
-  private final  BigDecimal purchasePrice ;
-
+@SuppressWarnings("NullableProblems")
+public record Share(Stock stock, BigDecimal quantity, BigDecimal purchasePrice) {
   /**
    * Creates a new Share with the given stock,quantity and purchase price.
-   * @param stock the stock was purchased
-   * @param quantity the number of units purchased
+   *
+   * @param stock         the stock was purchased
+   * @param quantity      the number of units purchased
    * @param purchasePrice the price per unit at time of purchase
-   * @throws IllegalArgumentException if stock is null, or if quantity or purchasePrice is null or not positive
+   * @throws IllegalArgumentException if stock is null, or if quantity or
+   *                                  purchasePrice is null or not positive
    *
    */
 
-  public Share(Stock stock,BigDecimal quantity,BigDecimal purchasePrice){
+  public Share {
     validateStock(stock);
     validateQuantity(quantity);
     validatePurchasePrice(purchasePrice);
-
-    this.stock=stock;
-    this.quantity=quantity;
-    this.purchasePrice=purchasePrice;
-
 
   }
 
   /**
    * Returns the stock that was purchased.
+   *
    * @return the stock
    */
-  public Stock getStock() {
+  @Override
+  public Stock stock() {
     return stock;
   }
 
   /**
    * Return the quantity of purchased.
+   *
    * @return the quantity.
    */
-  public BigDecimal getQuantity() {
+  @Override
+  public BigDecimal quantity() {
     return quantity;
   }
 
   /**
    * Return the price per unit at time of purchase.
+   *
    * @return the purchase price
    */
-  public BigDecimal getPurchasePrice() {
+  @Override
+  public BigDecimal purchasePrice() {
     return purchasePrice;
   }
 
   /**
    * Validates that the stock is not null.
+   *
    * @param stock the stock to validate
-   * @throws  IllegalArgumentException if stock is null
+   * @throws IllegalArgumentException if stock is null
    */
-  private void validateStock(Stock stock){
-    if(stock==null){
+  private void validateStock(Stock stock) {
+    if (stock == null) {
       throw new IllegalArgumentException("Stock is null");
     }
   }
 
   /**
    * Validates the quantity is not null, and is not negative.
+   *
    * @param quantity the quantity to validate
    * @throws IllegalArgumentException if quality is null or not positive
    */
-  private void validateQuantity(BigDecimal quantity){
-    if(quantity==null){
+  private void validateQuantity(BigDecimal quantity) {
+    if (quantity == null) {
       throw new IllegalArgumentException("Quantity is null");
     }
-    if(quantity.compareTo(BigDecimal.ZERO)<=0){
+    if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
       throw new IllegalArgumentException("Quantity must be greater than zero");
     }
   }
 
   /**
    * Validates the purchase price is not null and not negative.
+   *
    * @param purchasePrice the purchase price  to validate
    * @throws IllegalArgumentException if purchasePrice is null or negative
    */
-  private void validatePurchasePrice(BigDecimal purchasePrice){
-    if(purchasePrice==null){
+  private void validatePurchasePrice(BigDecimal purchasePrice) {
+    if (purchasePrice == null) {
       throw new IllegalArgumentException("Purchase Price is null");
     }
-    if(purchasePrice.compareTo(BigDecimal.ZERO)<=0){
+    if (purchasePrice.compareTo(BigDecimal.ZERO) <= 0) {
       throw new IllegalArgumentException("Purchase Price must be greater than zero");
     }
   }
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
+    }
 
-    if (o == null || getClass() != o.getClass())
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
     Share share = (Share) o;
     return Objects.equals(stock, share.stock) && Objects.equals(purchasePrice, share.purchasePrice);
   }
+
   @Override
-  public int hashCode() {
-    return Objects.hash(stock,quantity, purchasePrice);
-  }
-  @Override
-  public String toString(){
+  public String toString() {
     return String.format("Stock: %s, Quantity: %s, PurchasePrice: %s",
         stock.getSymbol(), quantity, purchasePrice);
   }
-
-
 }
