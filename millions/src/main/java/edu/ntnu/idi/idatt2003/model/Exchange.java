@@ -1,13 +1,6 @@
-package edu.ntnu.idi.idatt2003.controller;
+package edu.ntnu.idi.idatt2003.model;
 
 import edu.ntnu.idi.idatt2003.factory.TransactionFactory;
-import edu.ntnu.idi.idatt2003.model.Player;
-import edu.ntnu.idi.idatt2003.model.Purchase;
-import edu.ntnu.idi.idatt2003.model.Sale;
-import edu.ntnu.idi.idatt2003.model.Share;
-import edu.ntnu.idi.idatt2003.model.Stock;
-import edu.ntnu.idi.idatt2003.model.Transaction;
-import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
 import edu.ntnu.idi.idatt2003.model.calculator.SaleCalculator;
 import java.math.BigDecimal;
 import java.util.Comparator;

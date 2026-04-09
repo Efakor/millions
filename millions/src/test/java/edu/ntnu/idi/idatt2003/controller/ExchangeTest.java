@@ -9,12 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import edu.ntnu.idi.idatt2003.model.Player;
-import edu.ntnu.idi.idatt2003.model.Purchase;
-import edu.ntnu.idi.idatt2003.model.Sale;
-import edu.ntnu.idi.idatt2003.model.Share;
-import edu.ntnu.idi.idatt2003.model.Stock;
-import edu.ntnu.idi.idatt2003.model.Transaction;
+import edu.ntnu.idi.idatt2003.model.*;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
