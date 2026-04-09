@@ -1,6 +1,8 @@
 package edu.ntnu.idi.idatt2003.model;
 
 import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
+import edu.ntnu.idi.idatt2003.model.calculator.TransactionCalculator;
+
 import java.math.BigDecimal;
 
 /**
@@ -19,8 +21,8 @@ public class Purchase extends Transaction {
    * @param week the week number when the purchase occurs
    * @throws IllegalArgumentException if share is null or week is invalid
    */
-  public Purchase(Share share, int week) {
-    super(share, week, new PurchaseCalculator(share));
+  public Purchase(Share share, int week, TransactionCalculator calculator) {
+    super(share, week,calculator);
   }
 
   /**

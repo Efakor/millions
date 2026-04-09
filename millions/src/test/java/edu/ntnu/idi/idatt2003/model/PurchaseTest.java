@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
+
+import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
+import edu.ntnu.idi.idatt2003.model.calculator.SaleCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,9 +20,10 @@ import org.junit.jupiter.api.Test;
  */
 
 class PurchaseTest {
-  private Share appleShare;
+  private Share share;
   private Player player;
   private Purchase purchase;
+  private PurchaseCalculator calculator;
 
   /**
    * Sets up test fixtures before each test.
@@ -29,23 +33,24 @@ class PurchaseTest {
   @BeforeEach
   void setUp() {
     Stock appleStock = new Stock("AAPL", "Apple Inc.", new BigDecimal("150.00"));
-    appleShare = new Share(appleStock, new BigDecimal("10"), new BigDecimal("100.00"));
+    share = new Share(appleStock, new BigDecimal("10"), new BigDecimal("100.00"));
     player = new Player("Test Player", new BigDecimal("10000.00"));
-    purchase = new Purchase(appleShare, 1);
+    calculator = new PurchaseCalculator(share);
+    purchase = new Purchase(share,1,calculator);
   }
 
   /**
    * Tests that a Purchase can be created with valid inputs.
    */
   @Nested
-  class ConstructionTests {
+  class Construction {
     /**
      * Tests that commit deducts the correct amount form player's money.
      */
     @Test
     void testConstructionWithValidInputs() {
       assertNotNull(purchase);
-      assertEquals(appleShare, purchase.getShare());
+      assertEquals(share, purchase.getShare());
       assertEquals(1, purchase.getWeek());
       assertFalse(purchase.isCommitted());
     }
@@ -73,7 +78,7 @@ class PurchaseTest {
     @Test
     void testCommitAddShareToPortfolio() {
       purchase.commit(player);
-      assertTrue(player.getPortfolio().contains(appleShare));
+      assertTrue(player.getPortfolio().contains(share));
       assertEquals(1, player.getPortfolio().size());
     }
 
@@ -105,7 +110,7 @@ class PurchaseTest {
     void testMultiplePurchases() {
       Stock googleStock = new Stock("GOOGL", "Alphabet", new BigDecimal("2800.00"));
       Share googleShare = new Share(googleStock, new BigDecimal("2"), new BigDecimal("2750.00"));
-      Purchase purchase2 = new Purchase(googleShare, 1);
+      Purchase purchase2 = new Purchase(googleShare, 1,calculator);
       purchase.commit(player);
       purchase2.commit(player);
       assertEquals(2, player.getPortfolio().size());
@@ -167,7 +172,7 @@ class PurchaseTest {
     @Test
     void testPlayerUncommitedAfterInsufficientFunds() {
       Player poorPlayer = new Player("Poor Player", new BigDecimal("10.00"));
-      assertThrows(IllegalArgumentException.class, () -> purchase.commit(poorPlayer));
+      assertThrows(IllegalStateException.class, () -> purchase.commit(poorPlayer));
       assertFalse(purchase.isCommitted());
       assertEquals(0, poorPlayer.getPortfolio().size());
 
