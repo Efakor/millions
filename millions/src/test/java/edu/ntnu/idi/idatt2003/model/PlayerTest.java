@@ -4,8 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import edu.ntnu.idi.idatt2003.model.calculator.TransactionCalculator;
+
 
 import java.math.BigDecimal;
+
+import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -199,7 +203,8 @@ class PlayerTest {
       Stock stock = new Stock("TEST", "Test Inc.", new BigDecimal("10.00"));
       Share share = new Share(stock, new BigDecimal("1"), new BigDecimal("10.00"));
       for (int i = 1; i <= weeks; i++) {
-        Purchase purchase = new Purchase(share, i);
+        TransactionCalculator calculator=new PurchaseCalculator(share);
+        Purchase purchase = new Purchase(share, i,calculator);
         purchase.commit(player);
       }
     }

@@ -1,11 +1,13 @@
 package edu.ntnu.idi.idatt2003.controller;
 
+import edu.ntnu.idi.idatt2003.factory.TransactionFactory;
 import edu.ntnu.idi.idatt2003.model.Player;
 import edu.ntnu.idi.idatt2003.model.Purchase;
 import edu.ntnu.idi.idatt2003.model.Sale;
 import edu.ntnu.idi.idatt2003.model.Share;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.model.Transaction;
+import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
 import edu.ntnu.idi.idatt2003.model.calculator.SaleCalculator;
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -201,7 +203,7 @@ public class Exchange {
     }
 
     SaleCalculator calculator = new SaleCalculator(share);
-    Sale sale = new Sale(share, week, calculator);
+    Sale sale =TransactionFactory.createSale(share,week);
     sale.commit(player);
 
     return sale;
@@ -234,7 +236,7 @@ public class Exchange {
     BigDecimal currentPrice = stock.getSalesPrice();
     Share share = new Share(stock, quantity, currentPrice);
 
-    Purchase purchase = new Purchase(share, week);
+    Purchase purchase = TransactionFactory.createPurchase(share,week);
     purchase.commit(player);
 
     return purchase;
