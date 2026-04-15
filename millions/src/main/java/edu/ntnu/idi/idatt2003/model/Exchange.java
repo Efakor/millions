@@ -2,7 +2,11 @@ package edu.ntnu.idi.idatt2003.model;
 
 import edu.ntnu.idi.idatt2003.factory.TransactionFactory;
 import edu.ntnu.idi.idatt2003.model.calculator.SaleCalculator;
+import edu.ntnu.idi.idatt2003.observer.GameEvent;
+import edu.ntnu.idi.idatt2003.observer.GameObserver;
+import edu.ntnu.idi.idatt2003.observer.Observable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -22,11 +26,12 @@ import java.util.stream.Collectors;
  * @author efakor
  * @version 1.0
  */
-public class Exchange {
+public class Exchange implements Observable {
   private final String name;
   private int week;
   private final Map<String, Stock> stocks;
   private final Random random;
+  private final List<GameObserver> observers = new ArrayList<>();
 
   /**
    * Constructs a new Exchange with the given name and list of stocks.
@@ -196,8 +201,12 @@ public class Exchange {
     }
 
     SaleCalculator calculator = new SaleCalculator(share);
-    Sale sale =TransactionFactory.createSale(share,week);
+    Sale sale = TransactionFactory.createSale(share, week);
     sale.commit(player);
+
+    if (sale.isCommitted()) {
+      notifyObservers(GameEvent.SALE_MADE);
+    }
 
     return sale;
   }
@@ -229,8 +238,12 @@ public class Exchange {
     BigDecimal currentPrice = stock.getSalesPrice();
     Share share = new Share(stock, quantity, currentPrice);
 
-    Purchase purchase = TransactionFactory.createPurchase(share,week);
+    Purchase purchase = TransactionFactory.createPurchase(share, week);
     purchase.commit(player);
+
+    if (purchase.isCommitted()) {
+      notifyObservers(GameEvent.PURCHASE_MADE);
+    }
 
     return purchase;
   }
@@ -260,6 +273,8 @@ public class Exchange {
       }
       stock.addNewSalesPrice(newPrice);
     }
+
+    notifyObservers(GameEvent.WEEK_ADVANCED);
   }
 
   /**
@@ -288,5 +303,22 @@ public class Exchange {
         .sorted(Comparator.comparing(Stock::getLatestPriceChange))
         .limit(limit)
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public void addObserver(GameObserver observer) {
+    observers.add(observer);
+  }
+
+  @Override
+  public void removeObserver(GameObserver observer) {
+    observers.remove(observer);
+  }
+
+  @Override
+  public void notifyObservers(GameEvent event) {
+    for (GameObserver observer : observers) {
+      observer.onGameEvent(event);
+    }
   }
 }
