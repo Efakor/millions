@@ -25,25 +25,9 @@ import java.util.Objects;
     public PlayerController() {
     }
 
-    public void newGame(String name, BigDecimal capital, File stockFile){
-        Objects.requireNonNull(name,"Player name cannot be null");
-        Objects.requireNonNull(capital,"Starting capital cannot be null");
-        Objects.requireNonNull(stockFile,"Stock file cannot be null");
-        if(!stockFile.exists()|| !stockFile.isFile()){
-          throw new IllegalArgumentException("Invalid stock file"+stockFile.getName());
-        }
-        try{
-          player=new Player(name,capital);
-          CsvStockReader reader=new CsvStockReader();
-          List<Stock> stocks=reader.readStocksFromFile(stockFile.getPath());
-          if(stocks==null ||stocks.isEmpty()){
-            throw new IllegalArgumentException("No stocks loaded from file"+stockFile.getName());
-          }
-          exchange=new Exchange("Millions Exchange",stocks);
-        }catch(IOException e) {
-          throw new IllegalStateException("Failed to load stock file" + stockFile.getName(),e);
-        }
-
+    public void newGame(String name, BigDecimal capital){
+      this.player=new Player(name, capital);
+      this.exchange=new Exchange(name);
 
     }
     public Player getPlayer(){
