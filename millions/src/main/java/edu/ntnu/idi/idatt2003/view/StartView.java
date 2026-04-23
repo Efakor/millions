@@ -289,6 +289,8 @@ public class StartView extends VBox {
         MainView mainView=new MainView(
             new ExchangeController(playerController.getExchange()),
             playerController);
+        StockListView stockListView=new StockListView(playerController.getExchange());
+        mainView.setStockListView(stockListView);
         stage.getScene().setRoot(mainView);
       }
       private void updateFieldStyle() {

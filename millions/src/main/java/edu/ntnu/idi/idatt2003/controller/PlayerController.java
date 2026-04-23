@@ -5,11 +5,10 @@ import edu.ntnu.idi.idatt2003.model.Player;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.repository.CsvStockReader;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
+
 
 /**
    * Controller for player operations.
@@ -29,6 +28,16 @@ import java.util.Objects;
       this.player=new Player(name, capital);
       this.exchange=new Exchange(name);
 
+      CsvStockReader reader=new CsvStockReader();
+      try {
+        List<Stock> stocks = reader.readStocksFromFile("src/main/resources/stocks.csv/stocks.csv");
+
+        for (Stock stock : stocks) {
+          exchange.addStock(stock);
+        }
+      }catch (IOException e) {
+        throw new RuntimeException("Failed to load stock data",e);
+      }
     }
     public Player getPlayer(){
       return player;
