@@ -30,7 +30,7 @@ public class ExchangeController {
     throw  new UnsupportedOperationException("Not supported yet.");
   }
   public void advance(){
-    throw new UnsupportedOperationException("Not supported yet.");
+    exchange.advance();
   }
   public void loadStocks(File f){
     throw new UnsupportedOperationException("Not supported yet.");

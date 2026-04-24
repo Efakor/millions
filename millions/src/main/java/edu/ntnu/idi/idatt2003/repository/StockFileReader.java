@@ -9,7 +9,6 @@ import java.util.List;
  */
 public interface StockFileReader {
   /**
-   * .
    *
    * @param filename .
    * @return .
