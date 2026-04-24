@@ -5,11 +5,10 @@ import edu.ntnu.idi.idatt2003.model.Player;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.repository.CsvStockReader;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
+
 
 /**
    * Controller for player operations.
@@ -25,26 +24,20 @@ import java.util.Objects;
     public PlayerController() {
     }
 
-    public void newGame(String name, BigDecimal capital, File stockFile){
-        Objects.requireNonNull(name,"Player name cannot be null");
-        Objects.requireNonNull(capital,"Starting capital cannot be null");
-        Objects.requireNonNull(stockFile,"Stock file cannot be null");
-        if(!stockFile.exists()|| !stockFile.isFile()){
-          throw new IllegalArgumentException("Invalid stock file"+stockFile.getName());
-        }
-        try{
-          player=new Player(name,capital);
-          CsvStockReader reader=new CsvStockReader();
-          List<Stock> stocks=reader.readStocksFromFile(stockFile.getPath());
-          if(stocks==null ||stocks.isEmpty()){
-            throw new IllegalArgumentException("No stocks loaded from file"+stockFile.getName());
-          }
-          exchange=new Exchange("Millions Exchange",stocks);
-        }catch(IOException e) {
-          throw new IllegalStateException("Failed to load stock file" + stockFile.getName(),e);
-        }
+    public void newGame(String name, BigDecimal capital){
+      this.player=new Player(name, capital);
+      this.exchange=new Exchange(name);
 
+      CsvStockReader reader=new CsvStockReader();
+      try {
+        List<Stock> stocks = reader.readStocksFromFile("src/main/resources/stocks.csv/stocks.csv");
 
+        for (Stock stock : stocks) {
+          exchange.addStock(stock);
+        }
+      }catch (IOException e) {
+        throw new RuntimeException("Failed to load stock data",e);
+      }
     }
     public Player getPlayer(){
       return player;

@@ -11,10 +11,9 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
+
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -39,8 +38,7 @@ public class StartView extends VBox {
   private final Button chooseFileButton = new Button("CHOOSE FILE");
   private final Button startGameButton = new Button("START TRADING");
 
-  //File
-  private File selectedFile;
+
 
   private boolean nameTouched=false;
   private boolean capitalTouched=false;
@@ -128,18 +126,14 @@ public class StartView extends VBox {
 
         Label nameLabel = createFormLabel("Player Name");
         Label capitalLabel = createFormLabel("Starting capital($)");
-        Label fileLabel = createFormLabel("Stock data file(.csv)");
 
-        HBox fileBox = new HBox(10, chooseFileButton, selectedFileLabel);
-        fileBox.setAlignment(Pos.CENTER_LEFT);
         grid.add(nameLabel, 0, 0);
         grid.add(playerNameField, 1, 0);
         grid.add(nameErrorLabel, 1, 1);
         grid.add(capitalLabel, 0, 2);
         grid.add(startingCapitalField, 1, 2);
         grid.add(capitalErrorLabel, 1, 3);
-        grid.add(fileLabel, 0, 4);
-        grid.add(fileBox, 1, 4);
+
 
         return grid;
 
@@ -196,7 +190,7 @@ public class StartView extends VBox {
             "-fx-font-weight: bold;"+
             "-fx-cursor:hand;"
         );
-        chooseFileButton.setOnAction(e -> handleFileSelection());
+
         startGameButton.setOnAction(e -> handleStartGame());
 
 
@@ -272,24 +266,6 @@ public class StartView extends VBox {
       }
       //Handlers
 
-      private void handleFileSelection() {
-        if(getScene()==null){
-          showError("Window is not ready yet.");
-          return;
-        }
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-
-        File file = fileChooser.showOpenDialog(getScene().getWindow());
-        if (file != null) {
-          selectedFile = file;
-          selectedFileLabel.setText(file.getName());
-          selectedFileLabel.setStyle("-fx-text-fill:#3FB950;"+ "-fx-font-size: 11px;"+ "-fx-font-weight: bold;");
-          hideError();
-        }
-        updateStartButtonState();
-      }
-
       private void handleStartGame() {
         nameTouched=true;
         capitalTouched=true;
@@ -297,7 +273,7 @@ public class StartView extends VBox {
 
         boolean nameValid = isNameValid();
         boolean capitalValid = isCapitalValid();
-        boolean fileValid= selectedFile != null;
+
 
         if (!nameValid) {
           return;
@@ -305,16 +281,16 @@ public class StartView extends VBox {
         if(!capitalValid) {
           return;
 
-        }if(!fileValid) {
-          showError("Please select a CSV file");
-          return;
+
         }
         String name = playerNameField.getText().trim();
         BigDecimal capital = new BigDecimal(startingCapitalField.getText().trim());
-        playerController.newGame(name, capital, selectedFile);
+        playerController.newGame(name, capital);
         MainView mainView=new MainView(
             new ExchangeController(playerController.getExchange()),
             playerController);
+        StockListView stockListView=new StockListView(playerController.getExchange());
+        mainView.setStockListView(stockListView);
         stage.getScene().setRoot(mainView);
       }
       private void updateFieldStyle() {
@@ -348,9 +324,8 @@ public class StartView extends VBox {
         }
       }
 
-
       private void updateStartButtonState() {
-        boolean valid = isNameValid() && isCapitalValid() && selectedFile !=null;
+        boolean valid = isNameValid() && isCapitalValid();
         startGameButton.setDisable(!valid);
       }
       //Error display
