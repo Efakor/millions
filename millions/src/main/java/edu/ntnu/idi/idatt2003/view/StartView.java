@@ -2,6 +2,9 @@ package edu.ntnu.idi.idatt2003.view;
 
 import edu.ntnu.idi.idatt2003.controller.ExchangeController;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.Objects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -14,11 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.Objects;
-
-
 /**
  * Placeholder start screen.
  */
@@ -26,20 +24,21 @@ public class StartView extends VBox {
   private final PlayerController playerController;
   private final Stage stage;
 
-  //TextFields
+  // TextFields
   private final TextField playerNameField = new TextField();
   private final TextField startingCapitalField = new TextField();
 
-  //Labels
+  // Labels
   private final Label selectedFileLabel = new Label("No file selected");
-  private final  Label errorLabel=new Label();
-  private final Label nameErrorLabel=new Label();
-  private final Label capitalErrorLabel=new Label();
-  //Buttons
+  private final  Label errorLabel = new Label();
+  private final Label nameErrorLabel = new Label();
+  private final Label capitalErrorLabel = new Label();
+
+  // Buttons
   private final Button chooseFileButton = new Button("CHOOSE FILE");
   private final Button startGameButton = new Button("START TRADING");
 
-  //File
+  // File
   private File selectedFile;
 
   private boolean nameTouched=false;
@@ -57,8 +56,8 @@ public class StartView extends VBox {
     updateFieldStyle();
     updateStartButtonState();
 
-      }
-      //Layout
+  }
+      // Layout
       private void configureRoot() {
         setAlignment(Pos.CENTER);
         setFillWidth(false);
@@ -68,7 +67,7 @@ public class StartView extends VBox {
 
       }
       private void buildLayout() {
-        //Millions-headbar
+        // Millions-headbar
         Label title = new Label("MILLIONS");
         title.setStyle("-fx-text-fill: #58A6FF;-fx-font-size: 16; -fx-font-weight: bold;");
         HBox titleBox = new HBox(title);

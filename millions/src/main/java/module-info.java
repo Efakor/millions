@@ -1,6 +1,7 @@
 module edu.ntnu.idi.idatt2003 {
   requires javafx.graphics;
   requires javafx.controls;
+  requires javafx.base;
   requires javafx.fxml;
   requires java.desktop;
   opens edu.ntnu.idi.idatt2003 to javafx.graphics;
