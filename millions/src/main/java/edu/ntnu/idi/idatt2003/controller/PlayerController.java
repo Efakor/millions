@@ -5,6 +5,7 @@ import edu.ntnu.idi.idatt2003.model.Player;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.repository.CsvStockReader;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
     public PlayerController() {
     }
 
-    public void newGame(String name, BigDecimal capital){
+    public void newGame(String name, BigDecimal capital, File stockFile){
       this.player=new Player(name, capital);
       this.exchange=new Exchange(name);
 

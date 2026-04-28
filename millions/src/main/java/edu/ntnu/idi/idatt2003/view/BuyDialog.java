@@ -7,6 +7,8 @@ import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.model.Transaction;
 import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
 import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
+import java.math.BigDecimal;
+import java.util.Optional;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,13 +16,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-    import javafx.stage.Modality;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-
-
+/**
+ * Modal dialog for purchasing shares of a given stock.
+ * Shows a live cost breakdown (gross, tax, commission, total) that updates as the user changes
+ * the quantity. The Confirm button disables itself when the player has insufficient funds for
+ * the requested purchase.
+ *
+ *  <p>On confirm: calls {@link ExchangeController#buy(String, BigDecimal)},
+ * closes the dialog, and exposes the resulting Transaction via
+ * {@link #showAndWait(Stock, ExchangeController, PlayerController)}
+ * so the caller can pass it to the receipt modal
+ */
 public class BuyDialog {
 
   private static final String STYLE_DARK_BACKGROUND  = "-fx-background-color: #0D1117;";
