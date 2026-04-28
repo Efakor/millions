@@ -15,6 +15,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -311,10 +312,17 @@ public class StartView extends VBox {
         }
         String name = playerNameField.getText().trim();
         BigDecimal capital = new BigDecimal(startingCapitalField.getText().trim());
-        playerController.newGame(name, capital, selectedFile);
+        try {
+          playerController.newGame(name, capital, selectedFile);
+        }catch(IOException e) {
+          showError("Could not load the selected file");
+          return;
+        }
         MainView mainView=new MainView(
             new ExchangeController(playerController.getExchange()),
             playerController);
+        StockListView stockListView=new StockListView(playerController.getExchange());
+        mainView.setStockListView(stockListView);
         stage.getScene().setRoot(mainView);
       }
       private void updateFieldStyle() {
