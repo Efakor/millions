@@ -1,11 +1,11 @@
 package edu.ntnu.idi.idatt2003.controller;
 
-import edu.ntnu.idi.idatt2003.model.Exchange;
-import edu.ntnu.idi.idatt2003.model.Share;
-import edu.ntnu.idi.idatt2003.model.Stock;
+import edu.ntnu.idi.idatt2003.model.*;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
+import edu.ntnu.idi.idatt2003.controller.PlayerController;
 
 /**
  * Controller for Exchange operations.
@@ -13,17 +13,20 @@ import java.util.List;
  */
 public class ExchangeController {
   private final Exchange exchange;
+  private final PlayerController playerController;
 
-  public ExchangeController(Exchange exchange) {
+
+  public ExchangeController(Exchange exchange,PlayerController playerController) {
     this.exchange = exchange;
+    this.playerController=playerController;
   }
 
   public Exchange getExchange() {
     return exchange;
   }
 
-  public void buy(String symbol, BigDecimal qty) {
-    throw new UnsupportedOperationException("Not supported yet.");
+  public Transaction buy(String symbol, BigDecimal quantity) {
+    return exchange.buy(symbol,quantity,playerController.getPlayer());
 
   }
   public void sell(Share share) {
