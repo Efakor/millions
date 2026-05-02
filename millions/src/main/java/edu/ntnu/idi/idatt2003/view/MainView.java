@@ -143,9 +143,9 @@ public class MainView extends BorderPane implements GameObserver {
   /**
    * Attaches the centre detail panel.
    *
-   * @param detailView the detail view
+   * @param stockDetailView the detail view
    */
-  public void setDetailView(Node detailView) {
-    setCenter(detailView);
+  public void setStockDetailView(Node stockDetailView) {
+    setCenter(stockDetailView);
   }
 }

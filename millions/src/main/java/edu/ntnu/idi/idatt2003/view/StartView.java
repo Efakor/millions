@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt2003.view;
 
 import edu.ntnu.idi.idatt2003.controller.ExchangeController;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
+import edu.ntnu.idi.idatt2003.model.Stock;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -15,6 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -25,6 +27,7 @@ import java.util.Objects;
 public class StartView extends VBox {
   private final PlayerController playerController;
   private final Stage stage;
+
 
   //TextFields
   private final TextField playerNameField = new TextField();
@@ -311,10 +314,20 @@ public class StartView extends VBox {
         }
         String name = playerNameField.getText().trim();
         BigDecimal capital = new BigDecimal(startingCapitalField.getText().trim());
-        playerController.newGame(name, capital, selectedFile);
-        MainView mainView=new MainView(
-            new ExchangeController(playerController.getExchange()),
-            playerController);
+
+        playerController.newGame(name, capital,selectedFile);
+        ExchangeController exchangeController=new ExchangeController(playerController.getExchange(),playerController);
+        MainView mainView=new MainView(exchangeController, playerController);
+        StockListView stockListView=new StockListView(playerController.getExchange());
+        StockDetailPanel stockDetailPanel=new StockDetailPanel(exchangeController,playerController);
+
+        stockListView.setDetailPanel(stockDetailPanel);
+        stockListView.setupSelectionListener();
+
+        mainView.setStockDetailView(stockDetailPanel);
+        mainView.setStockListView(stockListView);
+
+        mainView.setStockListView(stockListView);
         stage.getScene().setRoot(mainView);
       }
       private void updateFieldStyle() {

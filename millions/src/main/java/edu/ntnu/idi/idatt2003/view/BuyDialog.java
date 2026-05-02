@@ -84,7 +84,7 @@ public class BuyDialog {
 
   private void buildUi() {
     Label title = new Label(
-        "BUY " + stock.getSymbol() + " @ " + stock.getSalesPrice().toPlainString());
+        "BUY " + stock.getSymbol() + " @ " + stock.getSalesPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
     title.setStyle("-fx-text-fill: #E6EDF3;"
         + " -fx-font-family: 'JetBrains Mono', monospace;"
         + " -fx-font-size: 16; -fx-font-weight: bold;");

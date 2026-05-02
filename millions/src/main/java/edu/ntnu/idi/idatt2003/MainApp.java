@@ -16,6 +16,7 @@ public class MainApp extends Application {
     primaryStage.setMinHeight(600);
     PlayerController playerController=new PlayerController();
 
+
     StartView startView = new StartView( playerController,primaryStage);
     Scene scene = new Scene(startView, 900, 600);
 
