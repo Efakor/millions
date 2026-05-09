@@ -42,9 +42,9 @@ public class ExchangeController {
     throw new UnsupportedOperationException("Not supported yet.");
   }
   public List <Stock> getGainers(int limit){
-    throw new UnsupportedOperationException("Not supported yet.");
+    return exchange.getGainers(limit);
   }
   public List <Stock> getLosers(int limit){
-    throw new UnsupportedOperationException("Not supported yet.");
+    return exchange.getLosers(limit);
   }
 }
