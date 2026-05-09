@@ -32,6 +32,7 @@ import java.util.List;
       CsvStockReader reader=new CsvStockReader();
       try {
         List<Stock> stocks = reader.readStocksFromFile(stockFile.getPath());
+        System.out.println("Loaded stocks: " + stocks.size());
 
         for (Stock stock : stocks) {
           exchange.addStock(stock);

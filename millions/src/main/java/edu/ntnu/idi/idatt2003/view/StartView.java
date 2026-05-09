@@ -320,6 +320,9 @@ public class StartView extends VBox {
         MainView mainView=new MainView(exchangeController, playerController);
         StockListView stockListView=new StockListView(playerController.getExchange());
         StockDetailPanel stockDetailPanel=new StockDetailPanel(exchangeController,playerController);
+        GainersLosersPanel gainersLosersPanel = new GainersLosersPanel(exchangeController);
+        exchangeController.getExchange().addObserver(gainersLosersPanel);
+        mainView.setPortfolioView(gainersLosersPanel);
 
         stockListView.setDetailPanel(stockDetailPanel);
         stockListView.setupSelectionListener();
