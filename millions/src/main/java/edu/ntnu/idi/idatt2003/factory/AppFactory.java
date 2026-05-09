@@ -29,7 +29,7 @@ public class AppFactory {
     VBox rightPanel = new VBox(10, gainersLosersPanel, portfolioView);
     mainView.setStockListView(stockListView);
     mainView.setStockDetailView(stockDetailPanel);
-    mainView.setPortfolioView(portfolioView);
+    mainView.setPortfolioView(rightPanel);
 
     return mainView;
 
