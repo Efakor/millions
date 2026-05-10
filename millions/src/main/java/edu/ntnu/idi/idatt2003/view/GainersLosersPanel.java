@@ -125,7 +125,6 @@ public class GainersLosersPanel extends VBox implements GameObserver {
 
 
 
-
     }
 
 
@@ -134,6 +133,7 @@ public class GainersLosersPanel extends VBox implements GameObserver {
   public void onGameEvent(GameEvent event){
     if(event==GameEvent.WEEK_ADVANCED){
       refresh();
+
 
     }
   }

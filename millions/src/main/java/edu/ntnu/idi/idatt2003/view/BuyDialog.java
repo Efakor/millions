@@ -144,7 +144,7 @@ public class BuyDialog {
     Label suffix = new Label("shares");
     suffix.setStyle(STYLE_LABEL);
 
-    HBox row = new HBox(12, quantityLabel, suffix, stepper, spacer);
+    HBox row = new HBox(12, quantityLabel, stepper,suffix, spacer);
     row.setAlignment(Pos.CENTER_LEFT);
     row.setPadding(new Insets(10));
     row.setStyle(STYLE_PANEL);
