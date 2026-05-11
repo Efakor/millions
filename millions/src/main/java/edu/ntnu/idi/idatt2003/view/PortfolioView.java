@@ -224,10 +224,12 @@ public class PortfolioView extends BorderPane implements GameObserver {
   VBox right = new VBox(2, pnlLabel, valLabel, pctLabel);
   right.setAlignment(Pos.CENTER_RIGHT);
 
-  Region spacer = new Region();
-  HBox.setHgrow(spacer, Priority.ALWAYS);
+  Region spacer1= new Region();
+  HBox.setHgrow(spacer1, Priority.ALWAYS);
 
-  HBox row = new HBox(spacer, left, spacer, right);
+  Region spacer2= new Region();
+  HBox.setHgrow(spacer2, Priority.ALWAYS);
+  HBox row = new HBox(spacer1, left, spacer2, right);
   row.setPadding(new Insets(8, 12, 8, 12));
   row.setStyle(
       "-fx-border-color: #21262D;"

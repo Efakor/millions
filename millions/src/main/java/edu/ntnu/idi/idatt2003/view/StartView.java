@@ -2,6 +2,7 @@ package edu.ntnu.idi.idatt2003.view;
 
 import edu.ntnu.idi.idatt2003.controller.ExchangeController;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
+import edu.ntnu.idi.idatt2003.factory.AppFactory;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -315,19 +316,8 @@ public class StartView extends VBox {
         String name = playerNameField.getText().trim();
         BigDecimal capital = new BigDecimal(startingCapitalField.getText().trim());
 
-        playerController.newGame(name, capital,selectedFile);
-        ExchangeController exchangeController=new ExchangeController(playerController.getExchange(),playerController);
-        MainView mainView=new MainView(exchangeController, playerController);
-        StockListView stockListView=new StockListView(playerController.getExchange());
-        StockDetailPanel stockDetailPanel=new StockDetailPanel(exchangeController,playerController);
 
-        stockListView.setDetailPanel(stockDetailPanel);
-        stockListView.setupSelectionListener();
-
-        mainView.setStockDetailView(stockDetailPanel);
-        mainView.setStockListView(stockListView);
-
-        mainView.setStockListView(stockListView);
+        MainView mainView= AppFactory.buildMainView(playerController,name,capital,selectedFile);
         stage.getScene().setRoot(mainView);
       }
       private void updateFieldStyle() {

@@ -20,6 +20,7 @@ public class StockListView extends VBox implements GameObserver {
   private final TextField searchField=new TextField();
   private final TableView<Stock> stockTable=new TableView<>();
   private StockDetailPanel detailPanel;
+
   public StockListView(Exchange exchange) {
     this.exchange = exchange;
     createRoot();
@@ -140,7 +141,7 @@ public class StockListView extends VBox implements GameObserver {
   @Override
   public void onGameEvent(GameEvent gameEvent) {
     if (gameEvent == GameEvent.WEEK_ADVANCED) {
-      loadData();
+      stockTable.refresh();
 
       }
     }

@@ -6,6 +6,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
+import javafx.application.Platform;
 
 /**
  * Controller for Exchange operations.
@@ -33,7 +34,7 @@ public class ExchangeController {
     throw  new UnsupportedOperationException("Not supported yet.");
   }
   public void advance(){
-    exchange.advance();
+    Platform.runLater(()->exchange.advance());
   }
   public void loadStocks(File f){
     throw new UnsupportedOperationException("Not supported yet.");
@@ -42,9 +43,9 @@ public class ExchangeController {
     throw new UnsupportedOperationException("Not supported yet.");
   }
   public List <Stock> getGainers(int limit){
-    throw new UnsupportedOperationException("Not supported yet.");
+    return exchange.getGainers(limit);
   }
   public List <Stock> getLosers(int limit){
-    throw new UnsupportedOperationException("Not supported yet.");
+    return exchange.getLosers(limit);
   }
 }
