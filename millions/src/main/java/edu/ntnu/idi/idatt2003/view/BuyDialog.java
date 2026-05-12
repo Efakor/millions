@@ -8,6 +8,7 @@ import edu.ntnu.idi.idatt2003.model.Transaction;
 import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
 import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,7 +16,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -84,7 +89,8 @@ public class BuyDialog {
 
   private void buildUi() {
     Label title = new Label(
-        "BUY " + stock.getSymbol() + " @ " + stock.getSalesPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+        "BUY " + stock.getSymbol() + " @ "
+            + stock.getSalesPrice().setScale(2, RoundingMode.HALF_UP));
     title.setStyle("-fx-text-fill: #E6EDF3;"
         + " -fx-font-family: 'JetBrains Mono', monospace;"
         + " -fx-font-size: 16; -fx-font-weight: bold;");
