@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -101,7 +102,7 @@ public class PortfolioView extends BorderPane implements GameObserver {
             + "-fx-cursor: hand;"
     );
     sellAllButton.setMaxWidth(Double.MAX_VALUE);
-    sellAllButton.setOnAction(e -> playerController.sellAll());
+    sellAllButton.setOnAction(e ->SellAllDialog.show(exchangeController,playerController,(Stage) getScene().getWindow()));
 
     VBox box = new VBox(6, totalLbl, totalLabel, sellAllButton);
     box.setPadding(new Insets(10, 12, 10, 12));
