@@ -38,10 +38,11 @@ public class SellAllDialog {
     Label subtitle = buildSubtitle();
     VBox proceedBox = buildProceedBox();
     Label warning = buildWarning();
+    HBox button=buildButton();
 
     VBox roots = new VBox(10);
     roots.setStyle("-fx-background-color:#161B22;");
-    roots.getChildren().addAll(title, subtitle, proceedBox, warning, buildButton);
+    roots.getChildren().addAll(title, subtitle, proceedBox, warning, button);
     roots.setPadding(new Insets(20));
     Scene scene = new Scene(roots, 400, 400);
 
