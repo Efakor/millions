@@ -138,7 +138,7 @@ public class StatusBarView extends HBox implements GameObserver {
         + "-fx-text-fill: " + badgeText + ";"
         + "-fx-padding: 2 10 2 10;"
         + "-fx-background-radius: 12;"
-        + "-fx-font-weight: bold"
+        + "-fx-font-weight: bold;"
         + "-fx-background-color: " + badgeBackground + ";"
     );
   }
