@@ -64,9 +64,6 @@ import java.util.List;
 
 
   }
-  public BigDecimal getTotalNetWorth() {
-    return player.getPortfolio().getNetWorth();
-  }
   public BigDecimal getTotalTax() {
     return player.getPortfolio().getTotalTax();
   }
@@ -75,6 +72,22 @@ import java.util.List;
   }
   public BigDecimal getTotalGross (){
     return player.getPortfolio().getTotalgross();
+  }
+  public String getPlayerName() {
+    return player.getName();
+  }
+  public BigDecimal getNetWorth() {
+    return player.getNetWorth();
+
+  }
+  public String getPlayerStatus() {
+    return player.getStatus();
+  }
+  public BigDecimal getProfitLoss() {
+    return player.getCurrentMoney().subtract(player.getStartingMoney());
+  }
+  public BigDecimal getStartingCapital(){
+    return player.getStartingMoney();
   }
 
 }
