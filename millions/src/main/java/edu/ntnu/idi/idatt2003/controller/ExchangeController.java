@@ -5,7 +5,6 @@ import edu.ntnu.idi.idatt2003.model.*;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
-import edu.ntnu.idi.idatt2003.controller.PlayerController;
 import javafx.application.Platform;
 
 /**

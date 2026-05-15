@@ -1,9 +1,8 @@
 package edu.ntnu.idi.idatt2003.view;
 
-import edu.ntnu.idi.idatt2003.controller.ExchangeController;
+
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
 import edu.ntnu.idi.idatt2003.factory.AppFactory;
-import edu.ntnu.idi.idatt2003.model.Stock;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -317,7 +316,7 @@ public class StartView extends VBox {
         BigDecimal capital = new BigDecimal(startingCapitalField.getText().trim());
 
 
-        MainView mainView= AppFactory.buildMainView(playerController,name,capital,selectedFile);
+        MainView mainView= AppFactory.buildMainView(playerController,name,capital,selectedFile,stage);
         stage.getScene().setRoot(mainView);
       }
       private void updateFieldStyle() {

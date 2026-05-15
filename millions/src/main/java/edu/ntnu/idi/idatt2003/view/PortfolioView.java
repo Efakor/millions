@@ -7,12 +7,14 @@ import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.observer.GameEvent;
 import edu.ntnu.idi.idatt2003.observer.GameObserver;
 import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +30,7 @@ public class PortfolioView extends BorderPane implements GameObserver {
 
   private final VBox holdingsList = new VBox();
   private final Label totalLabel = new Label(CurrencyUtil.formatNok(BigDecimal.ZERO));
+  private Runnable sellAllRequest;
 
   /**
    * Constructs the portfolio sidebar.
@@ -73,6 +76,10 @@ public class PortfolioView extends BorderPane implements GameObserver {
     setCenter(scrollPane);
     setBottom(totalBox);
   }
+  public void setSellAllRequest(Runnable sellAllRequest) {
+    this.sellAllRequest = sellAllRequest;
+
+  }
 
   private VBox buildTotalBox() {
     Label totalLbl = new Label("TOTAL VALUE");
@@ -101,7 +108,11 @@ public class PortfolioView extends BorderPane implements GameObserver {
             + "-fx-cursor: hand;"
     );
     sellAllButton.setMaxWidth(Double.MAX_VALUE);
-    sellAllButton.setOnAction(e -> playerController.sellAll());
+    sellAllButton.setOnAction(e -> {
+          if (sellAllRequest != null) {
+            sellAllRequest.run();
+          }
+        });
 
     VBox box = new VBox(6, totalLbl, totalLabel, sellAllButton);
     box.setPadding(new Insets(10, 12, 10, 12));
@@ -113,7 +124,7 @@ public class PortfolioView extends BorderPane implements GameObserver {
 
   @Override
   public void onGameEvent(GameEvent event) {
-    refresh();
+    Platform.runLater(this::refresh);
   }
 
   private void refresh() {

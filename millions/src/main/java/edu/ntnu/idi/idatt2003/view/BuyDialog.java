@@ -10,6 +10,8 @@ import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
+
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -247,16 +249,21 @@ public class BuyDialog {
   }
 
   private void onConfirm() {
-    try {
-      BigDecimal quantity = parseQuantityOrZero();
-      exchangeController.buy(stock.getSymbol(), quantity);
-      stage.close();
-      // Receipt modal will be shown by the caller, since showAndWait() returns the Transaction.
-    } catch (RuntimeException ex) {
-      fundsWarning.setText("Purchase failed: " + ex.getMessage());
-      fundsWarning.setVisible(true);
-      fundsWarning.setManaged(true);
-    }
+    stage.close();
+    javafx.application.Platform.runLater(() -> {
+      try {
+        BigDecimal quantity = parseQuantityOrZero();
+        result= exchangeController.buy(stock.getSymbol(), quantity);
+
+        // Receipt modal will be shown by the caller, since showAndWait() returns the Transaction.
+      } catch (RuntimeException ex) {
+        fundsWarning.setText("Purchase failed: " + ex.getMessage());
+        fundsWarning.setVisible(true);
+        fundsWarning.setManaged(true);
+      }
+
+    });
+
   }
 
   private void enableConfirm() {
