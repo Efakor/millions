@@ -30,6 +30,8 @@ public class AppFactory {
       int weeks=exchangeController.getExchange().getWeek();
       SummaryView summaryView=new SummaryView(playerController,weeks,stage);
       stage.getScene().setRoot(summaryView);
+      stage.setFullScreen(true);
+      stage.requestFocus();
       });
     });
 
