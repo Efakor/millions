@@ -20,15 +20,19 @@ public class SellAllDialog {
   private PlayerController playerController;
   private final Stage stage;
   private Stage dialogStage;
+  private Runnable navigateToSummary;
 
-  private SellAllDialog(ExchangeController exchangeController, PlayerController playerController, Stage stage) {
+  private SellAllDialog(ExchangeController exchangeController, PlayerController playerController, Stage stage,Runnable navigateToSummary) {
     this.exchangeController = exchangeController;
     this.playerController = playerController;
     this.stage = stage;
+    this.navigateToSummary = navigateToSummary;
   }
 
-  public static void show(ExchangeController exchangeController, PlayerController playerController, Stage stage) {
-    new SellAllDialog(exchangeController, playerController, stage).buildUi();
+  public static void show(ExchangeController exchangeController, PlayerController playerController, Stage stage, Runnable navigateToSummary) {
+    SellAllDialog dialog =new SellAllDialog(exchangeController, playerController, stage,navigateToSummary);
+    dialog.buildUi();
+
 
   }
 
@@ -120,10 +124,10 @@ public class SellAllDialog {
     confirmButton.setOnAction(event -> {
       playerController.sellAll();
       dialogStage.close();
-      SummaryView summaryView = new SummaryView(playerController.getPlayer(),
-          exchangeController.getExchange().getWeek()
-      );
-      stage.getScene().setRoot(summaryView);
+      if (navigateToSummary != null) {
+        navigateToSummary.run(); //Trigger to summaryView
+      }
+
     });
     cancelButton.setOnAction(event -> {
       dialogStage.close();

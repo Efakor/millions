@@ -29,6 +29,7 @@ public class PortfolioView extends BorderPane implements GameObserver {
 
   private final VBox holdingsList = new VBox();
   private final Label totalLabel = new Label(CurrencyUtil.formatNok(BigDecimal.ZERO));
+  private Runnable sellAllRequest;
 
   /**
    * Constructs the portfolio sidebar.
@@ -74,6 +75,10 @@ public class PortfolioView extends BorderPane implements GameObserver {
     setCenter(scrollPane);
     setBottom(totalBox);
   }
+  public void setSellAllRequest(Runnable sellAllRequest) {
+    this.sellAllRequest = sellAllRequest;
+
+  }
 
   private VBox buildTotalBox() {
     Label totalLbl = new Label("TOTAL VALUE");
@@ -102,7 +107,11 @@ public class PortfolioView extends BorderPane implements GameObserver {
             + "-fx-cursor: hand;"
     );
     sellAllButton.setMaxWidth(Double.MAX_VALUE);
-    sellAllButton.setOnAction(e ->SellAllDialog.show(exchangeController,playerController,(Stage) getScene().getWindow()));
+    sellAllButton.setOnAction(e -> {
+          if (sellAllRequest != null) {
+            sellAllRequest.run();
+          }
+        });
 
     VBox box = new VBox(6, totalLbl, totalLabel, sellAllButton);
     box.setPadding(new Insets(10, 12, 10, 12));

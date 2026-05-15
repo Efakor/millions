@@ -316,7 +316,7 @@ public class StartView extends VBox {
         BigDecimal capital = new BigDecimal(startingCapitalField.getText().trim());
 
 
-        MainView mainView= AppFactory.buildMainView(playerController,name,capital,selectedFile);
+        MainView mainView= AppFactory.buildMainView(playerController,name,capital,selectedFile,stage);
         stage.getScene().setRoot(mainView);
       }
       private void updateFieldStyle() {
