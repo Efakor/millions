@@ -1,9 +1,10 @@
 package edu.ntnu.idi.idatt2003.controller;
 
-import edu.ntnu.idi.idatt2003.model.*;
+import edu.ntnu.idi.idatt2003.model.Exchange;
+import edu.ntnu.idi.idatt2003.model.Player;
+import edu.ntnu.idi.idatt2003.model.Share;
+import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.repository.CsvStockReader;
-
-import javax.swing.text.Position;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
