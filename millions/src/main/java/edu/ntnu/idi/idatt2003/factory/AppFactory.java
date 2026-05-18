@@ -40,10 +40,14 @@ public class AppFactory {
     exchangeController.getExchange().addObserver(gainersLosersPanel);
     //Wire into layout
     VBox rightPanel = new VBox(10, gainersLosersPanel, portfolioView);
+    VBox.setVgrow(mainView, javafx.scene.layout.Priority.ALWAYS);
     mainView.setStockListView(stockListView);
     mainView.setStockDetailView(stockDetailPanel);
     mainView.setPortfolioView(rightPanel);
 
+    // in AppFactory, after building mainView
+    mainView.prefHeightProperty().bind(stage.heightProperty());
+    mainView.prefWidthProperty().bind(stage.widthProperty());
     return mainView;
 
   }
