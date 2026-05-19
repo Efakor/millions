@@ -52,10 +52,10 @@ public class StockDetailPanel extends VBox {
     lowestPriceLabel.setStyle("-fx-text-fill: #E6EDF3;");
     latestChangeLabel.setStyle("-fx-text-fill: #E6EDF3");
     //buy button
-    buyButton.setStyle("-fx-background-color: #1F6FEB;"+"-fx-text-fill: white;"+"-fx-background-radius:6;");
+    buyButton.setStyle("-fx-background-color: #1F6FEB; -fx-text-fill: white; -fx-background-radius:6;");
     //Title
     Label titleLabel = new Label ("Stock details");
-    titleLabel.setStyle("-fx-text-fill:#E6EDF3;+"+ "-fx-font-weight:bold;"+"-fx-font-size: 16;");
+    titleLabel.setStyle("-fx-text-fill:#E6EDF3; -fx-font-weight:bold; -fx-font-size: 16;");
     getChildren().addAll(titleLabel,
         symbolLabel, priceLabel, highestPriceLabel, lowestPriceLabel, latestChangeLabel,buyButton);
 

@@ -14,13 +14,13 @@ public class MainApp extends Application {
     primaryStage.setTitle("Millions");
     primaryStage.setMinWidth(900);
     primaryStage.setMinHeight(600);
-    PlayerController playerController=new PlayerController();
 
-
-    StartView startView = new StartView( playerController,primaryStage);
-    Scene scene = new Scene(startView, 900, 600);
+    PlayerController playerController = new PlayerController();
+    StartView startView = new StartView(playerController, primaryStage);
+    Scene scene = new Scene(startView, 1200, 750);
 
     primaryStage.setScene(scene);
+    primaryStage.setMaximized(true);
     primaryStage.show();
   }
 

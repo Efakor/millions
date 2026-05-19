@@ -26,6 +26,9 @@ public class MainView extends BorderPane implements GameObserver {
   private final ExchangeController exchangeController;
   private final PlayerController playerController;
 
+  //Button
+  private Button advanceButton;
+
   private final Label weekLabel = new Label("WEEK 1");
   private final Label cashLabel = new Label("Cash: " + CurrencyUtil.formatNok(BigDecimal.ZERO));
 
@@ -38,7 +41,7 @@ public class MainView extends BorderPane implements GameObserver {
   public MainView(ExchangeController exchangeController, PlayerController playerController) {
     this.exchangeController = exchangeController;
     this.playerController = playerController;
-    StatusBarView statusBar = new StatusBarView(playerController);
+    StatusBarView statusBar = new StatusBarView(playerController, exchangeController);
 
     setStyle("-fx-background-color: #0D1117;");
     setTop(buildTopBar());
@@ -78,7 +81,7 @@ public class MainView extends BorderPane implements GameObserver {
             + "-fx-font-size: 11px;"
             + "-fx-font-family: monospace;");
 
-    Button advanceButton = new Button("ADVANCE TO WEEK 2");
+    advanceButton = new Button("ADVANCE TO WEEK 2");
     advanceButton.setStyle(
         "-fx-background-color: #1F6FEB;"
             + "-fx-text-fill: white;"
@@ -119,7 +122,8 @@ public class MainView extends BorderPane implements GameObserver {
   private void refreshWeekDisplay() {
     int week = exchangeController.getExchange().getWeek();
     weekLabel.setText("WEEK: " + week);
-    cashLabel.setText("ADVANCE TO WEEK " + (week + 1));
+    advanceButton.setText("ADVANCE TO WEEK " + (week + 1));
+    refreshCashLabel();
   }
 
   /**
