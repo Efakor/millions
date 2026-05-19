@@ -2,20 +2,27 @@ package edu.ntnu.idi.idatt2003.view;
 
 import edu.ntnu.idi.idatt2003.controller.ExchangeController;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
+import javafx.scene.chart.LineChart;
 import javafx.geometry.Insets;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-
 import java.math.BigDecimal;
+
+import java.util.List;
+import java.util.stream.IntStream;
 
 
 public class StockDetailPanel extends VBox {
   private Stock currentStock;
+  private LineChart<Number, Number> lineChart;
   private final ExchangeController exchangeController;
   private final PlayerController playerController;
-  private final Button buyButton = new Button("BUY");
+  private final Button buyButton = new Button();
+
   //Labels
   private final Label symbolLabel = new Label();
   private final Label priceLabel = new Label();
@@ -59,7 +66,9 @@ public class StockDetailPanel extends VBox {
       setVisible(false);
       setManaged(false);
       return;
+
     }
+    buildChart(stock);
 
     symbolLabel.setText("Symbol: "+ stock.getSymbol());
     priceLabel.setText("Price: "+stock.getSalesPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
@@ -77,5 +86,43 @@ public class StockDetailPanel extends VBox {
     return buyButton;
 
   }
+  private void buildChart(Stock stock) {
+    NumberAxis xAxis = new NumberAxis();
+    xAxis.setLabel("Week");
+    NumberAxis yAxis = new NumberAxis();
+    yAxis.setLabel("Price");
+
+    LineChart<Number, Number> graph = new LineChart<Number, Number>(xAxis, yAxis);
+    graph.setTitle("Historical Prices for " + stock.getSymbol());
+    graph.setPrefHeight(200);
+
+    //define a series
+    XYChart.Series<Number, Number> series = new XYChart.Series<>();
+    series.setName(stock.getSymbol());
+
+
+    List<BigDecimal> prices = stock.getHistoricalPrices();
+    IntStream.range(0, prices.size()).forEach(i ->
+        series.getData().add(new XYChart.Data<>(i + 1, prices.get(i).doubleValue())
+        ));
+    graph.getData().add(series);
+    graph.setStyle("-fx-background-color:transparent");
+    graph.setLegendVisible(false);
+    graph.setCreateSymbols(false);
+
+    xAxis.setTickLabelFill(javafx.scene.paint.Color.web("#8B949E"));
+    yAxis.setTickLabelFill(javafx.scene.paint.Color.web("#8B949E"));
+    xAxis.setStyle("-fx-tick-label-fill: #8B949E;");
+    yAxis.setStyle("-fx-tick-label-fill: #8B949E;");
+
+    if (lineChart != null) {
+      getChildren().remove(lineChart);
+    }
+    lineChart = graph;
+    getChildren().add(lineChart);
+
+
+  }
+
 
 }
