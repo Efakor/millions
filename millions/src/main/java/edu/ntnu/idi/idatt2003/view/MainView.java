@@ -41,7 +41,7 @@ public class MainView extends BorderPane implements GameObserver {
   public MainView(ExchangeController exchangeController, PlayerController playerController) {
     this.exchangeController = exchangeController;
     this.playerController = playerController;
-    StatusBarView statusBar = new StatusBarView(playerController);
+    StatusBarView statusBar = new StatusBarView(playerController, exchangeController);
 
     setStyle("-fx-background-color: #0D1117;");
     setTop(buildTopBar());

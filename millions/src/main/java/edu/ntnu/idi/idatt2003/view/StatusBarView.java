@@ -1,5 +1,6 @@
 package edu.ntnu.idi.idatt2003.view;
 
+import edu.ntnu.idi.idatt2003.controller.ExchangeController;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
 import edu.ntnu.idi.idatt2003.observer.GameEvent;
 import edu.ntnu.idi.idatt2003.observer.GameObserver;
@@ -19,6 +20,7 @@ import javafx.scene.layout.VBox;
 public class StatusBarView extends HBox implements GameObserver {
 
   private final PlayerController playerController;
+  private final ExchangeController exchangeController;
 
   private final Label netWorthLabel = new Label(CurrencyUtil.formatNok(BigDecimal.ZERO));
   private final Label pnlLabel = new Label(CurrencyUtil.formatNok(BigDecimal.ZERO));
@@ -30,8 +32,9 @@ public class StatusBarView extends HBox implements GameObserver {
    *
    * @param playerController the player controller
    */
-  public StatusBarView(PlayerController playerController) {
+  public StatusBarView(PlayerController playerController, ExchangeController exchangeController) {
     this.playerController = playerController;
+    this.exchangeController = exchangeController;
     buildLayout();
   }
 
@@ -108,7 +111,7 @@ public class StatusBarView extends HBox implements GameObserver {
     netWorthLabel.setText(CurrencyUtil.formatNok(netWorth));
 
     weeksLabel.setText(String.valueOf(
-        player.getTransactionArchive().countDistinctWeeks()));
+        exchangeController.getExchange().getWeek()));
 
     String pnlText = (pnl.signum() >= 0 ? "+" : "-") + CurrencyUtil.formatNok(pnl.abs());
     pnlLabel.setText(pnlText);

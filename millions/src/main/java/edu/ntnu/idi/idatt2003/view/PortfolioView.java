@@ -76,6 +76,7 @@ public class PortfolioView extends BorderPane implements GameObserver {
     setCenter(scrollPane);
     setBottom(totalBox);
   }
+
   public void setSellAllRequest(Runnable sellAllRequest) {
     this.sellAllRequest = sellAllRequest;
 
@@ -109,10 +110,24 @@ public class PortfolioView extends BorderPane implements GameObserver {
     );
     sellAllButton.setMaxWidth(Double.MAX_VALUE);
     sellAllButton.setOnAction(e -> {
-          if (sellAllRequest != null) {
-            sellAllRequest.run();
-          }
-        });
+      // confirmation dialog
+      javafx.scene.control.Alert confirm = new javafx.scene.control.Alert(
+          javafx.scene.control.Alert.AlertType.CONFIRMATION);
+      confirm.setTitle("Sell All & Exit");
+      confirm.setHeaderText("Are you sure you want to sell everything and quit?");
+      confirm.setContentText(
+          "Estimated proceeds: "
+              + CurrencyUtil.formatNok(
+              playerController.getPlayer().getPortfolio().getNetWorth()));
+      confirm.getDialogPane().setStyle("-fx-background-color: #161B22;");
+
+      confirm.showAndWait().ifPresent(response -> {
+        if (response == javafx.scene.control.ButtonType.OK) {
+          playerController.sellAll();
+          showFinalSummary();
+        }
+      });
+    });
 
     VBox box = new VBox(6, totalLbl, totalLabel, sellAllButton);
     box.setPadding(new Insets(10, 12, 10, 12));
@@ -148,27 +163,76 @@ public class PortfolioView extends BorderPane implements GameObserver {
     }
 
     BigDecimal portfolioTotal = BigDecimal.ZERO;
-    for (Share share : shares) {
-      Stock stock = exchangeController.getExchange().getStock(share.stock().getSymbol());
-      if (stock == null) continue;
+    // group shares by symbol
+    java.util.Map<String, List<Share>> grouped = shares.stream()
+        .collect(java.util.stream.Collectors.groupingBy(
+            s -> s.stock().getSymbol()));
 
-      BigDecimal currentPrice = stock.getSalesPrice();
-      BigDecimal currentValue = currentPrice.multiply(share.quantity());
-      BigDecimal costBasis = share.purchasePrice().multiply(share.quantity());
-      BigDecimal pnl = currentValue.subtract(costBasis);
-      BigDecimal pnlPct = costBasis.compareTo(BigDecimal.ZERO) == 0
+    for (java.util.Map.Entry<String, List<Share>> entry : grouped.entrySet()) {
+      String symbol         = entry.getKey();
+      List<Share> group     = entry.getValue();
+      Stock stock           = exchangeController.getExchange().getStock(symbol);
+      if (stock == null) {
+        continue;
+      }
+
+      totalLabel.setText(CurrencyUtil.formatNok(portfolioTotal));
+
+      // total quantity
+      BigDecimal totalQty = group.stream()
+          .map(Share::quantity)
+          .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+      // weighted average purchase price
+      BigDecimal totalCost = group.stream()
+          .map(s -> s.purchasePrice().multiply(s.quantity()))
+          .reduce(BigDecimal.ZERO, BigDecimal::add);
+      BigDecimal avgPrice = totalQty.compareTo(BigDecimal.ZERO) == 0
           ? BigDecimal.ZERO
-          : pnl.divide(costBasis, 4, RoundingMode.HALF_UP)
+          : totalCost.divide(totalQty, 2, RoundingMode.HALF_UP);
+
+      BigDecimal currentValue = stock.getSalesPrice().multiply(totalQty);
+      BigDecimal pnl          = currentValue.subtract(totalCost);
+      BigDecimal pnlPct       = totalCost.compareTo(BigDecimal.ZERO) == 0
+          ? BigDecimal.ZERO
+          : pnl.divide(totalCost, 4, RoundingMode.HALF_UP)
           .multiply(BigDecimal.valueOf(100));
 
-      holdingsList.getChildren().add(buildHoldingRow(share, stock, currentValue, pnl, pnlPct));
+      // use first share as representative — sell button will sell all shares of this symbol
+      Share representative = group.getFirst();
+      holdingsList.getChildren().add(
+          buildHoldingRow(
+              representative, stock, totalQty, avgPrice, currentValue, pnl, pnlPct));
+
       portfolioTotal = portfolioTotal.add(currentValue);
     }
-
-    totalLabel.setText(CurrencyUtil.formatNok(portfolioTotal));
   }
 
-  private HBox buildHoldingRow(Share share, Stock stock,
+  private void showFinalSummary() {
+    javafx.scene.control.Alert summary = new javafx.scene.control.Alert(
+        javafx.scene.control.Alert.AlertType.INFORMATION);
+    summary.setTitle("Game Over");
+    summary.setHeaderText("Final Summary");
+
+    BigDecimal netWorth    = playerController.getPlayer().getNetWorth();
+    BigDecimal startingCap = playerController.getPlayer().getStartingMoney();
+    BigDecimal pnl         = netWorth.subtract(startingCap);
+    String status          = playerController.getPlayer().getStatus();
+    boolean profit         = pnl.compareTo(BigDecimal.ZERO) >= 0;
+
+    summary.setContentText(
+        "Net worth:    " + CurrencyUtil.formatNok(netWorth) + "\n"
+            + "P&L:          " + (profit ? "+" : "") + CurrencyUtil.formatNok(pnl) + "\n"
+            + "Status:       " + status + "\n"
+            + "Weeks played: "
+            + playerController.getPlayer().getTransactionArchive().countDistinctWeeks()
+    );
+
+    summary.showAndWait();
+    javafx.application.Platform.exit();
+  }
+
+  private HBox buildHoldingRow(Share share, Stock stock, BigDecimal totalQty, BigDecimal avgPrice,
                                BigDecimal currentValue, BigDecimal pnl, BigDecimal pnlPct) {
     Label symbolLabel = new Label(share.stock().getSymbol());
     symbolLabel.setStyle(
@@ -180,8 +244,7 @@ public class PortfolioView extends BorderPane implements GameObserver {
 
     Label metaLabel = new Label(
         share.quantity().toPlainString()
-        + " sh · avg " + CurrencyUtil.formatNok(share.purchasePrice())
-    );
+        + " sh · avg " + CurrencyUtil.formatNok(avgPrice));
     metaLabel.setStyle(
         "-fx-text-fill: #8B949E;"
             + "-fx-font-family: monospace;"
@@ -201,51 +264,51 @@ public class PortfolioView extends BorderPane implements GameObserver {
     sellButton.setOnAction(e -> SellDialog.showAndWait(
         share, exchangeController, playerController));
 
-  VBox left = new VBox(2, symbolLabel, metaLabel, sellButton);
+    VBox left = new VBox(2, symbolLabel, metaLabel, sellButton);
 
-  boolean profit = pnl.compareTo(BigDecimal.ZERO) >= 0;
-  String pnlColor = profit ? "#3FB950" : "#F85149";
-  String pnlSign = profit ? "+" : "-";
+    boolean profit = pnl.compareTo(BigDecimal.ZERO) >= 0;
+    String pnlColor = profit ? "#3FB950" : "#F85149";
+    String pnlSign = profit ? "+" : "-";
 
-  Label pnlLabel = new Label(
-      pnlSign + CurrencyUtil.formatNok(pnl.abs())
-  );
-  pnlLabel.setStyle(
-      "-fx-text-fill: " + pnlColor + ";"
+    Label pnlLabel = new Label(
+        pnlSign + CurrencyUtil.formatNok(pnl.abs())
+     );
+    pnlLabel.setStyle(
+         "-fx-text-fill: " + pnlColor + ";"
           + "-fx-font-family: monospace;"
           + "-fx-font-weight: bold;"
           + "-fx-font-size: 11px;"
-  );
+    );
 
-  Label valLabel = new Label(CurrencyUtil.formatNok(currentValue));
-  valLabel.setStyle(
-      "-fx-text-fill: #8B949E;"
+    Label valLabel = new Label(CurrencyUtil.formatNok(currentValue));
+    valLabel.setStyle(
+        "-fx-text-fill: #8B949E;"
           + "-fx-font-family: monospace;"
           + "-fx-font-size: 10px;"
-  );
+    );
 
-  Label pctLabel = new Label(
-      pnlSign + pnlPct.setScale(1, RoundingMode.HALF_UP) + "%");
-  pctLabel.setStyle(
-      "-fx-text-fill: " + pnlColor + ";"
-      + "-fx-font-family: monospace;"
-      + "-fx-font-size: 10px;"
-  );
+    Label pctLabel = new Label(
+        pnlSign + pnlPct.setScale(1, RoundingMode.HALF_UP) + "%");
+    pctLabel.setStyle(
+        "-fx-text-fill: " + pnlColor + ";"
+        + "-fx-font-family: monospace;"
+            + "-fx-font-size: 10px;"
+    );
 
-  VBox right = new VBox(2, pnlLabel, valLabel, pctLabel);
-  right.setAlignment(Pos.CENTER_RIGHT);
+    VBox right = new VBox(2, pnlLabel, valLabel, pctLabel);
+    right.setAlignment(Pos.CENTER_RIGHT);
 
-  Region spacer1= new Region();
-  HBox.setHgrow(spacer1, Priority.ALWAYS);
+    Region spacer1 = new Region();
+    HBox.setHgrow(spacer1, Priority.ALWAYS);
 
-  Region spacer2= new Region();
-  HBox.setHgrow(spacer2, Priority.ALWAYS);
-  HBox row = new HBox(spacer1, left, spacer2, right);
-  row.setPadding(new Insets(8, 12, 8, 12));
-  row.setStyle(
-      "-fx-border-color: #21262D;"
+    Region spacer2= new Region();
+    HBox.setHgrow(spacer2, Priority.ALWAYS);
+    HBox row = new HBox(spacer1, left, spacer2, right);
+    row.setPadding(new Insets(8, 12, 8, 12));
+    row.setStyle(
+        "-fx-border-color: #21262D;"
           + "-fx-border-width: 0 0 1 0;");
-      row.setAlignment(Pos.CENTER_LEFT);
-      return row;
+    row.setAlignment(Pos.CENTER_LEFT);
+    return row;
   }
 }
