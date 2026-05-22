@@ -30,7 +30,7 @@ public class ExchangeController {
 
   }
   public void sell(Share share) {
-    throw  new UnsupportedOperationException("Not supported yet.");
+    exchange.sell(share,playerController.getPlayer());
   }
   public void advance(){
     Platform.runLater(()->exchange.advance());
