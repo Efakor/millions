@@ -17,10 +17,7 @@ public class NewsFeedPanel extends VBox implements GameObserver {
       + " -fx-font-family: monospace; -fx-font-size: 11px;-fx-font-weight: bold;";
   private static final String STYLE_PANEL = "-fx-background-color: #161B22;"
       + " -fx-border-color: #30363D; -fx-border-width: 1;";
-  private static final String STYLE_LABEL = "-fx-text-fill: #8B949E;"
-      + " -fx-font-family: monospace; -fx-font-size: 11px;";
-  private static final String STYLE_VALUE = "-fx-text-fill: #E6EDF3;"
-      + " -fx-font-family: monospace; -fx-font-size: 12px;";
+  private static final String STYLE_SCROLLPANE = "-fx-background-color: #0D1117;-fx-background: #0D1117; -fx-viewport-background-color: #0D1117;";
   private static final String STYLE_HEADLINE_GREEN = "-fx-text-fill: #3FB950;" +
       "-fx-font-family: monospace; -fx-font-size: 11px;-fx-font-weight: bold;";
   private static final String STYLE_HEADLINE_RED = "-fx-text-fill: #F85149;" +
@@ -48,7 +45,7 @@ public class NewsFeedPanel extends VBox implements GameObserver {
     ScrollPane scrollPane = new ScrollPane(headlinesList);
     scrollPane.setFitToWidth(true);
     scrollPane.setPrefHeight(200);
-    scrollPane.setStyle(STYLE_BACKGROUND);
+    scrollPane.setStyle(STYLE_SCROLLPANE);
     setStyle(STYLE_PANEL);
     setPadding(new Insets(10));
     getChildren().addAll(title, scrollPane);
@@ -59,7 +56,7 @@ public class NewsFeedPanel extends VBox implements GameObserver {
     if (event == GameEvent.WEEK_ADVANCED) {
       List<String> headlines = exchangeController.getExchange().getHeadlines();
 
-      if (headlines.size() == 0) {
+      if (!headlines.isEmpty()) {
         // Get latest headlin(last in the list)
         String latest = headlines.get(headlines.size() - 1);
         //Week label
@@ -72,7 +69,7 @@ public class NewsFeedPanel extends VBox implements GameObserver {
           headlineLabel.setStyle(STYLE_HEADLINE_RED);
         }
         VBox vBox = new VBox(2, weekLabel, headlineLabel);
-        vBox.setStyle(STYLE_PANEL);
+        vBox.setStyle(STYLE_SCROLLPANE);
         vBox.setPadding(new Insets(10));
         headlinesList.getChildren().add(0, vBox);
 

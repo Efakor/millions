@@ -38,8 +38,10 @@ public class AppFactory {
     //Gainer/Losers panel
     GainersLosersPanel gainersLosersPanel = new GainersLosersPanel(exchangeController);
     exchangeController.getExchange().addObserver(gainersLosersPanel);
+    // News Feed
+    NewsFeedPanel newsFeedPanel = new NewsFeedPanel(exchangeController);
     //Wire into layout
-    VBox rightPanel = new VBox(10, gainersLosersPanel, portfolioView);
+    VBox rightPanel = new VBox(10, gainersLosersPanel,newsFeedPanel, portfolioView);
     VBox.setVgrow(mainView, javafx.scene.layout.Priority.ALWAYS);
     mainView.setStockListView(stockListView);
     mainView.setStockDetailView(stockDetailPanel);

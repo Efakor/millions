@@ -254,6 +254,7 @@ public class Exchange implements Observable {
    */
   public void advance() {
     week++;
+    recentHeadlines.clear();
 
     // Update each stock's price randomly
     for (Stock stock : stocks.values()) {
