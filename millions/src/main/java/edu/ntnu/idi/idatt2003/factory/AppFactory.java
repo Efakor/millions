@@ -15,9 +15,10 @@ public class AppFactory {
   public static MainView buildMainView(PlayerController playerController, String name, BigDecimal capital, File file,Stage stage) {
     playerController.newGame(name, capital, file);
     ExchangeController exchangeController = new ExchangeController(playerController.getExchange(), playerController);
+    exchangeController.loadStocks(file);
     MainView mainView = new MainView(exchangeController, playerController);
     //Stock list
-    StockListView stockListView = new StockListView(playerController.getExchange());
+    StockListView stockListView = new StockListView(exchangeController);
     StockDetailPanel stockDetailPanel = new StockDetailPanel(exchangeController, playerController);
     stockListView.setDetailPanel(stockDetailPanel);
     stockListView.setupSelectionListener();

@@ -1,5 +1,6 @@
 package edu.ntnu.idi.idatt2003.view;
 
+import edu.ntnu.idi.idatt2003.controller.ExchangeController;
 import edu.ntnu.idi.idatt2003.model.Exchange;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.observer.GameEvent;
@@ -16,20 +17,20 @@ import java.math.BigDecimal;
 
 
 public class StockListView extends VBox implements GameObserver {
-  private final Exchange exchange;
+  private final ExchangeController exchangeController;
   private final TextField searchField=new TextField();
   private final TableView<Stock> stockTable=new TableView<>();
   private StockDetailPanel detailPanel;
 
-  public StockListView(Exchange exchange) {
-    this.exchange = exchange;
+  public StockListView(ExchangeController exchangecontroller) {
+    this.exchangeController = exchangecontroller;
     createRoot();
     createTable();
     createSearchField();
     loadData();
     setupSelectionListener();
     getChildren().addAll(searchField,stockTable);
-    exchange.addObserver(this);
+    exchangeController.getExchange().addObserver(this);
   }
 
   private void createRoot(){
@@ -113,19 +114,21 @@ public class StockListView extends VBox implements GameObserver {
 
   private void loadData(){
     //Normal stock list-> JavaFX list
-    ObservableList<Stock> stockList= FXCollections.observableArrayList(exchange.getAllStocks());
-    FilteredList<Stock> filteredStockList=new FilteredList<>(stockList, stock -> true);
+    stockTable.setItems(FXCollections.observableArrayList(exchangeController.getAllStocks()));
     //Search
     searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-      String search=newValue==null?"":newValue.toLowerCase().trim();
-      filteredStockList.setPredicate(stock -> {
-        if(search==null || search.isEmpty()){
-          return true;
-        }
-        return stock.getSymbol().toLowerCase().contains(search) ||stock.getCompany().toLowerCase().contains(search);
-      });
+
+      if (newValue == null || newValue.trim().isEmpty()) {
+        stockTable.setItems(FXCollections.observableArrayList(
+            exchangeController.getAllStocks()
+        ));
+
+      } else {
+        stockTable.setItems(FXCollections.observableArrayList(exchangeController.findStocks(newValue.trim())));
+      }
+
     });
-    stockTable.setItems(filteredStockList);
+
   }
   public void setupSelectionListener(){
     stockTable.getSelectionModel().selectedItemProperty().addListener((observable,oldValue,newStock)->{

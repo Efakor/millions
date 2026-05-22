@@ -3,8 +3,11 @@ package edu.ntnu.idi.idatt2003.controller;
 import edu.ntnu.idi.idatt2003.model.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+
+import edu.ntnu.idi.idatt2003.repository.CsvStockReader;
 import javafx.application.Platform;
 
 /**
@@ -36,10 +39,23 @@ public class ExchangeController {
     Platform.runLater(()->exchange.advance());
   }
   public void loadStocks(File f){
-    throw new UnsupportedOperationException("Not supported yet.");
+    CsvStockReader reader = new CsvStockReader();
+    try {
+      List<Stock> stocks = reader.readStocksFromFile(f.getPath());
+      System.out.println("Loaded stocks: " + stocks.size());
+
+      for (Stock stock : stocks) {
+        exchange.addStock(stock);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to load stock data", e);
+    }
   }
-  public void findStocks(String searchTerm){
-    throw new UnsupportedOperationException("Not supported yet.");
+  public List <Stock> getAllStocks() {
+    return exchange.getAllStocks();
+  }
+  public List<Stock> findStocks (String searchTerm){
+    return exchange.findStocks(searchTerm);
   }
   public List <Stock> getGainers(int limit){
     return exchange.getGainers(limit);
@@ -48,3 +64,6 @@ public class ExchangeController {
     return exchange.getLosers(limit);
   }
 }
+
+
+
