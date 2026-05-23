@@ -19,7 +19,8 @@ public class AppFactory {
     MainView mainView = new MainView(exchangeController, playerController);
     //Stock list
     StockListView stockListView = new StockListView(exchangeController);
-    StockDetailPanel stockDetailPanel = new StockDetailPanel(exchangeController, playerController);
+    WatchlistView watchlistView = new WatchlistView(exchangeController);
+    StockDetailPanel stockDetailPanel = new StockDetailPanel(exchangeController, playerController,watchlistView);
     stockListView.setDetailPanel(stockDetailPanel);
     stockListView.setupSelectionListener();
 
@@ -42,7 +43,7 @@ public class AppFactory {
     // News Feed
     NewsFeedPanel newsFeedPanel = new NewsFeedPanel(exchangeController);
     //Wire into layout
-    VBox rightPanel = new VBox(10, gainersLosersPanel,newsFeedPanel, portfolioView);
+    VBox rightPanel = new VBox(10, gainersLosersPanel,newsFeedPanel,watchlistView, portfolioView);
     VBox.setVgrow(mainView, javafx.scene.layout.Priority.ALWAYS);
     mainView.setStockListView(stockListView);
     mainView.setStockDetailView(stockDetailPanel);

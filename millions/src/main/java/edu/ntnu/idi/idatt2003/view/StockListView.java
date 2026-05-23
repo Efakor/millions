@@ -43,7 +43,7 @@ public class StockListView extends VBox implements GameObserver {
     stockTable.setPrefHeight(420);
     stockTable.setMaxHeight(420);
     stockTable.setMinHeight(420);
-    stockTable.setStyle("-fx-background-color: 161B22;"); //Used gemini in this, due to color problems
+    stockTable.setStyle("-fx-background-color:#161B22;"); //Used gemini in this, due to color problems
     stockTable.setRowFactory(color->{
       TableRow<Stock> row=new TableRow<>();
       row.setStyle("-fx-background-color: #161B22;-fx-text-background-color: white;");
