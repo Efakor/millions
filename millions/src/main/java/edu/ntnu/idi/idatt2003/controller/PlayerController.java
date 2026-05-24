@@ -31,17 +31,7 @@ import java.util.List;
     this.player = new Player(name, capital);
     this.exchange = new Exchange(name);
 
-    CsvStockReader reader = new CsvStockReader();
-    try {
-      List<Stock> stocks = reader.readStocksFromFile(stockFile.getPath());
-      System.out.println("Loaded stocks: " + stocks.size());
 
-      for (Stock stock : stocks) {
-        exchange.addStock(stock);
-      }
-    } catch (IOException e) {
-      throw new RuntimeException("Failed to load stock data", e);
-    }
   }
 
   public Player getPlayer() {
@@ -81,6 +71,7 @@ import java.util.List;
     return player.getNetWorth();
 
   }
+
   public String getPlayerStatus() {
     return player.getStatus();
   }

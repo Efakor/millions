@@ -15,10 +15,12 @@ public class AppFactory {
   public static MainView buildMainView(PlayerController playerController, String name, BigDecimal capital, File file,Stage stage) {
     playerController.newGame(name, capital, file);
     ExchangeController exchangeController = new ExchangeController(playerController.getExchange(), playerController);
+    exchangeController.loadStocks(file);
     MainView mainView = new MainView(exchangeController, playerController);
     //Stock list
-    StockListView stockListView = new StockListView(playerController.getExchange());
-    StockDetailPanel stockDetailPanel = new StockDetailPanel(exchangeController, playerController);
+    StockListView stockListView = new StockListView(exchangeController);
+    WatchlistView watchlistView = new WatchlistView(exchangeController);
+    StockDetailPanel stockDetailPanel = new StockDetailPanel(exchangeController, playerController,watchlistView);
     stockListView.setDetailPanel(stockDetailPanel);
     stockListView.setupSelectionListener();
 
@@ -38,8 +40,10 @@ public class AppFactory {
     //Gainer/Losers panel
     GainersLosersPanel gainersLosersPanel = new GainersLosersPanel(exchangeController);
     exchangeController.getExchange().addObserver(gainersLosersPanel);
+    // News Feed
+    NewsFeedPanel newsFeedPanel = new NewsFeedPanel(exchangeController);
     //Wire into layout
-    VBox rightPanel = new VBox(10, gainersLosersPanel, portfolioView);
+    VBox rightPanel = new VBox(10, gainersLosersPanel,newsFeedPanel,watchlistView, portfolioView);
     VBox.setVgrow(mainView, javafx.scene.layout.Priority.ALWAYS);
     mainView.setStockListView(stockListView);
     mainView.setStockDetailView(stockDetailPanel);
