@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests for the TransactionArchive class.
  */
-class TransactionArchiveTest {
+class  TransactionArchiveTest {
 
   /**
    * Mock Transaction for testing.

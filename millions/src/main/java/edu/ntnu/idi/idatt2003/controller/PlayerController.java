@@ -27,11 +27,21 @@ import java.util.List;
   public PlayerController() {
   }
 
+  /**
+   *
+   * @param name
+   * @param capital
+   * @param stockFile
+   */
+
   public void newGame(String name, BigDecimal capital, File stockFile) {
-    this.player = new Player(name, capital);
-    this.exchange = new Exchange(name);
+    newGame(name,capital);
 
 
+  }
+  public void newGame(String name, BigDecimal capital) {
+    this.player=new Player(name,capital);
+    this.exchange=new Exchange(name);
   }
 
   public Player getPlayer() {
