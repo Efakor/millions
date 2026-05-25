@@ -11,23 +11,41 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
+/**
+ * Unit tests for ExchangeController.
+ * Tests buying,selling,advancing weeks and searching for stocks.
+ * Follows A-A-A (Arrange-Act-Assert) pattern.
+ */
+
 class ExchangeControllerTest {
   private ExchangeController exchangeController;
   private PlayerController playerController;
   private Exchange exchange;
   private Player player;
 
+  /**
+   * Sets up fresh exchange,player,controller before each test.
+   * Adds one stock(AAPL) to the exchange with a price of 150.
+   */
+
   @BeforeEach
   void setUp() {
     playerController=new PlayerController();
     playerController.newGame("Kari",new BigDecimal("10000"));
-   playerController.getExchange().addStock(new Stock("AAPL","Apple",new BigDecimal("150")));
-   exchangeController=new ExchangeController(playerController.getExchange(),playerController);
-   player=playerController.getPlayer();
-   exchange=playerController.getExchange();
+    playerController.getExchange().addStock(new Stock("AAPL","Apple",new BigDecimal("150")));
+    exchangeController=new ExchangeController(playerController.getExchange(),playerController);
+    player=playerController.getPlayer();
+    exchange=playerController.getExchange();
   }
+
+  /**
+   * Tests for buying
+   */
   @Nested
   class BuyTests{
+    /**
+     * Test that buying a valid  stock adds a stock to the player's portfolio.
+     */
     @Test
     void buyValidPlayerShare() {
       //Arrange
@@ -37,6 +55,10 @@ class ExchangeControllerTest {
       //Assert
       assertFalse(player.getPortfolio().getAllShares().isEmpty());
     }
+
+    /**
+     * Test that buying a stock deducts the correct amount form the players balance.
+     */
     @Test
     void buyValidMoneyDeduction() {
       //Arrange
@@ -47,6 +69,10 @@ class ExchangeControllerTest {
       //Assert
       assertTrue(player.getCurrentMoney().compareTo(before)<0);
     }
+
+    /**
+     * Test that buy a stock, but has insufficient funds, and throws IllegalStateException.
+     */
     @Test
     void buyInsufficientFunds_throwsException() {
       //Arrange
@@ -55,19 +81,26 @@ class ExchangeControllerTest {
       assertThrows(IllegalStateException.class, () ->
           exchangeController.buy("AAPL",quantity));
     }
+
+    /**
+     * Test that trying to buy a stock with Invalid symbol, throws IllegalArgumentException.
+     */
     @Test
     void buyInvalidSymbol_throwsException() {
       //Assert
       assertThrows(IllegalArgumentException.class, () ->
           exchangeController.buy("Invalid",new BigDecimal("99999")));
     }
-
-
-
+    /**
+     * Tests for the sell operation
+     */
 
   }
   @Nested
   class SellTests {
+    /**
+     * Test selling a share and removes from the player's portfolio.
+     */
     @Test
     void sellValidSymbol_shareRemovedPortfolio() {
       //Arrange
@@ -79,6 +112,10 @@ class ExchangeControllerTest {
       assertTrue(player.getPortfolio().getAllShares().isEmpty());
 
     }
+
+    /**
+     * Tests that selling a share increases the player's cash balance.
+     */
     @Test
     void sellValid_moneyIncreasedAfterSell() {
       //Arrange
@@ -90,11 +127,16 @@ class ExchangeControllerTest {
       //Assert
       assertTrue(player.getCurrentMoney().compareTo(moneyAfter)>0);
     }
-
+    /**
+     * Tests the stock search functionality
+     */
 
   }
   @Nested
   class SearchTests {
+    /**
+     * Tests that searching by company name and return matching stock.
+     */
     @Test
     void searchForStock() {
       //Arrange
@@ -103,6 +145,10 @@ class ExchangeControllerTest {
       assertFalse(stocks.isEmpty());
       assertEquals("AAPL",stocks.get(0).getSymbol());
     }
+
+    /**
+     * Tests that searching a non-existent stock and returns an empty list.
+     */
     @Test
     void searchStock_noMatch(){
       //Arrange
@@ -112,11 +158,16 @@ class ExchangeControllerTest {
       //Assert
       assertTrue(stocks.isEmpty());
     }
-
+    /**
+     * Tests for the week advancement functionality.
+     */
 
     }
     @Nested
     class advanceTests {
+      /**
+       * Tests that advancing the week increments the week counter by one.
+       */
     @Test
     void advanceWeekIncrements() {
       //Arrange
@@ -126,6 +177,10 @@ class ExchangeControllerTest {
       //Assert
       assertEquals(weekBefore+1,exchange.getWeek());
     }
+
+      /**
+       * Tests for advancing week adda new price to the stock's price history.
+       */
     @Test
     void advanceWeek_priceHistoryGrows() {
       //Arrange
