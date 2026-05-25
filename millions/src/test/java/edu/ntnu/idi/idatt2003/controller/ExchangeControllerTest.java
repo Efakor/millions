@@ -1,7 +1,5 @@
-package edu.ntnu.idi.idatt2003.view;
+package edu.ntnu.idi.idatt2003.controller;
 
-import edu.ntnu.idi.idatt2003.controller.ExchangeController;
-import edu.ntnu.idi.idatt2003.controller.PlayerController;
 import edu.ntnu.idi.idatt2003.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
