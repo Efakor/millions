@@ -7,7 +7,19 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * The main entry point for the Millions stock trading game.
+ * Initialises the JavaFX application, creates the primary stage
+ * and launches the start screen.
+ */
+
 public class MainApp extends Application {
+  /**
+   * Starts the JavaFX application by configuring the primary stage
+   * and displaying the start screen.
+   *
+   * @param primaryStage the primary stage provided by the JavaFX runtime
+   */
 
   @Override
   public void start(Stage primaryStage) {
@@ -23,6 +35,12 @@ public class MainApp extends Application {
     primaryStage.setMaximized(true);
     primaryStage.show();
   }
+
+  /**
+   * The main method that launches the JavaFX application.
+   *
+   * @param args command line arguments passed to the application
+   */
 
   public static void main(String[] args) {
     launch(args);

@@ -79,14 +79,35 @@ public class GainersLosersPanel extends VBox implements GameObserver {
 
   }
 
+
+  /**
+   * Builds a single row for the losers list.
+   *
+   * @param stock the stock to display
+   * @return an HBox containing the stock information
+   */
+
   private HBox buildGainerRow(Stock stock) {
     return buildRow(stock, true);
 
   }
 
+  /**
+   * Builds a single row for the losers list.
+   *
+   * @param stock the stock to display
+   * @return an HBox containing the stock information
+   */
+
   private HBox buildLoserRow(Stock stock) {
     return buildRow(stock, false);
   }
+  /**
+   * Builds a stock row with rank,symbol,company,price change and percentage.
+   *
+   * @param stock the stock to display
+   * @return an HBox containing the stock information
+   */
 
   private HBox buildRow(Stock stock, boolean isGainer) {
     String color = isGainer ? "green" : "red";

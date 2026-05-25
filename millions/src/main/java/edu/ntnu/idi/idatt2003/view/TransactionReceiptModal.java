@@ -104,11 +104,31 @@ public class TransactionReceiptModal {
     stage.showAndWait();
   }
 
+  /**
+   * Adds labelled row to the breakdown grid using the default value style.
+   *
+   * @param grid the GridPane to add the row
+   * @param row the row index
+   * @param label the left column label text
+   * @param value the right column value  text
+   */
+
   private static void addRow(GridPane grid, int row, String label, String value) {
     addRow(grid, row, label, value, STYLE_VALUE);
   }
 
-  private static void addRow(GridPane grid, int row, String label, String value, String valueStyle) {
+  /**
+   * Adds labelled row to the breakdown grid with a custom value style.
+   *
+   * @param grid the GridPane to add the row
+   * @param row the row index
+   * @param label the left column label text
+   * @param value the right column value  text
+   * @param valueStyle the CSS style to apply to the value label
+   */
+
+  private static void addRow(GridPane grid, int row,
+                             String label, String value, String valueStyle) {
     Label lbl = new Label(label);
     lbl.setStyle(STYLE_LABEL);
 

@@ -4,24 +4,34 @@ package edu.ntnu.idi.idatt2003.view;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
 import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.geometry.Insets;
 import javafx.stage.Stage;
 
 
-
+/**
+ * The final summary screen displayed after the player sells all holdings and exits.
+ * Shows a metric including net worth, starting capital,
+ *  profit/loss and weeks played, along with the player's achieved status
+ *  and an exit button that closes the application.
+ */
 
 public class  SummaryView extends VBox {
   private final PlayerController playerController;
   private final Stage stage;
   private Stage dialogStage;
 
-
+  /**
+   * Builds the full summary UI including title, description,
+   * stats grid, status box and exit button.
+   *
+   * @param weeksPlayed the total number of weeks played
+   */
   public SummaryView(PlayerController playerController, int weeksPlayed, Stage stage) {
     this.playerController = playerController;
     this.stage = stage;
@@ -29,33 +39,50 @@ public class  SummaryView extends VBox {
     setPadding(new Insets(30));
     setStyle("-fx-background-color:#0D1117;");
 
-    buildUI(weeksPlayed);
+    buildUi(weeksPlayed);
   }
+  /**
+   * Builds the full summary UI including title, description,
+   * stats grid, status box and exit button.
+   *
+   * @param weeksPlayed the total number of weeks played
+   */
 
-  private void buildUI(int weeksPlayed) {
+  private void buildUi(int weeksPlayed) {
     Label subtitle = new Label("Game Over");
     subtitle.setStyle("-fx-font-size:13; -fx-text-fill: #8B949E;-fx-font-weight: bold;");
     Label title = new Label(" Final Summary");
     title.setStyle("-fx-font-size:20; -fx-text-fill: white;");
-    Label description = new Label(String.format(" Player:%s .%d weeks played", playerController.getPlayerName(), weeksPlayed));
+    Label description = new Label(String.format(" Player:%s .%d weeks played",
+        playerController.getPlayerName(), weeksPlayed));
     description.setStyle("-fx-font-size:14; -fx-text-fill: white;");
 
     GridPane gridPane = new GridPane();
     gridPane.setHgap(10);
     gridPane.setVgap(10);
     gridPane.setAlignment(Pos.CENTER);
-    gridPane.add(createCard("NET WORTH", CurrencyUtil.formatNok(playerController.getNetWorth())), 0, 0);
-    gridPane.add(createCard("STARTING CAPITAL", CurrencyUtil.formatNok(playerController.getStartingCapital())), 1, 0);
-    gridPane.add(createCard("PROFIT/LOSS", CurrencyUtil.formatNok(playerController.getProfitLoss())), 0, 1);
-    gridPane.add(createCard("WEEKS PLAYED", String.valueOf(weeksPlayed)), 1, 1);
+    gridPane.add(createCard("NET WORTH",
+        CurrencyUtil.formatNok(playerController.getNetWorth())), 0, 0);
+    gridPane.add(createCard("STARTING CAPITAL",
+        CurrencyUtil.formatNok(playerController.getStartingCapital())), 1, 0);
+    gridPane.add(createCard("PROFIT/LOSS",
+        CurrencyUtil.formatNok(playerController.getProfitLoss())), 0, 1);
+    gridPane.add(createCard("WEEKS PLAYED",
+        String.valueOf(weeksPlayed)), 1, 1);
     HBox statusBox = buildStatusBox(playerController.getPlayerStatus());
     Button exitButton = buildExitButton();
     this.getChildren().addAll(
         subtitle, title, description, gridPane, statusBox, exitButton
     );
 
-
   }
+  /**
+   * Creates a styled metric card displaying a title and value.
+   *
+   * @param title the metric title displayed above the value
+   * @param value the metric value to display
+   * @return a VBox containing the title and value labels
+   */
 
   private VBox createCard(String title, String value) {
     VBox card = new VBox(5);
@@ -70,6 +97,12 @@ public class  SummaryView extends VBox {
     return card;
 
   }
+  /**
+   * Builds the player status badge box.
+   *
+   * @param playerStatus the player's current status string
+   * @return an HBox containing the status display
+   */
 
   private HBox buildStatusBox(String playerStatus) {
     HBox statusBox = new HBox(10);
@@ -79,12 +112,19 @@ public class  SummaryView extends VBox {
     return statusBox;
   }
 
+  /**
+   * Builds the exit button that terminates the application.
+   *
+   * @return a styled button that exists the application
+   */
+
 
   private Button buildExitButton() {
     Button exitButton = new Button("EXIT");
     exitButton.setMaxWidth(Double.MAX_VALUE);
     exitButton.setPadding(new Insets(15));
-    exitButton.setStyle("-fx-font-size: 10px;-fx-text-fill: white;-fx-font-weight: bold;-fx-background-color:#8B0000");
+    exitButton.setStyle("-fx-font-size: 10px;-fx-text-fill: white;-fx-font-weight: bold;"
+        + "-fx-background-color:#8B0000");
     exitButton.setOnAction(event -> {
       Platform.exit();
     });
