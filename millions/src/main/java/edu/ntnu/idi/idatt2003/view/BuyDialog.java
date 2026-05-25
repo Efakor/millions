@@ -10,8 +10,6 @@ import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
-
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -75,7 +73,7 @@ public class BuyDialog {
   private Transaction result;
 
   /**
-   * Private constructor use {@link #showAndWait} instead
+   * Private constructor use {@link #showAndWait} instead.
    *
    * @param stock the stock to purchase
    * @param exchange the exchange controller handling the transaction
@@ -93,7 +91,8 @@ public class BuyDialog {
   }
 
   /**
-   * Creates and displays the buy dialog, until teh user closes it
+   * Creates and displays the buy dialog, until the user closes it.
+   *
    * @param stock  the stock to purchase
    * @param exchange the exchange controller
    * @param player the player controller
@@ -111,17 +110,16 @@ public class BuyDialog {
    * Builds and configures the dialog UI, which includes title,quantity,row,
    * cost breakdown panel and action button.
    */
-
   private void buildUi() {
     Label title = new Label(
         "BUY " + stock.getSymbol() + " @ "
             + stock.getSalesPrice().setScale(2, RoundingMode.HALF_UP));
+
     title.setStyle("-fx-text-fill: #E6EDF3;"
         + " -fx-font-family: 'JetBrains Mono', monospace;"
         + " -fx-font-size: 16; -fx-font-weight: bold;");
 
-    HBox quantityRow = buildQuantityRow();
-    GridPane breakdown = buildBreakdown();
+
 
     fundsWarning.setStyle(STYLE_WARNING);
     fundsWarning.setVisible(false);
@@ -137,6 +135,8 @@ public class BuyDialog {
 
     HBox buttons = new HBox(10, cancelButton, confirmButton);
     buttons.setAlignment(Pos.CENTER_RIGHT);
+    HBox quantityRow = buildQuantityRow();
+    GridPane breakdown = buildBreakdown();
 
     VBox root = new VBox(14, title, quantityRow, breakdown, fundsWarning, buttons);
     root.setPadding(new Insets(20));
@@ -150,10 +150,10 @@ public class BuyDialog {
   }
 
   /**
-   * Builds quantity input row with increment button and decrement button
+   * Builds quantity input row with increment button and decrement button.
+   *
    * @return an HBox containing the quantity controls.
    */
-
   private HBox buildQuantityRow() {
     Label quantityLabel = new Label("QUANTITY");
     quantityLabel.setStyle(STYLE_LABEL);
@@ -180,15 +180,16 @@ public class BuyDialog {
     Label suffix = new Label("shares");
     suffix.setStyle(STYLE_LABEL);
 
-    HBox row = new HBox(12, quantityLabel, stepper,suffix, spacer);
+    HBox row = new HBox(12, quantityLabel, stepper, suffix, spacer);
     row.setAlignment(Pos.CENTER_LEFT);
     row.setPadding(new Insets(10));
     row.setStyle(STYLE_PANEL);
     return row;
-  }
 
+  }
   /**
    * Build the cost breakdown grid showing gross,commission,tax and total.
+   *
    * @return  GridPane contains the breakdown rows
    */
 
@@ -208,6 +209,7 @@ public class BuyDialog {
 
   /**
    * Adds a single row to the breakdown grid.
+   *
    * @param grid the GridPane to add the rows to
    * @param row the row index
    * @param label the label text for the left column
@@ -231,7 +233,8 @@ public class BuyDialog {
 
   /**
    * Increments or decrements the quantity field,
-   *    * and prevents the quantity going below 1.
+   * and prevents the quantity going below 1.
+   *
    * @param delta the amount to add,use negative to decrement.
    */
 
@@ -277,13 +280,15 @@ public class BuyDialog {
     PurchaseCalculator calc = new PurchaseCalculator(previewShare);
 
     BigDecimal gross = calc.calculateGross();
-    BigDecimal commission = calc.calculateCommission();
-    BigDecimal tax = calc.calculateTax();
-    BigDecimal total = calc.calculateTotal();
-
     grossLabel.setText(CurrencyUtil.formatNok(gross));
+
+    BigDecimal commission = calc.calculateCommission();
     commissionLabel.setText(CurrencyUtil.formatNok(commission));
+
+    BigDecimal tax = calc.calculateTax();
     taxLabel.setText(CurrencyUtil.formatNok(tax));
+
+    BigDecimal total = calc.calculateTotal();
     totalLabel.setText(CurrencyUtil.formatNok(total));
 
     BigDecimal cash = playerController.getPlayer().getCurrentMoney();
@@ -296,7 +301,8 @@ public class BuyDialog {
   }
 
   /**
-   * Parses the quantity field as a BigDecimal
+   * Parses the quantity field as a BigDecimal.
+   *
    * @return the parsed quantity, or BigDecimal.Zero on failure
    */
 
@@ -323,7 +329,7 @@ public class BuyDialog {
     javafx.application.Platform.runLater(() -> {
       try {
         BigDecimal quantity = parseQuantityOrZero();
-        result= exchangeController.buy(stock.getSymbol(), quantity);
+        result = exchangeController.buy(stock.getSymbol(), quantity);
 
         // Receipt modal will be shown by the caller, since showAndWait() returns the Transaction.
       } catch (RuntimeException ex) {
@@ -349,6 +355,7 @@ public class BuyDialog {
 
   /**
    * Disables the confirm button and shows a warning message.
+   *
    * @param message the warning message to display
    */
   private void disableConfirm(String message) {
