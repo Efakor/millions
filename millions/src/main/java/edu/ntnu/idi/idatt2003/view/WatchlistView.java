@@ -61,6 +61,10 @@ public class WatchlistView extends VBox  implements GameObserver {
     buildLayout();
     exchangeController.getExchange().addObserver(this);
   }
+  /**
+   * Builds the panel layout including the header, alert banner
+   * and scrollable stock rows.
+   */
 
   private void buildLayout() {
     setStyle(STYLE_BACKGROUND);
@@ -151,6 +155,11 @@ public class WatchlistView extends VBox  implements GameObserver {
       refreshRows();
     }
   }
+  /**
+   * Checks all watched stocks for price movements exceeding the alert threshold.
+   * Shows a warning banner listing all stocks that triggered an alert.
+   * Updates the price snapshot for each watched stock after checking.
+   */
 
   private void checkAlerts() {
     List<String> triggered = new ArrayList<>();
@@ -192,6 +201,10 @@ public class WatchlistView extends VBox  implements GameObserver {
       alertBox.setManaged(true);
     }
   }
+  /**
+   * Rebuilds the stock rows from the current watchlist.
+   * Displays an empty state message if no stocks are being watched.
+   */
 
   private void refreshRows() {
     stockRows.getChildren().clear();
@@ -212,6 +225,14 @@ public class WatchlistView extends VBox  implements GameObserver {
       }
     }
   }
+  /**
+   * Builds a single watchlist row displaying the stock symbol,
+   * current price, percentage change since being added and a remove button.
+   * Percentage change is colour coded — green for gains, red for losses.
+   *
+   * @param stock the stock to display
+   * @return an HBox containing the formatted watchlist row
+   */
 
   private HBox buildRow(Stock stock) {
     BigDecimal change = stock.getLatestPriceChange();

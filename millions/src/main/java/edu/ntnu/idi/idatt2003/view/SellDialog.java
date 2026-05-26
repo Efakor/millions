@@ -12,7 +12,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -64,12 +68,7 @@ public class SellDialog {
     Stock stock = exchangeController.getExchange().getStock(share.stock().getSymbol());
     SaleCalculator calc = new SaleCalculator(share);
 
-    BigDecimal gross = calc.calculateGross();
-    BigDecimal commission = calc.calculateCommission();
-    BigDecimal total = calc.calculateTotal();
-    BigDecimal tax = calc.calculateTax();
-    BigDecimal costBasis = share.purchasePrice().multiply(share.quantity());
-    BigDecimal pnl = total.subtract(costBasis);
+
 
     Label title = new Label("SELL " + share.stock().getSymbol());
     title.setStyle("-fx-text-fill: #E6EDF3;"
@@ -82,8 +81,9 @@ public class SellDialog {
     Label subtitle = new Label(priceInfo);
     subtitle.setStyle(STYLE_LABEL);
 
-    GridPane breakdown = buildBreakdown(stock, gross, commission, tax, total);
-
+    BigDecimal total = calc.calculateTotal();
+    BigDecimal costBasis = share.purchasePrice().multiply(share.quantity());
+    BigDecimal pnl = total.subtract(costBasis);
     boolean profit = pnl.compareTo(BigDecimal.ZERO) >= 0;
     String pnlColor = profit ? "#3FB950" : "#F85149";
     String pnlSign = profit ? "+" : "-";
@@ -94,10 +94,10 @@ public class SellDialog {
         + "-fx-font-family: monospace;"
         + "-fx-font-weight: bold;"
         + "-fx-font-size: 12px;");
-
     Button cancelButton = new Button("CANCEL");
     cancelButton.setStyle(STYLE_BUTTON_OFF);
     cancelButton.setOnAction(e -> stage.close());
+
 
     Button confirmButton = new Button("CONFIRM SELL");
     confirmButton.setStyle(STYLE_BUTTON_OK);
@@ -105,10 +105,16 @@ public class SellDialog {
     confirmButton.setOnAction(e -> {
       exchangeController.sell(share);
       stage.close();
-    });
 
+
+
+    });
     HBox buttons = new HBox(10, cancelButton, confirmButton);
     buttons.setAlignment(Pos.CENTER_RIGHT);
+    BigDecimal gross = calc.calculateGross();
+    BigDecimal commission = calc.calculateCommission();
+    BigDecimal tax = calc.calculateTax();
+    GridPane breakdown = buildBreakdown(stock, gross, commission, tax, total);
 
     VBox root = new VBox(14, title, subtitle, breakdown, pnlLabel, buttons);
     root.setPadding(new Insets(20));
@@ -119,6 +125,18 @@ public class SellDialog {
     stage.initModality(Modality.APPLICATION_MODAL);
     stage.setResizable(false);
   }
+
+  /**
+   * Builds the sale breakdown grid showing sales price,
+   * gross value,commission,tax and net proceeds.
+   *
+   * @param stock the stock being sold
+   * @param gross the gross value before fees
+   * @param commission the commission fee
+   * @param tax the capital gains tax
+   * @param total the net proceeds after all deductions
+   * @return a GridPane containing the breakdown rows
+   */
 
   private GridPane buildBreakdown(Stock stock, BigDecimal gross,
                                   BigDecimal commission, BigDecimal tax, BigDecimal total) {
@@ -136,7 +154,18 @@ public class SellDialog {
     return grid;
   }
 
-  private void addRow(GridPane grid, int row, String labelText, String value, String valueStyle) {
+  /**
+   * Adds a single labelled row to the breakdown grid.
+   *
+   * @param grid the GridPane to add the row to
+   * @param row the row index
+   * @param labelText teh left column label text
+   * @param value the right column value text
+   * @param valueStyle the CSS style to apply the valueLabel
+   */
+
+  private void addRow(GridPane grid, int row,
+                      String labelText, String value, String valueStyle) {
     Label label = new Label(labelText);
     label.setStyle(STYLE_LABEL);
 

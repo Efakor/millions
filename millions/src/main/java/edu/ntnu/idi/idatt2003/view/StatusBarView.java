@@ -70,12 +70,27 @@ public class StatusBarView extends HBox implements GameObserver {
     );
   }
 
+  /**
+   * Applies the standard white monospace value style to a label.
+   *
+   * @param label the label to style
+   */
+
   private void applyValueStyle(Label label) {
     label.setStyle(
         "-fx-text-fill: #E6EDF3;"
         + "-fx-font-weight: bold;" + "-fx-font-size: 13px;"
         + "-fx-font-family: monospace;");
   }
+
+  /**
+   * Builds a singles status bar item with a small title label above
+   * and a value label below.
+   *
+   * @param title the metric title displays above the value
+   * @param valueLabel the label node displaying the metric value
+   * @return a VBox contains the title and value labels
+   */
 
   private VBox buildItem(String title, Label valueLabel) {
     Label titleLabel = new Label(title);
@@ -141,7 +156,7 @@ public class StatusBarView extends HBox implements GameObserver {
         + "-fx-text-fill: " + badgeText + ";"
         + "-fx-padding: 2 10 2 10;"
         + "-fx-background-radius: 12;"
-        + "-fx-font-weight: bold"
+        + "-fx-font-weight: bold;"
         + "-fx-background-color: " + badgeBackground + ";"
     );
   }
