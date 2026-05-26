@@ -19,6 +19,9 @@ import java.util.List;
    */
 
   public class PlayerController {
+  /**
+   * Constructs a new Player Controller with no active game session
+   */
 
   private Exchange exchange;
   private Player player;
