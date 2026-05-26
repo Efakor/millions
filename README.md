@@ -39,6 +39,25 @@ GOOGL,Alphabet Inc., 250.00
 -  Personal watchlist with price alerts
 -  Random Market evnts news feed
 -  Final summary screen with net worth and status
+  
+
+
+## Testing & Code Quality
+The project includes comprhensive unit tests and implements strict Google CheckStyle formatting.
+
+To run the unit tests:
+
+```bash
+mvn test
+```
+
+to run the CheckStyle validation:
+
+``` bash
+mvn checkstyle:check
+```
+
+
 
 ## Project Structure
 ```bash
