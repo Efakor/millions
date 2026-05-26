@@ -7,18 +7,20 @@ import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.observer.GameEvent;
 import edu.ntnu.idi.idatt2003.observer.GameObserver;
 import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 /**
  * Sidebar showing the player's current holdings.
@@ -44,6 +46,11 @@ public class PortfolioView extends BorderPane implements GameObserver {
     buildLayout();
     exchangeController.getExchange().addObserver(this);
   }
+
+  /**
+   * Builds the full panel layout including the header
+   * and total value footer with the sell all button.
+   */
 
   private void buildLayout() {
     setStyle("-fx-background-color: #0D1117;");
@@ -77,10 +84,22 @@ public class PortfolioView extends BorderPane implements GameObserver {
     setBottom(totalBox);
   }
 
+  /**
+   * Sets the callback, when sell all button is confirmed.
+   *
+   * @param sellAllRequest the runnable call when sell all is triggered
+   */
+
   public void setSellAllRequest(Runnable sellAllRequest) {
     this.sellAllRequest = sellAllRequest;
 
   }
+
+  /**
+   * Builds the bottom total value showing portfolio value and sell all button.
+   *
+   * @return a VBox containing the total label and sell all button
+   */
 
   private VBox buildTotalBox() {
     Label totalLbl = new Label("TOTAL VALUE");
@@ -136,6 +155,13 @@ public class PortfolioView extends BorderPane implements GameObserver {
         + "-fx-border-width: 1 0 0 0;");
     return box;
   }
+
+  /**
+   *Called by the exchange when a game event is fired.
+   * Plans the UI refresh on the JavaFX application thread.
+   *
+   * @param event the event that was triggered
+   */
 
   @Override
   public void onGameEvent(GameEvent event) {
@@ -208,6 +234,10 @@ public class PortfolioView extends BorderPane implements GameObserver {
     }
   }
 
+  /**
+   * Refreshes the holdings lists with current portfolio data.
+   */
+
   private void showFinalSummary() {
     javafx.scene.control.Alert summary = new javafx.scene.control.Alert(
         javafx.scene.control.Alert.AlertType.INFORMATION);
@@ -264,7 +294,6 @@ public class PortfolioView extends BorderPane implements GameObserver {
     sellButton.setOnAction(e -> SellDialog.showAndWait(
         share, exchangeController, playerController));
 
-    VBox left = new VBox(2, symbolLabel, metaLabel, sellButton);
 
     boolean profit = pnl.compareTo(BigDecimal.ZERO) >= 0;
     String pnlColor = profit ? "#3FB950" : "#F85149";
@@ -294,14 +323,14 @@ public class PortfolioView extends BorderPane implements GameObserver {
         + "-fx-font-family: monospace;"
             + "-fx-font-size: 10px;"
     );
-
     VBox right = new VBox(2, pnlLabel, valLabel, pctLabel);
     right.setAlignment(Pos.CENTER_RIGHT);
+    VBox left = new VBox(2, symbolLabel, metaLabel, sellButton);
 
     Region spacer1 = new Region();
     HBox.setHgrow(spacer1, Priority.ALWAYS);
 
-    Region spacer2= new Region();
+    Region spacer2 = new Region();
     HBox.setHgrow(spacer2, Priority.ALWAYS);
     HBox row = new HBox(spacer1, left, spacer2, right);
     row.setPadding(new Insets(8, 12, 8, 12));

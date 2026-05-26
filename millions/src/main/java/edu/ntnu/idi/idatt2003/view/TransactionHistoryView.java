@@ -63,6 +63,10 @@ public class TransactionHistoryView extends BorderPane implements GameObserver {
     this.playerController = playerController;
     buildLayout();
   }
+  /**
+   * Builds the full panel layout including the filter bar,
+   * scrollable transaction rows and initial data load.
+   */
 
   private void buildLayout() {
     setStyle(STYLE_BACKGROUND);
@@ -79,6 +83,12 @@ public class TransactionHistoryView extends BorderPane implements GameObserver {
 
     refresh();
   }
+  /**
+   * Builds the filter bar containing type filter buttons,
+   * a week spinner and a hint label.
+   *
+   * @return an HBox containing all filter controls
+   */
 
   private HBox buildFilterBar() {
     buttonAll.setStyle(STYLE_BUTTON_ON);
@@ -112,6 +122,12 @@ public class TransactionHistoryView extends BorderPane implements GameObserver {
     bar.setStyle(STYLE_HEADER);
     return bar;
   }
+  /**
+   * Sets the active transaction type filter and refreshes the displayed rows.
+   * Updates button styles to reflect the active filter.
+   *
+   * @param filter the filter to apply : "ALL", "BUY" or "SELL"
+   */
 
   private void setFilter(String filter) {
     activeFilter = filter;
@@ -130,6 +146,11 @@ public class TransactionHistoryView extends BorderPane implements GameObserver {
   public void onGameEvent(GameEvent gameEvent) {
     refresh();
   }
+  /**
+   * Refreshes the transaction list by applying the active type filter
+   * and week filter, then rebuilding all displayed rows.
+   * Shows an empty state message if no transactions match the filters.
+   */
 
   private void refresh() {
     rowContainer.getChildren().clear();
@@ -171,6 +192,11 @@ public class TransactionHistoryView extends BorderPane implements GameObserver {
     }
   }
 
+  /**
+   * Builds the column header row for the transaction table.
+   *
+   * @return a GridPane containing the column header labels
+   */
   private GridPane buildHeaderRow() {
     GridPane grid = new GridPane();
     grid.setHgap(10);
@@ -186,6 +212,16 @@ public class TransactionHistoryView extends BorderPane implements GameObserver {
     }
     return grid;
   }
+
+  /**
+   * Builds a single transaction data row shows index,week,type,
+   * symbol,quantity,gross value,fees,total value.
+   *
+   * @param index the row number displayed in the first column
+   * @param t the transaction to display
+   * @return a GridPane containing the formatted transaction data
+   */
+
 
   private GridPane buildRow(int index, Transaction t) {
     GridPane grid = new GridPane();
