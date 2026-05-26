@@ -41,6 +41,7 @@ GOOGL,Alphabet Inc., 250.00
 -  Final summary screen with net worth and status
 
 ## Project Structure
+```bash
 src/main/java/edu/ntnu/idi/idatt2003/
 ├── controller/    — ExchangeController, PlayerController
 ├── factory/       — AppFactory, TransactionFactory
@@ -49,5 +50,6 @@ src/main/java/edu/ntnu/idi/idatt2003/
 ├── repository/    — CsvStockReader, CsvStockWriter
 ├── util/          — CurrencyUtil
 └── view/          — All JavaFX views
+```
 
 
