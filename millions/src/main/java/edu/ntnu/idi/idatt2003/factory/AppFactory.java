@@ -17,14 +17,14 @@ public class AppFactory {
     ExchangeController exchangeController = new ExchangeController(playerController.getExchange(), playerController);
     exchangeController.loadStocks(file);
     MainView mainView = new MainView(exchangeController, playerController);
-    //Stock list
+    // Stock list
     StockListView stockListView = new StockListView(exchangeController);
     WatchlistView watchlistView = new WatchlistView(exchangeController);
     StockDetailPanel stockDetailPanel = new StockDetailPanel(exchangeController, playerController,watchlistView);
     stockListView.setDetailPanel(stockDetailPanel);
     stockListView.setupSelectionListener();
 
-    //Portfolio(self registers in constructor)
+    // Portfolio(self registers in constructor)
     PortfolioView portfolioView = new PortfolioView(playerController, exchangeController);
     portfolioView.setSellAllRequest(()->{
       SellAllDialog.show(exchangeController,playerController,stage,()->{
@@ -37,19 +37,19 @@ public class AppFactory {
       });
     });
 
-    //Gainer/Losers panel
+    // Gainer/Losers panel
     GainersLosersPanel gainersLosersPanel = new GainersLosersPanel(exchangeController);
     exchangeController.getExchange().addObserver(gainersLosersPanel);
     // News Feed
     NewsFeedPanel newsFeedPanel = new NewsFeedPanel(exchangeController);
-    //Wire into layout
+    // Wire into layout
     VBox rightPanel = new VBox(10, gainersLosersPanel,newsFeedPanel,watchlistView, portfolioView);
     VBox.setVgrow(mainView, javafx.scene.layout.Priority.ALWAYS);
     mainView.setStockListView(stockListView);
     mainView.setStockDetailView(stockDetailPanel);
     mainView.setPortfolioView(rightPanel);
 
-    // in AppFactory, after building mainView
+    // In AppFactory, after building mainView
     mainView.prefHeightProperty().bind(stage.heightProperty());
     mainView.prefWidthProperty().bind(stage.widthProperty());
     return mainView;

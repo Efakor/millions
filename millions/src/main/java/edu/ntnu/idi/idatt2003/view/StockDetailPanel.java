@@ -4,6 +4,9 @@ import edu.ntnu.idi.idatt2003.controller.ExchangeController;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.IntStream;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
@@ -11,16 +14,24 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.IntStream;
+
+/**
+ * Panel displaying detailed information about a selected stock.
+ * Shows current price, highest price, lowest price, latest price change
+ * and a line chart of the full price history built using Java streams.
+ * Also provides buy and watchlist buttons for the selected stock.
+ *
+ */
 
 
 public class StockDetailPanel extends VBox {
-  private static final String STYLE_BACKGROUND = "-fx-background-color: #0D1117;";
   private static final String STYLE_PANEL = "-fx-background-color: #161B22;"
       + " -fx-border-color: #30363D; -fx-border-width: 1;";
   private static final String STYLE_TITLE = "-fx-text-fill: #58A6FF;"
@@ -47,21 +58,29 @@ public class StockDetailPanel extends VBox {
   private final ExchangeController exchangeController;
   private final PlayerController playerController;
   private final WatchlistView watchlistView;
-  //Controlls
+  // Controlls
   private final Button buyButton = new Button();
   private final Button watchlistButton = new Button("+WATCHLIST");
 
-  //UI Labels
+  // UI Labels
   private final Label symbolLabel = new Label();
   private final Label subtitleLabel = new Label();
 
-  //Grid value labels
+  // Grid value labels
   private final Label latestChangeLabel = new Label();
   private final Label lowestPriceLabel = new Label();
   private final Label highestPriceLabel = new Label();
   private final Label currentPriceLabel = new Label();
 
   private GridPane gridPane;
+
+  /**
+   * Constructs the stock detail panel with buy and watchlist functionality.
+   *
+   * @param exchangeController the exchange controller handling transactions
+   * @param playerController the player controller providing the player state
+   * @param watchlistView the watchlist view for saving the watched stock
+   */
 
 
   public StockDetailPanel(ExchangeController exchangeController,
@@ -91,15 +110,16 @@ public class StockDetailPanel extends VBox {
         updateWatchlistButton(symbol);
       }
     });
-    buildUI();
+    buildUi();
 
   }
 
-  //labels
-  private void buildUI() {
-    symbolLabel.setStyle(STYLE_TITLE);
-    subtitleLabel.setStyle(STYLE_SUBTITLE);
-    VBox headerBox = new VBox(2, symbolLabel, subtitleLabel);
+  /**
+   * Builds the panel UI including the header stats grid and button row.
+   */
+
+  private void buildUi() {
+
 
     gridPane = new GridPane();
     gridPane.setHgap(20);
@@ -119,28 +139,59 @@ public class StockDetailPanel extends VBox {
     HBox buttonBox = new HBox(12, buyButton, watchlistButton);
     buttonBox.setAlignment(Pos.CENTER_RIGHT);
 
+    symbolLabel.setStyle(STYLE_TITLE);
+    subtitleLabel.setStyle(STYLE_SUBTITLE);
+    VBox headerBox = new VBox(2, symbolLabel, subtitleLabel);
+
     getChildren().addAll(headerBox, gridPane, buttonBox);
 
   }
 
-  private void addRow(GridPane gridPane, int row, String labelText, Label valuelabel, String valuestyle) {
+  /**
+   * Adds a single labelled row to the stats grid with a spacer between the labeled value.
+   *
+   * @param gridPane the GridPane to add the row to
+   * @param row   the row index
+   * @param labelText the left column label text
+   * @param valuelabel the label node for the right column
+   * @param valueStyle the CSS style to apply to the value label
+   */
+
+  private void addRow(GridPane gridPane,
+                      int row, String labelText,
+                      Label valuelabel,
+                      String valueStyle) {
     Label label = new Label(labelText);
     label.setStyle(STYLE_LABEL);
 
-    valuelabel.setStyle(valuestyle);
+    valuelabel.setStyle(valueStyle);
     Region spacer = new Region();
     GridPane.setHgrow(spacer, Priority.ALWAYS);
     gridPane.add(label, 0, row);
     gridPane.add(spacer, 1, row);
     gridPane.add(valuelabel, 2, row);
   }
+  /**
+   * Updates the watchlist button text based on whether the given
+   * stock symbol is currently on the watchlist.
+   *
+   * @param symbol the stock symbol to check
+   */
+
   private void updateWatchlistButton(String symbol) {
-    if(watchlistView.isWatched(symbol)) {
+    if (watchlistView.isWatched(symbol)) {
       watchlistButton.setText("+WATCHLIST");
-    }else {
+    } else {
       watchlistButton.setText("★WATCHLIST");
     }
   }
+  /**
+   * Displays and updates all labels, applies colour coding based on price direction
+   * and rebuilds the price history chart.
+   * Hides the panel if the stock is null.
+   *
+   * @param stock the stock to display, or null to hide the panel
+   */
 
   public void showStock(Stock stock) {
     this.currentStock = stock;
@@ -165,39 +216,52 @@ public class StockDetailPanel extends VBox {
     lowestPriceLabel.setText(CurrencyUtil.formatNok(stock.getLowestPrice()));
     latestChangeLabel.setText(CurrencyUtil.formatNok(stock.getLatestPriceChange()));
 
-    //Layout
+    // Layout
     BigDecimal change = stock.getLatestPriceChange();
     boolean isPositive = change.compareTo(BigDecimal.ZERO) > 0;
-    String changeText = (isPositive ? "+" : "") + change.setScale(2, BigDecimal.ROUND_HALF_UP) + "%";
+    String changeText = (isPositive ? "+" : "")
+        + change.setScale(2, BigDecimal.ROUND_HALF_UP) + "%";
 
     latestChangeLabel.setText(changeText);
-    latestChangeLabel.setStyle(STYLE_VALUE + ";-fx-text-fill:" + (isPositive ? COLOR_GREEN : COLOR_RED));
-    currentPriceLabel.setStyle(STYLE_TOTAL + ";-fx-text-fill:" + (isPositive ? COLOR_GREEN : COLOR_RED));
+    latestChangeLabel.setStyle(STYLE_VALUE
+        + ";-fx-text-fill:"
+        + (isPositive ? COLOR_GREEN : COLOR_RED));
+    currentPriceLabel.setStyle(STYLE_TOTAL
+        + ";-fx-text-fill:"
+        + (isPositive ? COLOR_GREEN : COLOR_RED));
     updateWatchlistButton(stock.getSymbol());
     setVisible(true);
     setManaged(true);
 
     buildChart(stock, isPositive);
   }
+  /**
+   * Displays the given stock in the detail panel.
+   * Updates all labels, applies colour coding based on price direction
+   * and rebuilds the price history chart.
+   * Hides the panel if the stock is null.
+   *
+   * @param stock the stock to display, or null to hide the panel
+   */
 
   private void buildChart(Stock stock, boolean isPositive) {
     if (lineChart != null) {
       getChildren().remove(lineChart);
     }
-    NumberAxis xAxis = new NumberAxis();
-    NumberAxis yAxis = new NumberAxis();
-    xAxis.setOpacity(1);
-    xAxis.setLabel("Week");
+    NumberAxis xaxis = new NumberAxis();
+    NumberAxis yaxis = new NumberAxis();
+    xaxis.setOpacity(1);
+    xaxis.setLabel("Week");
 
-    yAxis.setLabel("Price");
-    yAxis.setOpacity(1);
+    yaxis.setLabel("Price");
+    yaxis.setOpacity(1);
 
-    xAxis.setTickLabelFill(javafx.scene.paint.Color.web("#8B949E"));
-    yAxis.setTickLabelFill(javafx.scene.paint.Color.web("#8B949E"));
-    xAxis.setStyle("-fx-tick-label-fill: #8B949E; -fx-font-family: monospace; -fx-font-size: 9px;");
-    yAxis.setStyle("-fx-tick-label-fill: #8B949E; -fx-font-family: monospace; -fx-font-size: 9px;");
+    xaxis.setTickLabelFill(javafx.scene.paint.Color.web("#8B949E"));
+    yaxis.setTickLabelFill(javafx.scene.paint.Color.web("#8B949E"));
+    xaxis.setStyle("-fx-tick-label-fill: #8B949E; -fx-font-family: monospace; -fx-font-size: 9px;");
+    yaxis.setStyle("-fx-tick-label-fill: #8B949E; -fx-font-family: monospace; -fx-font-size: 9px;");
 
-    LineChart<Number, Number> graph = new LineChart<Number, Number>(xAxis, yAxis);
+    LineChart<Number, Number> graph = new LineChart<Number, Number>(xaxis, yaxis);
     graph.setPrefHeight(200);
     graph.setLegendVisible(false);
     graph.setCreateSymbols(false);
@@ -206,7 +270,7 @@ public class StockDetailPanel extends VBox {
     graph.setAlternativeRowFillVisible(false);
     graph.setAlternativeColumnFillVisible(false);
 
-    //define a series
+    // Define a series
     XYChart.Series<Number, Number> series = new XYChart.Series<>();
 
     List<BigDecimal> prices = stock.getHistoricalPrices();
@@ -214,7 +278,7 @@ public class StockDetailPanel extends VBox {
         series.getData().add(new XYChart.Data<>(i + 1, prices.get(i).doubleValue())
         ));
     graph.getData().add(series);
-    //Used claude AI  to get the background black for aesthetic reasons
+    // Used claude AI  to get the background black for aesthetic reasons
     javafx.application.Platform.runLater(() -> {
       graph.lookup(".chart-plot-background")
           .setStyle("-fx-background-color: #0D1117;");
