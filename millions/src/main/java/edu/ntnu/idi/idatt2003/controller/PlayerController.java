@@ -118,7 +118,7 @@ public class PlayerController {
    */
 
   public BigDecimal getTotalGross() {
-    return player.getPortfolio().getTotalgross();
+    return player.getPortfolio().getTotalGross();
   }
 
   /**
