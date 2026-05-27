@@ -40,6 +40,7 @@ GOOGL,Alphabet Inc., 250.00
 - Each stock line format must be: 'symbol, company, name, price'
 - Lines starting with '#' are treated as comments and ignored
 - Blank lines are ignored
+- Note for Testing: You can use any CSV file that follows this format. However, for easy testing, we have provided a ready-to-use file included in this repository. Please select this file when launching the game: stocks.csv
 
 ## Features
 - Buy and sell shares with cost breakdown
