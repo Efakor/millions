@@ -3,7 +3,7 @@ A real time desktop stock market simulation game built  with Java  21 and JavaFX
 
 ## Authors
 - Archi Makwana
-- Vannesa Efakor Akousa Amedi
+- Vanessa Efakor Akosua Amedi
 
 ## Requirements
 - Java 21 or higher
@@ -30,7 +30,7 @@ mvn javafx:run
 4. Click **START Trading**
 
 ## Stock data format
-In order the application reads the CSV files,the file msut follow this format
+In order the application reads the CSV files,the file must follow this format
 ```bash
 AAPL,Apple Inc., 150.00
 TSLA, Tesla Inc.,300.00
