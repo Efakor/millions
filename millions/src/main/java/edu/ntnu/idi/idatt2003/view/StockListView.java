@@ -4,6 +4,7 @@ import edu.ntnu.idi.idatt2003.controller.ExchangeController;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.observer.GameEvent;
 import edu.ntnu.idi.idatt2003.observer.GameObserver;
+import edu.ntnu.idi.idatt2003.view.components.StockDetailPanel;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javafx.beans.property.SimpleStringProperty;

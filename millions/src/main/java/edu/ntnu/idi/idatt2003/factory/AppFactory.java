@@ -2,15 +2,15 @@ package edu.ntnu.idi.idatt2003.factory;
 
 import edu.ntnu.idi.idatt2003.controller.ExchangeController;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
-import edu.ntnu.idi.idatt2003.view.GainersLosersPanel;
 import edu.ntnu.idi.idatt2003.view.MainView;
-import edu.ntnu.idi.idatt2003.view.NewsFeedPanel;
 import edu.ntnu.idi.idatt2003.view.PortfolioView;
 import edu.ntnu.idi.idatt2003.view.SellAllDialog;
-import edu.ntnu.idi.idatt2003.view.StockDetailPanel;
 import edu.ntnu.idi.idatt2003.view.StockListView;
 import edu.ntnu.idi.idatt2003.view.SummaryView;
 import edu.ntnu.idi.idatt2003.view.WatchlistView;
+import edu.ntnu.idi.idatt2003.view.components.GainersLosersPanel;
+import edu.ntnu.idi.idatt2003.view.components.NewsFeedPanel;
+import edu.ntnu.idi.idatt2003.view.components.StockDetailPanel;
 import java.io.File;
 import java.math.BigDecimal;
 import javafx.scene.layout.VBox;
