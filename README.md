@@ -36,22 +36,29 @@ AAPL,Apple Inc., 150.00
 TSLA, Tesla Inc.,300.00
 GOOGL,Alphabet Inc., 250.00
 ```
-- Each stock line format must be: 'symbol, company, name, price'
 
+- Each stock line format must be: 'symbol, company, name, price'
 - Lines starting with '#' are treated as comments and ignored
 - Blank lines are ignored
 
 ## Features
-- Buy asn sell shares with cost breakdown
-- Price history line chart per stock (to see the change in graph, need to click teh stock)
+- Buy and sell shares with cost breakdown
+- Price history line chart per stock (to see the change in graph, need to click the stock)
 -  Personal watchlist with price alerts
--  Random Market evnts news feed
+-  Random Market events news feed
 -  Final summary screen with net worth and status
+
+## Software Architecture & Patterns
+This project was designed with a strict focus on clean code and structural principles:
+- **MVC (Model-View-Controller):** Strict separation between business logic, UI, and mediation.
+- **Observer Pattern:** Used to automatically and asynchronously refresh JavaFX components.
+- **Factory Pattern:** Centralizes transaction creation and system component wiring.
+- **Strategy Pattern:** Encapsulates the specific commission and tax calculation algorithms.
   
 
 
 ## Testing & Code Quality
-The project includes comprhensive unit tests and implements strict Google CheckStyle formatting.
+The project includes comprehensive unit tests and implements strict Google CheckStyle formatting.
 
 To run the unit tests:
 
