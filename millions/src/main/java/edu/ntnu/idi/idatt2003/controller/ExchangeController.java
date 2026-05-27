@@ -5,7 +5,6 @@ import edu.ntnu.idi.idatt2003.model.Share;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.model.Transaction;
 import edu.ntnu.idi.idatt2003.repository.CsvStockReader;
-
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;

@@ -1,21 +1,21 @@
 package edu.ntnu.idi.idatt2003.controller;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import edu.ntnu.idi.idatt2003.model.Player;
 import edu.ntnu.idi.idatt2003.model.Stock;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * Unit tests for PlayerController.
  * Test game initialisation, sell all and profit/loss calculations.
  */
-
 public class PlayerControllerTest {
 
   private PlayerController playerController;
@@ -29,15 +29,15 @@ public class PlayerControllerTest {
   @BeforeEach
   void setUp() {
     playerController = new PlayerController();
-    playerController.newGame("Kari",new BigDecimal("10000"));
+    playerController.newGame("Kari", new BigDecimal("10000"));
     playerController.getExchange().addStock(
-        new Stock("AAPL","Apple",new BigDecimal("150")));
-    exchangeController=new ExchangeController(playerController.getExchange(),playerController);
+        new Stock("AAPL", "Apple", new BigDecimal("150")));
+    exchangeController = new ExchangeController(playerController.getExchange(), playerController);
     player = playerController.getPlayer();
   }
 
   /**
-   * Tests for NewGameTests
+   * Tests for NewGameTests.
    */
   @Nested
   @DisplayName("Tests for NewGameTests")
@@ -47,95 +47,94 @@ public class PlayerControllerTest {
      */
     @Test
     void playerNameValid() {
-      //Arrange done in setup()
+      // Arrange done in setup()
 
-      //Assert
-      assertEquals("Kari",playerController.getPlayerName());
+      // Assert
+      assertEquals("Kari", playerController.getPlayerName());
     }
 
     /**
-     * Tests player capital is correct
+     * Tests player capital is correct.
      */
     @Test
     void playerCapitalValid() {
-      //Arrange done in setup()
+      // Arrange done in setup()
 
-      //Assert
-      assertEquals(new BigDecimal("10000"),playerController.getStartingCapital());
+      // Assert
+      assertEquals(new BigDecimal("10000"), playerController.getStartingCapital());
 
     }
 
     /**
-     * Tests portfolio starts empty
+     * Tests portfolio starts empty.
      */
     @Test
     void playerPortfolioValid() {
-      //Arrange done in setup()
+      // Arrange done in setup()
 
-      //Assert
+      // Assert
       assertTrue(player.getPortfolio().getAllShares().isEmpty());
     }
 
   }
 
   /**
-   * Tests for all sellAllTests
+   * Tests for all sellAllTests.
    */
   @Nested
   @DisplayName("Tests for SellAllTests")
   class SellAllTests {
     /**
-     * Tests for buy some shares first
+     * Tests for buy some shares first.
      */
     @Test
     void sellAll_buySharesValid() {
-      //Arrange
-      exchangeController.buy("AAPL",new BigDecimal("2"));
-      //Act
+      // Arrange
+      exchangeController.buy("AAPL", new BigDecimal("2"));
+      // Act
       playerController.sellAll();
-      //Assert
+      // Assert
       assertTrue(player.getPortfolio().getAllShares().isEmpty());
 
     }
 
     /**
-     * Tests money increased after sell
+     * Tests money increased after sell.
      */
     @Test
-    void moneyIncreasesAfterSell(){
-      //Arrange
-      exchangeController.buy("AAPL",new BigDecimal("2"));
-      BigDecimal moneyAfterBuy=player.getCurrentMoney();
-      //Act
+    void moneyIncreasesAfterSell() {
+      // Arrange
+      exchangeController.buy("AAPL", new BigDecimal("2"));
+      BigDecimal moneyAfterBuy = player.getCurrentMoney();
+      // Act
       playerController.sellAll();
-      //Assert
-      assertTrue(player.getCurrentMoney().compareTo(moneyAfterBuy)>0);
+      // Assert
+      assertTrue(player.getCurrentMoney().compareTo(moneyAfterBuy) > 0);
     }
 
     /**
-     * Tests sell all on empty portfolio
+     * Tests sell all on empty portfolio.
      */
     @Test
-    void emptyPortfolio(){
-      //Assert
-      assertDoesNotThrow(()->playerController.sellAll());
+    void emptyPortfolio() {
+      // Assert
+      assertDoesNotThrow(() -> playerController.sellAll());
     }
-
   }
 
   /**
-   * Tests for Profit/loss
+   * Tests for Profit/loss.
    */
   @Nested
   @DisplayName("Tests for ProfitLossTests")
   class ProfitLossTests {
     /**
-     * Tests for start profit/loss should be zero
+     * Tests for start profit/loss should be zero.
      */
     @Test
     void profitLossStartZero() {
-      //Arrange done in setup()
-      assertEquals(BigDecimal.ZERO,playerController.getProfitLoss());
+      // Arrange done in setup()
+      assertEquals(BigDecimal.ZERO, playerController.getProfitLoss());
     }
 
     /**
@@ -143,17 +142,13 @@ public class PlayerControllerTest {
      */
     @Test
     void profitLossCheckBuying() {
-      //Arrange
-      exchangeController.buy("AAPL",new BigDecimal("2"));
-      //Act
+      // Arrange
+      exchangeController.buy("AAPL", new BigDecimal("2"));
+      // Act
       playerController.sellAll();
-      //Assert
-      assertTrue(playerController.getProfitLoss().compareTo(BigDecimal.ZERO)<0);
+      // Assert
+      assertTrue(playerController.getProfitLoss().compareTo(BigDecimal.ZERO) < 0);
 
     }
-
   }
-
-
-
 }

@@ -5,12 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import edu.ntnu.idi.idatt2003.model.calculator.TransactionCalculator;
-
-
-import java.math.BigDecimal;
-
 import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
+import edu.ntnu.idi.idatt2003.model.calculator.TransactionCalculator;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

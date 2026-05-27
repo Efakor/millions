@@ -1,13 +1,19 @@
 package edu.ntnu.idi.idatt2003.controller;
 
-import edu.ntnu.idi.idatt2003.model.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import edu.ntnu.idi.idatt2003.model.Exchange;
+import edu.ntnu.idi.idatt2003.model.Player;
+import edu.ntnu.idi.idatt2003.model.Share;
+import edu.ntnu.idi.idatt2003.model.Stock;
+import java.math.BigDecimal;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import java.math.BigDecimal;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
 
 /**
  * Unit tests for ExchangeController.
@@ -17,7 +23,6 @@ import java.util.List;
 
 class ExchangeControllerTest {
   private ExchangeController exchangeController;
-  private PlayerController playerController;
   private Exchange exchange;
   private Player player;
 
@@ -28,29 +33,29 @@ class ExchangeControllerTest {
 
   @BeforeEach
   void setUp() {
-    playerController=new PlayerController();
-    playerController.newGame("Kari",new BigDecimal("10000"));
-    playerController.getExchange().addStock(new Stock("AAPL","Apple",new BigDecimal("150")));
-    exchangeController=new ExchangeController(playerController.getExchange(),playerController);
-    player=playerController.getPlayer();
-    exchange=playerController.getExchange();
+    PlayerController playerController = new PlayerController();
+    playerController.newGame("Kari", new BigDecimal("10000"));
+    playerController.getExchange().addStock(new Stock("AAPL", "Apple", new BigDecimal("150")));
+    exchangeController = new ExchangeController(playerController.getExchange(), playerController);
+    player = playerController.getPlayer();
+    exchange = playerController.getExchange();
   }
 
   /**
-   * Tests for buying
+   * Tests for buying.
    */
   @Nested
-  class BuyTests{
+  class BuyTests {
     /**
      * Test that buying a valid  stock adds a stock to the player's portfolio.
      */
     @Test
     void buyValidPlayerShare() {
-      //Arrange
-      BigDecimal quantity=new BigDecimal("2");
-      //Act
-      exchangeController.buy("AAPL",quantity);
-      //Assert
+      // Arrange
+      BigDecimal quantity = new BigDecimal("2");
+      // Act
+      exchangeController.buy("AAPL", quantity);
+      // Assert
       assertFalse(player.getPortfolio().getAllShares().isEmpty());
     }
 
@@ -59,13 +64,13 @@ class ExchangeControllerTest {
      */
     @Test
     void buyValidMoneyDeduction() {
-      //Arrange
-      BigDecimal before=player.getCurrentMoney();
-      BigDecimal quantity=new BigDecimal("2");
-      //Act
-      exchangeController.buy("AAPL",quantity);
-      //Assert
-      assertTrue(player.getCurrentMoney().compareTo(before)<0);
+      // Arrange
+      BigDecimal before = player.getCurrentMoney();
+      BigDecimal quantity = new BigDecimal("2");
+      // Act
+      exchangeController.buy("AAPL", quantity);
+      // Assert
+      assertTrue(player.getCurrentMoney().compareTo(before) < 0);
     }
 
     /**
@@ -73,11 +78,11 @@ class ExchangeControllerTest {
      */
     @Test
     void buyInsufficientFunds_throwsException() {
-      //Arrange
-      BigDecimal quantity=new BigDecimal("99999");
-      //Assert
+      // Arrange
+      BigDecimal quantity = new BigDecimal("99999");
+      // Assert
       assertThrows(IllegalStateException.class, () ->
-          exchangeController.buy("AAPL",quantity));
+          exchangeController.buy("AAPL", quantity));
     }
 
     /**
@@ -85,15 +90,15 @@ class ExchangeControllerTest {
      */
     @Test
     void buyInvalidSymbol_throwsException() {
-      //Assert
+      // Assert
       assertThrows(IllegalArgumentException.class, () ->
-          exchangeController.buy("Invalid",new BigDecimal("99999")));
+          exchangeController.buy("Invalid", new BigDecimal("99999")));
     }
-    /**
-     * Tests for the sell operation
-     */
-
   }
+
+  /**
+   * Tests for the sell operation.
+   */
   @Nested
   class SellTests {
     /**
@@ -101,12 +106,12 @@ class ExchangeControllerTest {
      */
     @Test
     void sellValidSymbol_shareRemovedPortfolio() {
-      //Arrange
-      exchangeController.buy("AAPL",new BigDecimal("2"));
-      Share share=player.getPortfolio().getAllShares().get(0);
-      //Act
+      // Arrange
+      exchangeController.buy("AAPL", new BigDecimal("2"));
+      Share share = player.getPortfolio().getAllShares().getFirst();
+      // Act
       exchangeController.sell(share);
-      //Assert
+      // Assert
       assertTrue(player.getPortfolio().getAllShares().isEmpty());
 
     }
@@ -116,20 +121,20 @@ class ExchangeControllerTest {
      */
     @Test
     void sellValid_moneyIncreasedAfterSell() {
-      //Arrange
-      exchangeController.buy("AAPL",BigDecimal.ONE);
-      BigDecimal moneyAfter=player.getCurrentMoney();
-      Share share=player.getPortfolio().getAllShares().get(0);
-      //Act
+      // Arrange
+      exchangeController.buy("AAPL", BigDecimal.ONE);
+      BigDecimal moneyAfter = player.getCurrentMoney();
+      Share share = player.getPortfolio().getAllShares().getFirst();
+      // Act
       exchangeController.sell(share);
-      //Assert
-      assertTrue(player.getCurrentMoney().compareTo(moneyAfter)>0);
+      // Assert
+      assertTrue(player.getCurrentMoney().compareTo(moneyAfter) > 0);
     }
-    /**
-     * Tests the stock search functionality
-     */
-
   }
+
+  /**
+   * Tests the stock search functionality.
+   */
   @Nested
   class SearchTests {
     /**
@@ -137,59 +142,59 @@ class ExchangeControllerTest {
      */
     @Test
     void searchForStock() {
-      //Arrange
-      String search="Apple";
-      List<Stock> stocks=exchangeController.findStocks(search);
+      // Arrange
+      String search = "Apple";
+      List<Stock> stocks = exchangeController.findStocks(search);
       assertFalse(stocks.isEmpty());
-      assertEquals("AAPL",stocks.get(0).getSymbol());
+      assertEquals("AAPL", stocks.getFirst().getSymbol());
     }
 
     /**
      * Tests that searching a non-existent stock and returns an empty list.
      */
     @Test
-    void searchStock_noMatch(){
-      //Arrange
-      String search="RRRRR";
-      //Act
-      List<Stock> stocks=exchangeController.findStocks(search);
-      //Assert
+    void searchStock_noMatch() {
+      // Arrange
+      String search = "RRRRR";
+      // Act
+      List<Stock> stocks = exchangeController.findStocks(search);
+      // Assert
       assertTrue(stocks.isEmpty());
     }
-    /**
-     * Tests for the week advancement functionality.
-     */
+  }
 
-    }
-    @Nested
-    class advanceTests {
-      /**
-       * Tests that advancing the week increments the week counter by one.
-       */
+  /**
+   * Tests for the week advancement functionality.
+   */
+  @Nested
+  class AdvanceTests {
+    /**
+     * Tests that advancing the week increments the week counter by one.
+     */
     @Test
     void advanceWeekIncrements() {
-      //Arrange
-      int weekBefore=exchange.getWeek();
-      //Act
+      // Arrange
+      int weekBefore = exchange.getWeek();
+      // Act
       exchange.advance();
-      //Assert
-      assertEquals(weekBefore+1,exchange.getWeek());
+      // Assert
+      assertEquals(weekBefore + 1, exchange.getWeek());
     }
 
-      /**
-       * Tests for advancing week adda new price to the stock's price history.
-       */
+    /**
+     * Tests for advancing week add a new price to the stock's price history.
+     */
     @Test
     void advanceWeek_priceHistoryGrows() {
-      //Arrange
-      int historySizeBefore=exchange.getStock("AAPL").getHistoricalPrices().size();
-      //Act
+      // Arrange
+      int historySizeBefore = exchange.getStock("AAPL").getHistoricalPrices().size();
+      // Act
       exchange.advance();
-      //Assert
-      assertTrue(exchange.getStock("AAPL").getHistoricalPrices().size()>historySizeBefore);
+      // Assert
+      assertTrue(exchange.getStock("AAPL").getHistoricalPrices().size() > historySizeBefore);
     }
-    }
-
   }
+
+}
 
 
