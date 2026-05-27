@@ -9,9 +9,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * .
+ * Reads stock data from a comma-separated values (CSV) file.
+ * Implements {@link StockFileReader} to provide CSV-specific file reading.
+ * Lines starting with {@code #} are treated as comments and skipped.
+ * Blank lines are also skipped. Each valid line must follow the format:
+ * {@code symbol, company name, price}.
+ *
  */
 public class CsvStockReader implements StockFileReader {
+
+  /**
+   * Reads all stocks from the given CSV file.
+   * Skips comment lines starting with {@code #} and blank lines.
+   * Malformed lines are silently ignored.
+   *
+   * @param filename the path to the CSV file to read
+   * @return a list of stocks parsed from the file, empty if none found
+   * @throws IOException              if the file cannot be read
+   * @throws IllegalArgumentException if the filename is null or empty
+   */
   @Override
   public List<Stock> readStocksFromFile(String filename) throws IOException {
     if (filename == null || filename.trim().isEmpty()) {
@@ -38,6 +54,15 @@ public class CsvStockReader implements StockFileReader {
     // File automatically close here
     return stocks;
   }
+  /**
+   * Parses a single CSV line into a Stock object.
+   * The line must contain exactly three comma-separated values:
+   * symbol, company name and price.
+   * Returns null if the line is malformed or cannot be parsed.
+   *
+   * @param line the CSV line to parse
+   * @return a Stock object, or null if the line is invalid
+   */
 
   private Stock parseStockLine(String line) {
     try {

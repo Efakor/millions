@@ -6,7 +6,13 @@ import edu.ntnu.idi.idatt2003.observer.GameEvent;
 import edu.ntnu.idi.idatt2003.observer.GameObserver;
 import edu.ntnu.idi.idatt2003.observer.Observable;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +33,7 @@ public class Exchange implements Observable {
   private final Map<String, Stock> stocks;
   private final Random random;
   private final List<GameObserver> observers = new ArrayList<>();
-  private final List<String> recentHeadlines=new ArrayList<>();
+  private final List<String> recentHeadlines = new ArrayList<>();
 
 
   /**
@@ -272,40 +278,39 @@ public class Exchange implements Observable {
       stock.addNewSalesPrice(newPrice);
     }
     // 15% chance of market event
-    if(random.nextDouble() < 0.15) {
-      //pick a random stock
-      List<Stock> stockList=new ArrayList<>(stocks.values());
-      Stock randomStock=stockList.get(random.nextInt(stockList.size())); //should use bigdecimal
-      //generate spike
-      double spike=0.20+random.nextDouble()*0.20;
-      //using the min and max formula
+    if (random.nextDouble() < 0.15) {
+      // pick a random stock
+      List<Stock> stockList = new ArrayList<>(stocks.values());
+      Stock randomStock = stockList.get(random.nextInt(stockList.size())); // should use BigDecimal
+      // generate spike
+      double spike = 0.20 + random.nextDouble() * 0.20;
+      // using the min and max formula
       boolean isPositive = random.nextBoolean();
       BigDecimal spikePercent;
 
-      if(isPositive) {
-        spikePercent=BigDecimal.valueOf(spike);
+      if (isPositive) {
+        spikePercent = BigDecimal.valueOf(spike);
+      } else {
+        spikePercent = BigDecimal.valueOf(-spike);
       }
-      else{
-        spikePercent=BigDecimal.valueOf(-spike);
-      }
-      BigDecimal currentPrice=randomStock.getSalesPrice();
+      BigDecimal currentPrice = randomStock.getSalesPrice();
       BigDecimal spikeAmount = currentPrice.multiply(spikePercent);
       BigDecimal newPrice = currentPrice.add(spikeAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
-      //Ensure the price should not go less than 1
+      // Ensure the price should not go less than 1
       if (newPrice.compareTo(BigDecimal.ONE) < 0) {
         newPrice = BigDecimal.ONE;
       }
       randomStock.addNewSalesPrice(newPrice);
 
-      //Generate headlines
+      // Generate headlines
       String marketEvent;
       if (isPositive) {
         marketEvent = "surges";
-      }else {
+      } else {
         marketEvent = "crashes";
       }
-      String headline=String.format("BREAKING NEWS: %s %s %.2f%%",
-          randomStock.getSymbol(),marketEvent,
+      String headline = String.format("BREAKING NEWS: %s %s %.2f%%",
+          randomStock.getSymbol(), marketEvent,
           spikePercent.abs().multiply(BigDecimal.valueOf(100)).doubleValue());
       recentHeadlines.add(headline);
 
@@ -316,7 +321,8 @@ public class Exchange implements Observable {
 
   /**
    * Returns the list of the market events headlines,
-   * also used for preventing external modifications
+   * also used for preventing external modifications.
+   *
    * @return the headlines don't get modified
    */
   public List<String> getHeadlines() {
