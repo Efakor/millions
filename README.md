@@ -10,6 +10,14 @@ A real time desktop stock market simulation game built  with Java  21 and JavaFX
 - Maven
 
 ## How to run
+
+1. Clone the repository and navigate to the project root:
+```bash
+git clone <repository-url>
+cd Millions
+```
+2.Run the application
+
 ```bash
 mvn javafx:run
 
