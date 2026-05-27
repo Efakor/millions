@@ -1,4 +1,4 @@
-package edu.ntnu.idi.idatt2003.view;
+package edu.ntnu.idi.idatt2003.view.components;
 
 import edu.ntnu.idi.idatt2003.controller.ExchangeController;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import edu.ntnu.idi.idatt2003.view.BuyDialog;
+import edu.ntnu.idi.idatt2003.view.WatchlistView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
