@@ -11,4 +11,5 @@ module edu.ntnu.idi.idatt2003 {
   opens edu.ntnu.idi.idatt2003.observer to javafx.graphics;
   opens edu.ntnu.idi.idatt2003.repository to javafx.graphics;
   opens edu.ntnu.idi.idatt2003.util to javafx.graphics;
+  opens edu.ntnu.idi.idatt2003.view.components to javafx.graphics;
 }

@@ -6,6 +6,8 @@ import edu.ntnu.idi.idatt2003.observer.GameEvent;
 import edu.ntnu.idi.idatt2003.observer.GameObserver;
 import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
 import java.math.BigDecimal;
+
+import edu.ntnu.idi.idatt2003.view.components.StatusBarView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;

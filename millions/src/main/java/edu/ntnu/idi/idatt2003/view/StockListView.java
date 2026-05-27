@@ -1,11 +1,12 @@
 package edu.ntnu.idi.idatt2003.view;
 
 import edu.ntnu.idi.idatt2003.controller.ExchangeController;
-import edu.ntnu.idi.idatt2003.model.Exchange;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.observer.GameEvent;
 import edu.ntnu.idi.idatt2003.observer.GameObserver;
 import java.math.BigDecimal;
+
+import edu.ntnu.idi.idatt2003.view.components.StockDetailPanel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
