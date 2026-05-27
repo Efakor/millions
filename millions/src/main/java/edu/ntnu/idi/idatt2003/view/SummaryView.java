@@ -1,6 +1,5 @@
 package edu.ntnu.idi.idatt2003.view;
 
-
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
 import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
 import javafx.application.Platform;
@@ -13,17 +12,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
 /**
  * The final summary screen displayed after the player sells all holdings and exits.
  * Shows a metric including net worth, starting capital,
  *  profit/loss and weeks played, along with the player's achieved status
  *  and an exit button that closes the application.
  */
-
 public class  SummaryView extends VBox {
   private final PlayerController playerController;
-  private final Stage stage;
   private Stage dialogStage;
 
   /**
@@ -34,7 +30,6 @@ public class  SummaryView extends VBox {
    */
   public SummaryView(PlayerController playerController, int weeksPlayed, Stage stage) {
     this.playerController = playerController;
-    this.stage = stage;
     setSpacing(15);
     setPadding(new Insets(30));
     setStyle("-fx-background-color:#0D1117;");
@@ -117,17 +112,13 @@ public class  SummaryView extends VBox {
    *
    * @return a styled button that exists the application
    */
-
-
   private Button buildExitButton() {
     Button exitButton = new Button("EXIT");
     exitButton.setMaxWidth(Double.MAX_VALUE);
     exitButton.setPadding(new Insets(15));
     exitButton.setStyle("-fx-font-size: 10px;-fx-text-fill: white;-fx-font-weight: bold;"
         + "-fx-background-color:#8B0000");
-    exitButton.setOnAction(event -> {
-      Platform.exit();
-    });
+    exitButton.setOnAction(event -> Platform.exit());
     return exitButton;
   }
 }

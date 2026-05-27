@@ -130,20 +130,23 @@ public class Portfolio {
         .map(share -> new SaleCalculator(share).calculateTotal())
         .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
-  public BigDecimal getTotalgross(){
+
+  public BigDecimal getTotalGross() {
     return shares.stream()
         .map(share -> new SaleCalculator(share).calculateGross())
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-    }
-    public BigDecimal getTotalCommission(){
-    return shares.stream()
-        .map(share -> new SaleCalculator(share).calculateCommission()).
-        reduce(BigDecimal.ZERO, BigDecimal::add);
   }
-  public BigDecimal getTotalTax(){
-    return shares.stream().map(share -> new SaleCalculator(share).calculateTax()).
-        reduce(BigDecimal.ZERO, BigDecimal::add);
+
+  public BigDecimal getTotalCommission() {
+    return shares.stream()
+        .map(share -> new SaleCalculator(share).calculateCommission())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
+
+  public BigDecimal getTotalTax() {
+    return shares.stream().map(share -> new SaleCalculator(share).calculateTax())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
 }

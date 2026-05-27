@@ -1,11 +1,11 @@
 package edu.ntnu.idi.idatt2003.view;
 
 import edu.ntnu.idi.idatt2003.controller.ExchangeController;
-import edu.ntnu.idi.idatt2003.model.Exchange;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.observer.GameEvent;
 import edu.ntnu.idi.idatt2003.observer.GameObserver;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -16,7 +16,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
 
 /**
  * Panel displaying a searchable, scrollable list of all stocks on the exchange.
@@ -72,11 +71,8 @@ public class StockListView extends VBox implements GameObserver {
   /**
    * Configures the search field with placeholder text.
    */
-
-
   private void createSearchField() {
     searchField.setPromptText("Search by symbol or company");
-
   }
 
   /**
@@ -84,8 +80,6 @@ public class StockListView extends VBox implements GameObserver {
    * price and weekly change. Applies colour coding to the change column
    * green for positive, red for negative.
    */
-
-
   private void createTable() {
     TableColumn<Stock, String> symbolColumn = new TableColumn<>("Symbol");
     symbolColumn.setCellValueFactory(cell ->
@@ -101,7 +95,7 @@ public class StockListView extends VBox implements GameObserver {
     salesPriceColumn.setCellValueFactory(cell ->
         new javafx.beans.property.SimpleObjectProperty<>(cell.getValue().getSalesPrice()));
     salesPriceColumn.setCellFactory(column ->
-        new TableCell<Stock, BigDecimal>() {
+        new TableCell<>() {
           @Override
           protected void updateItem(BigDecimal value, boolean empty) {
             super.updateItem(value, empty);
@@ -110,14 +104,14 @@ public class StockListView extends VBox implements GameObserver {
               setStyle("");
               return;
             }
-            setText(value.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+            setText(value.setScale(2, RoundingMode.HALF_UP).toString());
           }
         });
     changeColumn.setCellValueFactory(cell ->
         new javafx.beans.property.SimpleObjectProperty<>(cell.getValue()
                 .getLatestPriceChange()));
     changeColumn.setCellFactory(column ->
-        new TableCell<Stock, BigDecimal>() {
+        new TableCell<>() {
           @Override
           protected void updateItem(BigDecimal value, boolean empty) {
             super.updateItem(value, empty);
@@ -135,7 +129,7 @@ public class StockListView extends VBox implements GameObserver {
             } else {
               setStyle("-fx-text-fill: white;");
             }
-            setText(value.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+            setText(value.setScale(2, RoundingMode.HALF_UP).toString());
           }
         });
 

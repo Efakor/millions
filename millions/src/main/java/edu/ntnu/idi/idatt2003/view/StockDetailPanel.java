@@ -5,6 +5,7 @@ import edu.ntnu.idi.idatt2003.controller.PlayerController;
 import edu.ntnu.idi.idatt2003.model.Stock;
 import edu.ntnu.idi.idatt2003.util.CurrencyUtil;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.IntStream;
 import javafx.geometry.Insets;
@@ -21,7 +22,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
 /**
  * Panel displaying detailed information about a selected stock.
  * Shows current price, highest price, lowest price, latest price change
@@ -29,8 +29,6 @@ import javafx.stage.Stage;
  * Also provides buy and watchlist buttons for the selected stock.
  *
  */
-
-
 public class StockDetailPanel extends VBox {
   private static final String STYLE_PANEL = "-fx-background-color: #161B22;"
       + " -fx-border-color: #30363D; -fx-border-width: 1;";
@@ -48,17 +46,14 @@ public class StockDetailPanel extends VBox {
       + " -fx-text-fill: white; -fx-font-family: monospace;"
       + " -fx-font-weight: bold; -fx-padding: 10 20;";
 
-
   private static final String COLOR_RED = "#F85149";
   private static final String COLOR_GREEN = "#3FB950";
 
-
   private Stock currentStock;
   private LineChart<Number, Number> lineChart;
-  private final ExchangeController exchangeController;
-  private final PlayerController playerController;
   private final WatchlistView watchlistView;
-  // Controlls
+
+  // Controls
   private final Button buyButton = new Button();
   private final Button watchlistButton = new Button("+WATCHLIST");
 
@@ -72,8 +67,6 @@ public class StockDetailPanel extends VBox {
   private final Label highestPriceLabel = new Label();
   private final Label currentPriceLabel = new Label();
 
-  private GridPane gridPane;
-
   /**
    * Constructs the stock detail panel with buy and watchlist functionality.
    *
@@ -81,13 +74,9 @@ public class StockDetailPanel extends VBox {
    * @param playerController the player controller providing the player state
    * @param watchlistView the watchlist view for saving the watched stock
    */
-
-
   public StockDetailPanel(ExchangeController exchangeController,
                           PlayerController playerController,
                           WatchlistView watchlistView) {
-    this.exchangeController = exchangeController;
-    this.playerController = playerController;
     this.watchlistView = watchlistView;
     setSpacing(15);
     setPadding(new Insets(15));
@@ -119,14 +108,11 @@ public class StockDetailPanel extends VBox {
    */
 
   private void buildUi() {
-
-
-    gridPane = new GridPane();
+    GridPane gridPane = new GridPane();
     gridPane.setHgap(20);
     gridPane.setVgap(10);
     gridPane.setPadding(new Insets(15));
     gridPane.setStyle(STYLE_PANEL);
-
 
     addRow(gridPane, 0, "Current Price", currentPriceLabel, STYLE_TOTAL);
     addRow(gridPane, 1, "Highest Price", highestPriceLabel, STYLE_VALUE);
@@ -148,7 +134,7 @@ public class StockDetailPanel extends VBox {
   }
 
   /**
-   * Adds a single labelled row to the stats grid with a spacer between the labeled value.
+   * Adds a single labeled row to the stats grid with a spacer between the labeled value.
    *
    * @param gridPane the GridPane to add the row to
    * @param row   the row index
@@ -156,7 +142,6 @@ public class StockDetailPanel extends VBox {
    * @param valuelabel the label node for the right column
    * @param valueStyle the CSS style to apply to the value label
    */
-
   private void addRow(GridPane gridPane,
                       int row, String labelText,
                       Label valuelabel,
@@ -220,7 +205,7 @@ public class StockDetailPanel extends VBox {
     BigDecimal change = stock.getLatestPriceChange();
     boolean isPositive = change.compareTo(BigDecimal.ZERO) > 0;
     String changeText = (isPositive ? "+" : "")
-        + change.setScale(2, BigDecimal.ROUND_HALF_UP) + "%";
+        + change.setScale(2, RoundingMode.HALF_UP) + "%";
 
     latestChangeLabel.setText(changeText);
     latestChangeLabel.setStyle(STYLE_VALUE
@@ -235,6 +220,7 @@ public class StockDetailPanel extends VBox {
 
     buildChart(stock, isPositive);
   }
+
   /**
    * Displays the given stock in the detail panel.
    * Updates all labels, applies colour coding based on price direction
@@ -243,7 +229,6 @@ public class StockDetailPanel extends VBox {
    *
    * @param stock the stock to display, or null to hide the panel
    */
-
   private void buildChart(Stock stock, boolean isPositive) {
     if (lineChart != null) {
       getChildren().remove(lineChart);
@@ -261,7 +246,7 @@ public class StockDetailPanel extends VBox {
     xaxis.setStyle("-fx-tick-label-fill: #8B949E; -fx-font-family: monospace; -fx-font-size: 9px;");
     yaxis.setStyle("-fx-tick-label-fill: #8B949E; -fx-font-family: monospace; -fx-font-size: 9px;");
 
-    LineChart<Number, Number> graph = new LineChart<Number, Number>(xaxis, yaxis);
+    LineChart<Number, Number> graph = new LineChart<>(xaxis, yaxis);
     graph.setPrefHeight(200);
     graph.setLegendVisible(false);
     graph.setCreateSymbols(false);
@@ -291,12 +276,10 @@ public class StockDetailPanel extends VBox {
     });
 
     String trendColor = isPositive ? COLOR_GREEN : COLOR_RED;
-    series.getNode().setStyle("-fx-stroke: " + trendColor + "; -fx-stroke-width: 2.5px;");
+    series.getNode().setStyle("-fx-stroke: " + trendColor + "; -fx-stroke-width: 3px;");
     lineChart = graph;
     getChildren().add(1, lineChart);
   }
-
-
 }
 
 

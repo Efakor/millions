@@ -17,10 +17,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-
-
 /**
- * Placeholder start screen.
+ * Start screen for the Millions trading game.
+ *
+ * <p>Collects the player's name, starting capital, and a CSV stock data file
+ * before transitioning to the main game screen. All three fields are validated
+ * in real time — name and capital fields show inline green/red border feedback
+ * as the player types, and the Start button stays disabled until everything
+ * is valid and a file has been selected.</p>
  */
 public class StartView extends VBox {
   private final PlayerController playerController;
@@ -184,7 +188,6 @@ public class StartView extends VBox {
     label.setStyle("-fx-text-fill: #E6EDF3;-fx-font-size: 13px;");
     return label;
   }
-
 
   /**
    * Fields and buttons configuration, the player name
@@ -351,7 +354,6 @@ public class StartView extends VBox {
    * Handles the file button action.
    * Filters to CSV files and updates the selected file label on selection.
    */
-
   private void handleFileSelection() {
     if (getScene() == null) {
       showError("Window is not ready yet.");
@@ -378,7 +380,6 @@ public class StartView extends VBox {
    * Validates all the fields and if valid,
    * builds the main view and transitions the scene to it.
    */
-
   private void handleStartGame() {
     nameTouched = true;
     capitalTouched = true;
@@ -410,8 +411,6 @@ public class StartView extends VBox {
    * Updates the visual styling of the name and capital fields
    * based on the validation style.
    */
-
-
   private void updateFieldStyle() {
     if (!nameTouched) {
       applyNeutralFieldStyle(playerNameField);

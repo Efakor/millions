@@ -15,22 +15,16 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-
-
 /**
  * Modal confirmation dialog for selling all holdings and exiting the game.
  * Displays a full proceeds breakdown including gross value, commission,
  * tax and estimated net proceeds before the player confirms.
  * On confirmation, sells all shares and triggers navigation to the summary screen.
  */
-
-
 public class SellAllDialog {
-  private final ExchangeController exchangeController;
   private final PlayerController playerController;
-  private final Stage stage;
   private Stage dialogStage;
-  private Runnable navigateToSummary;
+  private final Runnable navigateToSummary;
 
   /**
    * Private constructor -use{@link #show} instead.
@@ -44,9 +38,7 @@ public class SellAllDialog {
   private SellAllDialog(ExchangeController exchangeController,
                         PlayerController playerController, Stage stage,
                         Runnable navigateToSummary) {
-    this.exchangeController = exchangeController;
     this.playerController = playerController;
-    this.stage = stage;
     this.navigateToSummary = navigateToSummary;
   }
 

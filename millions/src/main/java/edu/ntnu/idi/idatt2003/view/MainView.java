@@ -26,7 +26,7 @@ public class MainView extends BorderPane implements GameObserver {
   private final ExchangeController exchangeController;
   private final PlayerController playerController;
 
-  //Button
+  // Button
   private Button advanceButton;
 
   private final Label weekLabel = new Label("WEEK 1");

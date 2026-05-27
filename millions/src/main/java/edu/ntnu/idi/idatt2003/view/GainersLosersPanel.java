@@ -12,18 +12,16 @@ import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-
-
 /**
  * Panel displaying the top gaining and losing stocks on the exchange.
  * Implements {@link GameObserver} to automatically refresh after each week advance.
  * The number of stocks displayed is configurable via a spinner control.
  */
 public class GainersLosersPanel extends VBox implements GameObserver {
-  private ExchangeController exchangeController;
-  private VBox gainersList;
-  private VBox losersList;
-  private Spinner<Integer> limitSpinner;
+  private final ExchangeController exchangeController;
+  private final VBox gainersList;
+  private final VBox losersList;
+  private final Spinner<Integer> limitSpinner;
 
   /**
    * Constructs the GainersLosersPanel and registers it as Game Observer.
@@ -53,9 +51,7 @@ public class GainersLosersPanel extends VBox implements GameObserver {
     // Add to the HBox
     HBox lists = new HBox(10, gainersList, losersList);
     getChildren().addAll(limitSpinner, lists);
-    limitSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-      refresh();
-    });
+    limitSpinner.valueProperty().addListener((observable, oldValue, newValue) -> refresh());
     exchangeController.getExchange().addObserver(this);
     refresh();
   }
@@ -78,7 +74,6 @@ public class GainersLosersPanel extends VBox implements GameObserver {
 
 
   }
-
 
   /**
    * Builds a single row for the losers list.
@@ -137,7 +132,8 @@ public class GainersLosersPanel extends VBox implements GameObserver {
     Label percentChangeLabel = new Label(String.format("%.1f%%", percentage.doubleValue()));
     percentChangeLabel.setStyle("-fx-font-size: 11px ; -fx-text-fill:" + ";");
 
-    HBox row = new HBox(10, symbol, company, absolutePriceChange, percentChangeLabel);
+    HBox row;
+    row = new HBox(10, symbol, company, absolutePriceChange, percentChangeLabel);
     return row;
 
   }

@@ -37,7 +37,6 @@ import javafx.stage.Stage;
  */
 public class BuyDialog {
 
-
   private static final String STYLE_DARK_BACKGROUND  = "-fx-background-color: #0D1117;";
   private static final String STYLE_PANEL    = "-fx-background-color: #161B22;"
       + " -fx-border-color: #30363D; -fx-border-width: 1;";

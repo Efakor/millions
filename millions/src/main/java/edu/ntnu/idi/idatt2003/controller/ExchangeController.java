@@ -1,7 +1,11 @@
 package edu.ntnu.idi.idatt2003.controller;
 
+import edu.ntnu.idi.idatt2003.model.Exchange;
+import edu.ntnu.idi.idatt2003.model.Share;
+import edu.ntnu.idi.idatt2003.model.Stock;
+import edu.ntnu.idi.idatt2003.model.Transaction;
 import edu.ntnu.idi.idatt2003.repository.CsvStockReader;
-import edu.ntnu.idi.idatt2003.model.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -20,7 +24,6 @@ public class ExchangeController {
    * @param exchange         the exchange model to control
    * @param playerController the player controller providing the current player
    */
-
 
   public ExchangeController(Exchange exchange, PlayerController playerController) {
     this.exchange = exchange;
@@ -47,7 +50,7 @@ public class ExchangeController {
    */
 
   public Transaction buy(String symbol, BigDecimal quantity) {
-    return exchange.buy(symbol,quantity, playerController.getPlayer());
+    return exchange.buy(symbol, quantity, playerController.getPlayer());
 
   }
   /**
@@ -58,7 +61,7 @@ public class ExchangeController {
    */
 
   public void sell(Share share) {
-    exchange.sell(share,playerController.getPlayer());
+    exchange.sell(share, playerController.getPlayer());
   }
 
   /**
@@ -66,7 +69,8 @@ public class ExchangeController {
    * Executed on the JavaFX application thread via Platform.runLater.
    */
 
-  public void advance(){exchange.advance();
+  public void advance() {
+    exchange.advance();
   }
 
   /**
@@ -76,7 +80,7 @@ public class ExchangeController {
    * @throws RuntimeException if the file cannot be read
    */
 
-  public void loadStocks(File f){
+  public void loadStocks(File f) {
     CsvStockReader reader = new CsvStockReader();
     try {
       List<Stock> stocks = reader.readStocksFromFile(f.getPath());
@@ -89,14 +93,16 @@ public class ExchangeController {
       throw new RuntimeException("Failed to load stock data", e);
     }
   }
+
   /**
    * Returns all stocks currently listed on the exchange.
    *
    * @return an unmodifiable list of all stocks
    */
-  public List <Stock> getAllStocks() {
+  public List<Stock> getAllStocks() {
     return exchange.getAllStocks();
   }
+
   /**
    * Finds stocks matching the given search term by symbol or company name.
    *
@@ -104,9 +110,10 @@ public class ExchangeController {
    * @return a list of matching stocks, empty if none found
    * @throws IllegalArgumentException if the search term is null or empty
    */
-  public List<Stock> findStocks (String searchTerm) {
+  public List<Stock> findStocks(String searchTerm) {
     return exchange.findStocks(searchTerm);
   }
+
   /**
    * Returns the top gaining stocks since the last week advance.
    *
@@ -114,7 +121,7 @@ public class ExchangeController {
    * @return a list of top gaining stocks sorted by price change descending
    */
 
-  public List <Stock> getGainers(int limit) {
+  public List<Stock> getGainers(int limit) {
     return exchange.getGainers(limit);
   }
   /**
@@ -124,7 +131,7 @@ public class ExchangeController {
    * @return a list of top gaining stocks sorted by price change descending
    */
 
-  public List <Stock> getLosers(int limit) {
+  public List<Stock> getLosers(int limit) {
     return exchange.getLosers(limit);
 
   }

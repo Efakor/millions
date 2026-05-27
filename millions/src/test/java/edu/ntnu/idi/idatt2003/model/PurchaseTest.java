@@ -6,10 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.math.BigDecimal;
-
 import edu.ntnu.idi.idatt2003.model.calculator.PurchaseCalculator;
-import edu.ntnu.idi.idatt2003.model.calculator.SaleCalculator;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -36,7 +34,7 @@ class PurchaseTest {
     share = new Share(appleStock, new BigDecimal("10"), new BigDecimal("100.00"));
     player = new Player("Test Player", new BigDecimal("10000.00"));
     calculator = new PurchaseCalculator(share);
-    purchase = new Purchase(share,1,calculator);
+    purchase = new Purchase(share, 1, calculator);
   }
 
   /**
@@ -110,7 +108,7 @@ class PurchaseTest {
     void testMultiplePurchases() {
       Stock googleStock = new Stock("GOOGL", "Alphabet", new BigDecimal("2800.00"));
       Share googleShare = new Share(googleStock, new BigDecimal("2"), new BigDecimal("2750.00"));
-      Purchase purchase2 = new Purchase(googleShare, 1,calculator);
+      Purchase purchase2 = new Purchase(googleShare, 1, calculator);
       purchase.commit(player);
       purchase2.commit(player);
       assertEquals(2, player.getPortfolio().size());

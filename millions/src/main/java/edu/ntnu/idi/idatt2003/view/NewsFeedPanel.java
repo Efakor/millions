@@ -9,15 +9,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
-
 /**
  * Panel displaying market event headlines generated during week advancement.
  * Implements {@link GameObserver} to automatically append new headlines
  * after each week advance. Headlines are colour-coded green for surges
  * and red for crashes.
  */
-
-
 public class NewsFeedPanel extends VBox implements GameObserver {
 
   private static final String STYLE_BACKGROUND = "-fx-background-color: #0D1117;";
@@ -36,7 +33,7 @@ public class NewsFeedPanel extends VBox implements GameObserver {
 
   private final ExchangeController exchangeController;
   private ScrollPane scrollPane;
-  private VBox headlinesList;
+  private final VBox headlinesList;
 
   /**
    * Construct NewsFeedPanel and registers it as a GameObserver
@@ -87,7 +84,7 @@ public class NewsFeedPanel extends VBox implements GameObserver {
 
       if (!headlines.isEmpty()) {
         // Get latest headlin(last in the list)
-        String latest = headlines.get(headlines.size() - 1);
+        String latest = headlines.getLast();
         // Week label
         Label weekLabel = new Label("WEEK" + exchangeController.getExchange().getWeek());
         weekLabel.setStyle(STYLE_WEEK);
@@ -100,7 +97,7 @@ public class NewsFeedPanel extends VBox implements GameObserver {
         VBox box = new VBox(2, weekLabel, headlineLabel);
         box.setStyle(STYLE_SCROLLPANE);
         box.setPadding(new Insets(10));
-        headlinesList.getChildren().add(0, box);
+        headlinesList.getChildren().addFirst(box);
 
       }
     }

@@ -10,7 +10,6 @@ import java.util.Objects;
  * and at what price.
  */
 
-@SuppressWarnings("NullableProblems")
 public record Share(Stock stock, BigDecimal quantity, BigDecimal purchasePrice) {
   /**
    * Creates a new Share with the given stock,quantity and purchase price.

@@ -3,7 +3,6 @@ package edu.ntnu.idi.idatt2003;
 import edu.ntnu.idi.idatt2003.controller.PlayerController;
 import edu.ntnu.idi.idatt2003.view.StartView;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -41,7 +40,6 @@ public class MainApp extends Application {
    *
    * @param args command line arguments passed to the application
    */
-
   public static void main(String[] args) {
     launch(args);
   }

@@ -221,8 +221,6 @@ public class TransactionHistoryView extends BorderPane implements GameObserver {
    * @param t the transaction to display
    * @return a GridPane containing the formatted transaction data
    */
-
-
   private GridPane buildRow(int index, Transaction t) {
     GridPane grid = new GridPane();
     grid.setHgap(10);

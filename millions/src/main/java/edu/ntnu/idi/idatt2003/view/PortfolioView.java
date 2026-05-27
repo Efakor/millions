@@ -32,7 +32,6 @@ public class PortfolioView extends BorderPane implements GameObserver {
 
   private final VBox holdingsList = new VBox();
   private final Label totalLabel = new Label(CurrencyUtil.formatNok(BigDecimal.ZERO));
-  private Runnable sellAllRequest;
 
   /**
    * Constructs the portfolio sidebar.
@@ -91,7 +90,6 @@ public class PortfolioView extends BorderPane implements GameObserver {
    */
 
   public void setSellAllRequest(Runnable sellAllRequest) {
-    this.sellAllRequest = sellAllRequest;
 
   }
 
