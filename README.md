@@ -1,5 +1,5 @@
 # Millions-Stock Trading Game
-A real time desktop stock market simulation game built  with Java  21 and JavaFX 2.Developed as a part of IDATT2003 Programmering 2 at NTNU.
+A real time desktop stock market simulation game built  with Java  21 and JavaFX 23.Developed as a part of IDATT2003 Programmering 2 at NTNU.
 
 ## Authors
 - Archi Makwana
@@ -76,7 +76,10 @@ src/main/java/edu/ntnu/idi/idatt2003/
 ├── observer/      — GameEvent, GameObserver, Observable
 ├── repository/    — CsvStockReader, CsvStockWriter
 ├── util/          — CurrencyUtil
-└── view/          — All JavaFX views
+└── view/          
+   ├── components/ — NewsFeedPanel,GainersLoserPanel,StatusBarView,StockDetailPanel
+   └──...          - MainView,StartView,SummaryView,BuyDialog,SellDialog,SellAllDialog
+
 ```
 
 
